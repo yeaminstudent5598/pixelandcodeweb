@@ -9,6 +9,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { LogIn, Menu, Mountain } from "lucide-react";
+import Image from "next/image";
 
 // নেভিগেশন লিংকগুলোর জন্য একটি অ্যারে তৈরি করা হয়েছে
 const navLinks = [
@@ -27,6 +28,7 @@ function Logo() {
     <Link href="/" className="flex items-center gap-2">
       {/* ছবির মতো একটি SVG লোগো */}
       <Mountain className="h-6 w-6 text-orange-500" />
+
       <span className="hidden text-lg font-bold sm:inline-block">
         Pixel & Code
       </span>
