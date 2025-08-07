@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Pixel & Code - Web Agency",
   description: "Building modern websites with Next.js and Tailwind CSS",
   icons: {
-    icon: '/logo-01.jpg',
+    icon: '/logo-01.svg',
   },
 };
 
