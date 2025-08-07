@@ -63,7 +63,7 @@ export function TestimonialsSection() {
               </div>
               <Quote className="absolute left-6 top-6 h-10 w-10 text-gray-200" />
               <p className="mt-10 text-center text-lg italic text-gray-700">
-                "{testimonials[0].quote}"
+              &ldquo;{testimonials[0].quote}&rdquo;
               </p>
               <div className="mt-6 text-center">
                 <h4 className="text-xl font-bold text-gray-900">
