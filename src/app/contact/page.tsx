@@ -14,37 +14,37 @@ const contactInfo = [
   {
     icon: <Phone className="h-8 w-8 text-white" />,
     title: "মোবাইল",
-    lines: ["01922-226558", "01319-987257"],
+    lines: ["+8801641801705", "+8801989415813"],
     bgColor: "bg-orange-500",
   },
   {
     icon: <Mail className="h-8 w-8 text-white" />,
     title: "ই-মেইল",
-    lines: ["support@moasbd.com", "sales@moasbd.com"],
+    lines: ["pixelandcode07@gmail.com"],
     bgColor: "bg-red-500",
   },
   {
     icon: <MapPin className="h-8 w-8 text-white" />,
     title: "অফিস",
-    lines: ["৩৮/এ আর. কে. মিশন রোড,", "ময়মনসিংহ, বাংলাদেশ"],
+    lines: ["Shariatpur Sadar, Shariatpur, বাংলাদেশ"],
     bgColor: "bg-blue-500",
   },
   {
     icon: <Facebook className="h-8 w-8 text-white" />,
     title: "ফেসবুক পেইজ",
-    lines: ["MOAS BD"],
+    lines: ["Pixel & Code"],
     bgColor: "bg-sky-600",
   },
   {
     icon: <MessageCircle className="h-8 w-8 text-white" />,
     title: "মেসেঞ্জার",
-    lines: ["MOAS BD"],
+    lines: ["Pixel & Code"],
     bgColor: "bg-purple-500",
   },
   {
     icon: <Smartphone className="h-8 w-8 text-white" />,
     title: "হোয়াটসঅ্যাপ",
-    lines: ["017922-226558"],
+    lines: ["+8801989415813"],
     bgColor: "bg-green-500",
   },
 ];
