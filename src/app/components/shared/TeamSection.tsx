@@ -1,0 +1,67 @@
+// src/components/shared/TeamSection.tsx
+import Image from "next/image";
+import React from "react";
+
+// টিম মেম্বারদের ডেটা
+const teamMembers = [
+  {
+    imgSrc: "https://i.ibb.co/6rC0d2Z/uts-de.png", // ❗️ আপনার নিজের ছবি দিন
+    name: "উৎস দে",
+    role: "প্রতিষ্ঠাতা ও পরিচালক",
+  },
+  {
+    imgSrc: "https://i.ibb.co/dK9B2kF/ajoy-goshwami.png", // ❗️ আপনার নিজের ছবি দিন
+    name: "অজয় গোস্বামী",
+    role: "ডিজিটাল মার্কেটার",
+  },
+  {
+    imgSrc: "https://i.ibb.co/bXJ1jYt/sagor-ahmed.png", // ❗️ আপনার নিজের ছবি দিন
+    name: "সাগর আহমেদ",
+    role: "ওয়েব ডিজাইনার",
+  },
+  {
+    imgSrc: "https://i.ibb.co/2ZzHwSj/mukto.png", // ❗️ আপনার নিজের ছবি দিন
+    name: "মুক্ত",
+    role: "একউন্টস ম্যানেজার",
+  },
+];
+
+export function TeamSection() {
+  return (
+    <section className="w-full bg-gradient-to-br from-white via-pink-50 to-red-50 py-20 sm:py-28">
+      <div className="container mx-auto px-4">
+        {/* সেকশনের শিরোনাম */}
+        <div className="mb-12 text-center">
+          <div className="mb-4 inline-block rounded-full border border-red-200 bg-white px-6 py-2 text-sm font-medium text-red-500 shadow-sm">
+            টিম মেম্বার
+          </div>
+          <h2 className="text-3xl font-extrabold text-gray-800 md:text-4xl">
+            আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!
+          </h2>
+        </div>
+
+        {/* টিম মেম্বারদের কার্ড */}
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {teamMembers.map((member, index) => (
+            <div
+              key={index}
+              className="group flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div className="relative mb-4 h-36 w-36 overflow-hidden rounded-full border-4 border-white shadow-md">
+                <Image
+                  src={member.imgSrc}
+                  alt={`Profile picture of ${member.name}`}
+                  width={144}
+                  height={144}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
+              <p className="mt-1 text-base text-gray-500">{member.role}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
