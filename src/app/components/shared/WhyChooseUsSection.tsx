@@ -78,7 +78,7 @@ export function WhyChooseUsSection() {
             {/* মোবাইল অ্যাপের ছবি */}
             <div className="relative z-10 transform transition-transform duration-500 hover:scale-105">
               <Image
-                src="https://moasbd.com/wp-content/uploads/2023/05/phn-slide.png" // ✅ আপনার নতুন ছবি যুক্ত করা হয়েছে
+                src="/Yeamin.png" // ✅ আপনার নতুন ছবি যুক্ত করা হয়েছে
                 alt="App analytics screenshot"
                 width={300}
                 height={650}

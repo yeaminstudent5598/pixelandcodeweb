@@ -12,7 +12,7 @@ const testimonials = [
       "One of the best agency I have ever work with . My business increase almost 2 times more than before after working with them . My best wishes for them . Specially thanks to uthso 🙂",
     name: "Tasnim Rahman",
     role: "প্রতিষ্ঠাতা, KAZI TECH HUB",
-    imgSrc: "https://i.ibb.co/6rC0d2Z/uts-de.png", // ❗️ আপনার ক্লায়েন্টের ছবি দিন
+    imgSrc: "/Yeamin.png", // ❗️ আপনার ক্লায়েন্টের ছবি দিন
   },
   // আপনি চাইলে এখানে আরও টেস্টিমোনিয়াল যুক্ত করতে পারেন
 ];

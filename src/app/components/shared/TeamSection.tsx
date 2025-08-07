@@ -5,23 +5,23 @@ import React from "react";
 // টিম মেম্বারদের ডেটা
 const teamMembers = [
   {
-    imgSrc: "https://i.ibb.co/6rC0d2Z/uts-de.png", // ❗️ আপনার নিজের ছবি দিন
-    name: "উৎস দে",
+    imgSrc: "/Yeamin.png", // ❗️ আপনার নিজের ছবি দিন
+    name: "Yeamin",
     role: "প্রতিষ্ঠাতা ও পরিচালক",
   },
   {
-    imgSrc: "https://i.ibb.co/dK9B2kF/ajoy-goshwami.png", // ❗️ আপনার নিজের ছবি দিন
-    name: "অজয় গোস্বামী",
+    imgSrc: "/Sifat.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Sifat Hossain",
     role: "ডিজিটাল মার্কেটার",
   },
   {
-    imgSrc: "https://i.ibb.co/bXJ1jYt/sagor-ahmed.png", // ❗️ আপনার নিজের ছবি দিন
-    name: "সাগর আহমেদ",
+    imgSrc: "/Naeem.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Naeem Majumder",
     role: "ওয়েব ডিজাইনার",
   },
   {
-    imgSrc: "https://i.ibb.co/2ZzHwSj/mukto.png", // ❗️ আপনার নিজের ছবি দিন
-    name: "মুক্ত",
+    imgSrc: "/Mizan.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Mizan",
     role: "একউন্টস ম্যানেজার",
   },
 ];

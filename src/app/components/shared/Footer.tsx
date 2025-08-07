@@ -111,8 +111,8 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-orange-500" />
                 <span>
-                  ১২৩ মেইন রোড, ময়মনসিংহ, <br />
-                  বাংলাদেশ
+                  Shariatpur Sadar, Shariatpur, <br />
+                  Bangladesh
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -121,7 +121,7 @@ export function Footer() {
                   href="mailto:info@pixelandcode.com"
                   className="transition-colors hover:text-orange-500"
                 >
-                  info@pixelandcode.com
+                  pixelandcode07@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -130,7 +130,7 @@ export function Footer() {
                   href="tel:+8801234567890"
                   className="transition-colors hover:text-orange-500"
                 >
-                  +৮৮০ ১২৩৪-৫৬৭৮৯০
+                  +8801989415813
                 </a>
               </li>
             </ul>

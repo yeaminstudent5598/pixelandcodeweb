@@ -2,17 +2,20 @@
 import Image from "next/image";
 import React from "react";
 
-// ক্লায়েন্টদের লোগোর ডেটা
+// ক্লায়েন্টদের লোগোর ডেটা (র‍্যান্ডম কোম্পানির লোগো দিয়ে আপডেট করা হয়েছে)
 const clients = [
-  { src: "https://i.ibb.co/mSgVfzt/client-1.png", alt: "Client Logo 1" },
-  { src: "https://i.ibb.co/6D3tS4x/client-2.png", alt: "Client Logo 2" },
-  { src: "https://i.ibb.co/GQLvV0x/client-3.png", alt: "Client Logo 3" },
-  { src: "https://i.ibb.co/P9fCjMv/client-4.png", alt: "Client Logo 4" },
-  { src: "https://i.ibb.co/JqYpL2y/client-5.png", alt: "Client Logo 5" },
-  { src: "https://i.ibb.co/k3QxGvj/client-6.png", alt: "Client Logo 6" },
-  { src: "https://i.ibb.co/R28Cg2R/client-7.png", alt: "Client Logo 7" },
-  { src: "https://i.ibb.co/yQxGk9K/client-8.png", alt: "Client Logo 8" },
-  { src: "https://i.ibb.co/3zdWcM9/client-9.png", alt: "Client Logo 9" },
+  { src: "https://cdn.worldvectorlogo.com/logos/google-1-1.svg", alt: "Google" },
+  { src: "https://cdn.worldvectorlogo.com/logos/microsoft-5.svg", alt: "Microsoft" },
+  { src: "https://cdn.worldvectorlogo.com/logos/netflix-3.svg", alt: "Netflix" },
+  { src: "https://cdn.worldvectorlogo.com/logos/airbnb.svg", alt: "Airbnb" },
+  { src: "https://cdn.worldvectorlogo.com/logos/uber-2.svg", alt: "Uber" },
+  { src: "https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg", alt: "Slack" },
+  { src: "https://cdn.worldvectorlogo.com/logos/google-1-1.svg", alt: "Google" },
+  { src: "https://cdn.worldvectorlogo.com/logos/microsoft-5.svg", alt: "Microsoft" },
+  { src: "https://cdn.worldvectorlogo.com/logos/netflix-3.svg", alt: "Netflix" },
+  { src: "https://cdn.worldvectorlogo.com/logos/airbnb.svg", alt: "Airbnb" },
+  { src: "https://cdn.worldvectorlogo.com/logos/uber-2.svg", alt: "Uber" },
+  { src: "https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg", alt: "Slack" },
 ];
 
 export function ClientsSection() {
@@ -30,12 +33,12 @@ export function ClientsSection() {
             আমাদের সম্মানিত ক্লায়েন্ট সমূহ!
           </h2>
 
-          {/* ক্লায়েন্ট লোগোগুলো */}
+          {/* ক্লায়েন্ট লোগোগুলো */}
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
             {clients.map((client, index) => (
               <div
                 key={index}
-                className="relative h-16 w-32 grayscale transition-all duration-300 hover:grayscale-0"
+                className="relative h-12 w-28 grayscale transition-all duration-300 hover:grayscale-0"
               >
                 <Image
                   src={client.src}

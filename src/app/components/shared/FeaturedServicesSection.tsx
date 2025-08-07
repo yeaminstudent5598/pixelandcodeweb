@@ -7,7 +7,7 @@ import Link from "next/link";
 // সার্ভিসগুলোর ডেটা
 const servicesData = [
   {
-    src: "https://i.ibb.co/6nDD4r0/product-photography.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/Service-01.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Product Photography Service",
     title: "Product Photography",
     price: "মাত্র ৪৯৯ টাকা থেকে শুরু!",
@@ -15,7 +15,7 @@ const servicesData = [
     link: "/services/photography",
   },
   {
-    src: "https://i.ibb.co/xJ1p9bC/social-media-post.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/Service-02.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Social Media Post Design",
     title: "Social Media Post Design",
     price: "মাত্র ৪৯৯ টাকা থেকে শুরু!",
@@ -23,7 +23,7 @@ const servicesData = [
     link: "/services/social-media",
   },
   {
-    src: "https://i.ibb.co/yQdC5xW/logo-design.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/Service-03.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Logo Design Service",
     title: "Logo Design",
     price: "মাত্র ৯৯৯ টাকা থেকে শুরু!",

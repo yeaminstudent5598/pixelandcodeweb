@@ -7,7 +7,7 @@ import Link from "next/link";
 const packagesData = [
   {
     planName: "সিলভার প্যাকেজ",
-    imageSrc: "https://i.ibb.co/L5BKTqg/silver-package.png", // ❗️ আপনার নিজের ছবি দিন
+    imageSrc: "/Service-01.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Silver Package Banner",
     priceUSD: 20,
     priceBDT: 3000,
@@ -18,7 +18,7 @@ const packagesData = [
   },
   {
     planName: "গোল্ড প্যাকেজ",
-    imageSrc: "https://i.ibb.co/cQx69s3/gold-package.png", // ❗️ আপনার নিজের ছবি দিন
+    imageSrc: "/Service-02.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Gold Package Banner",
     priceUSD: 30,
     priceBDT: 4500,
@@ -29,7 +29,7 @@ const packagesData = [
   },
   {
     planName: "ডায়মন্ড প্যাকেজ",
-    imageSrc: "https://i.ibb.co/GvXzYmS/diamond-package.png", // ❗️ আপনার নিজের ছবি দিন
+    imageSrc: "/Service-03.jpg", // ❗️ আপনার নিজের ছবি দিন
     alt: "Diamond Package Banner",
     priceUSD: 50,
     priceBDT: 7500,

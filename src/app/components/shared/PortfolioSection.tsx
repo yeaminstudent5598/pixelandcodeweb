@@ -5,15 +5,15 @@ import React from "react";
 // পোর্টফোলিও আইটেমগুলোর ডেটা
 const portfolioItems = [
   {
-    src: "https://i.ibb.co/yWc4RBP/1.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/part-01.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
     alt: "Gadgets Social Media Post Design",
   },
   {
-    src: "https://i.ibb.co/3kZ4v04/2.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/part-02.jpg", // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
     alt: "Food Delivery Social Media Post Design",
   },
   {
-    src: "https://i.ibb.co/N1g5vjJ/3.jpg", // ❗️ আপনার নিজের ছবি দিন
+    src: "/part-03.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
     alt: "Supershop Social Media Post Design",
   },
 ];

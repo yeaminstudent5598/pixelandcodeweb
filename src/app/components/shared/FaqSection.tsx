@@ -42,7 +42,7 @@ export function FaqSection() {
           {/* বাম কলাম: ছবি */}
           <div className="relative hidden h-full min-h-[500px] items-center justify-center lg:flex">
             <Image
-              src="https://i.ibb.co/6rC0d2Z/uts-de.png" // ❗️ আপনার নিজের ছবি দিন
+              src="/Yeamin.png" // ❗️ আপনার নিজের ছবি দিন
               alt="Profile of Uts De"
               width={450}
               height={600}
