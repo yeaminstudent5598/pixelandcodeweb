@@ -69,9 +69,9 @@ const servicesData = [
 
 // প্যাকেজ ব্যানারগুলোর ডেটা
 const packageBanners = [
-    { src: "https://i.ibb.co/L5BKTqg/silver-package.png", alt: "Silver Package" },
-    { src: "https://i.ibb.co/cQx69s3/gold-package.png", alt: "Gold Package" },
-    { src: "https://i.ibb.co/GvXzYmS/diamond-package.png", alt: "Diamond Package" },
+    { src: "/Service-01.jpg", alt: "Silver Package" },
+    { src: "/Service-02.jpg", alt: "Gold Package" },
+    { src: "/Service-03.jpg", alt: "Diamond Package" },
 ]
 
 export default function ServicesPage() {

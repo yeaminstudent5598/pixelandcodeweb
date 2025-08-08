@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import React from "react";
 
-// যোগাযোগের তথ্যগুলোর ডেটা
+// যোগাযোগের তথ্যগুলোর ডেটা (আপডেট করা হয়েছে)
 const contactInfo = [
   {
     icon: <Phone className="h-8 w-8 text-white" />,
@@ -26,7 +26,7 @@ const contactInfo = [
   {
     icon: <MapPin className="h-8 w-8 text-white" />,
     title: "অফিস",
-    lines: ["Shariatpur Sadar, Shariatpur, বাংলাদেশ"],
+    lines: ["শরীয়তপুর সদর, শরীয়তপুর,", "বাংলাদেশ - ৮০০০"],
     bgColor: "bg-blue-500",
   },
   {
@@ -86,10 +86,10 @@ export default function ContactPage() {
           ))}
         </div>
 
-        {/* গুগল ম্যাপ */}
+        {/* গুগল ম্যাপ (আপডেট করা হয়েছে) */}
         <div className="mt-20 overflow-hidden rounded-lg shadow-lg">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3627.502159892787!2d90.40523861500001!3d24.6067729841755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x37564f4a4f4b4c4d%3A0x4d4d4d4d4d4d4d4d!2s38a%20Ram%20Krishna%20Mission%20Rd%2C%20Mymensingh%202200!5e0!3m2!1sen!2sbd!4v1678886400000!5m2!1sen!2sbd"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58622.23211111111!2d90.30123456789012!3d23.24567890123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755684070a02931%3A0x8c274903c73d286a!2sShariatpur!5e0!3m2!1sen!2sbd!4v1723135515082!5m2!1sen!2sbd"
             width="100%"
             height="450"
             style={{ border: 0 }}

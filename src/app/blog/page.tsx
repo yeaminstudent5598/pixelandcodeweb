@@ -7,8 +7,8 @@ import React from "react";
 // ব্লগ পোস্টগুলোর ডেটা
 const blogPosts = [
   {
-    imgSrc: "https://i.ibb.co/L8dFkR2/achievement-bg.jpg", // আপনার ব্লগ পোস্টের ছবি
-    avatarSrc: "https://i.ibb.co/6rC0d2Z/uts-de.png", // লেখকের ছবি
+    imgSrc: "/Service-01.jpg", // আপনার ব্লগ পোস্টের ছবি
+    avatarSrc: "/Yeamin.png", // লেখকের ছবি
     title: "Facebook Marketing Smart Campaign",
     excerpt: "সঠিকভাবে অ্যাড ক্যাম্পেইন করে আপনার ব্যবসাকে এগিয়ে নিন...",
     date: "January 25, 2025",
@@ -16,8 +16,8 @@ const blogPosts = [
     link: "/blog/fb-smart-campaign",
   },
   {
-    imgSrc: "https://i.ibb.co/yVp4M9F/offer-fb.jpg",
-    avatarSrc: "https://i.ibb.co/dK9B2kF/ajoy-goshwami.png",
+    imgSrc: "/Service-02.jpg",
+    avatarSrc: "/Mizan.jpg",
     title: "ডিজিটাল মার্কেটিং কি? ফেসবুক মার্কেটিং কেন, কিভাবে করাবেন?",
     excerpt: "আপনি কি দীর্ঘমেয়াদী ব্যবসায়ের উন্নতিতে ডিজিটাল মার্কেটিং...",
     date: "December 1, 2023",
@@ -25,8 +25,8 @@ const blogPosts = [
     link: "/blog/what-is-digital-marketing",
   },
   {
-    imgSrc: "https://i.ibb.co/JqKxZ0x/offer-poster.jpg",
-    avatarSrc: "https://i.ibb.co/bXJ1jYt/sagor-ahmed.png",
+    imgSrc: "/Service-03.jpg",
+    avatarSrc: "/Sifat.jpg",
     title: "ফেসবুক মার্কেটিং কি? কিভাবে করাবেন ফেসবুক মার্কেটিং?",
     excerpt: "সময়ের সাথে সাথে সবকিছুই পরিবর্তনশীল। মার্কেটিং এর ধরণ...",
     date: "May 17, 2023",

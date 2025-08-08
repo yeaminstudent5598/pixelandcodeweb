@@ -14,10 +14,10 @@ import { LogIn, Menu } from "lucide-react";
 const navLinks = [
   { href: "/", label: "হোম" },
   { href: "/services", label: "সার্ভিসেস" },
-  { href: "/certificate", label: "সার্টিফিকেট" },
+  { href: "/web-service", label: "ওয়েব সার্ভিস" },
   { href: "/offers", label: "অফার" },
   { href: "/blog", label: "ব্লগ" },
-  { href: "/placement", label: "প্লেসমেন্ট" },
+  { href: "/payment", label: "পেমেন্ট" },
   { href: "/contact", label: "যোগাযোগ" },
 ];
 
