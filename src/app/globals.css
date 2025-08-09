@@ -6,7 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* ✅ এই লাইনটি পরিবর্তন করা হয়েছে */
   --font-sans: var(--font-hind-siliguri);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -116,10 +115,6 @@
 }
 
 @layer base {
-  /* ✅ এই অংশটুকু যুক্ত করা হয়েছে */
-  html {
-    font-size: 22px;
-  }
   * {
     @apply border-border outline-ring/50;
   }
