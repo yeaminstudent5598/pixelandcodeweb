@@ -50,15 +50,29 @@ const webPackages = {
 const graphicsPackages = {
     monthly: [
       { name: "ব্রোঞ্জ", price: 3200, features: ["৮টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ২টি পোস্ট ডিজাইন", "প্রতি ডিজাইনে ১টি রিভিশন"], popular: false },
-      { name: "সিলভার", price: 6200, features: ["১৬টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৪টি পোস্ট ডিজাইন", "פריমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ২টি রিভিশন"], popular: true },
-      { name: "গোল্ড", price: 8500, features: ["২৪টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৬টি পোস্ট ডিজাইন", "פריমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ৩টি রিভিশন"], popular: false },
+      { name: "সিলভার", price: 6200, features: ["১৬টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৪টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ২টি রিভিশন"], popular: true },
+      { name: "গোল্ড", price: 8500, features: ["২৪টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৬টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ৩টি রিভিশন"], popular: false },
     ],
     yearly: [
       { name: "ব্রোঞ্জ", price: 35000, features: ["৮টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ২টি পোস্ট ডিজাইন", "প্রতি ডিজাইনে ১টি রিভিশন"], popular: false },
-      { name: "সিলভার", price: 68000, features: ["১৬টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৪টি পোস্ট ডিজাইন", "פריমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ২টি রিভিশন"], popular: true },
-      { name: "গোল্ড", price: 93000, features: ["২৪টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৬টি পোস্ট ডিজাইন", "פריমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ৩টি রিভিশন"], popular: false },
+      { name: "সিলভার", price: 68000, features: ["১৬টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৪টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ২টি রিভিশন"], popular: true },
+      { name: "গোল্ড", price: 93000, features: ["২৪টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৬টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট", "প্রতি ডিজাইনে ৩টি রিভিশন"], popular: false },
     ]
   };
+
+// ভিডিও এডিটিং প্যাকেজের ডেটা
+const videoPackages = {
+    monthly: [
+        { name: "বেসিক", price: 4000, features: ["২টি রিলস/শর্টস ভিডিও", "বেসিক কালার গ্রেডিং", "স্টক ফুটেজ"], popular: false },
+        { name: "প্রো", price: 7000, features: ["৫টি রিলস/শর্টস ভিডিও", "অ্যাডভান্সড ট্রানজিশন", "কপিরাইট ফ্রি মিউজিক"], popular: true },
+        { name: "বিজনেস", price: 12000, features: ["১০টি রিলস/শর্টস ভিডিও", "মোশন গ্রাফিক্স", "২টি প্রোমোশনাল ভিডিও"], popular: false },
+    ],
+    yearly: [
+        { name: "বেসিক", price: 42000, features: ["২টি রিলস/শর্টস ভিডিও", "বেসিক কালার গ্রেডিং", "স্টক ফুটেজ"], popular: false },
+        { name: "প্রো", price: 75000, features: ["৫টি রিলস/শর্টস ভিডিও", "অ্যাডভান্সড ট্রানজিশন", "কপিরাইট ফ্রি মিউজিক"], popular: true },
+        { name: "বিজনেস", price: 130000, features: ["১০টি রিলস/শর্টস ভিডিও", "মোশন গ্রাফিক্স", "২টি প্রোমোশনাল ভিডিও"], popular: false },
+    ]
+};
 
 
 export default function PackagesPage() {
@@ -85,10 +99,11 @@ export default function PackagesPage() {
         </div>
 
         <Tabs defaultValue="facebook" className="w-full">
-          <TabsList className="mx-auto grid w-full max-w-lg grid-cols-3">
+          <TabsList className="mx-auto grid w-full max-w-2xl grid-cols-2 sm:grid-cols-4">
             <TabsTrigger value="facebook">ফেসবুক এড</TabsTrigger>
             <TabsTrigger value="website">ওয়েবসাইট</TabsTrigger>
             <TabsTrigger value="graphics">গ্রাফিক্স ডিজাইন</TabsTrigger>
+            <TabsTrigger value="video">ভিডিও এডিটিং</TabsTrigger>
           </TabsList>
 
           {/* ফেসবুক এড ক্যাম্পেইন ট্যাব */}
@@ -155,6 +170,36 @@ export default function PackagesPage() {
           <TabsContent value="graphics">
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
               {(isYearly ? graphicsPackages.yearly : graphicsPackages.monthly).map((pkg) => (
+                <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
+                   {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
+                    <CardDescription className="text-4xl font-bold text-gray-800">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <ul className="space-y-3">
+                        {pkg.features.map(feature => (
+                            <li key={feature} className="flex items-center gap-3">
+                                <Check className="h-5 w-5 text-green-500" />
+                                <span>{feature}</span>
+                            </li>
+                        ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                        <Link href="/payment">প্যাকেজটি কিনুন</Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+          
+          {/* ভিডিও এডিটিং ট্যাব */}
+          <TabsContent value="video">
+          <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
+              {(isYearly ? videoPackages.yearly : videoPackages.monthly).map((pkg) => (
                 <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
                    {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
                   <CardHeader className="text-center">

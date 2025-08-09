@@ -16,57 +16,68 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import { Lock, Check } from "lucide-react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-// প্যাকেজগুলোর ডেটা
-const packages = [
-  {
-    id: "silver",
-    name: "সিলভার প্যাকেজ",
-    price: 3000,
-    features: [
-      "$২০ ফেসবুক এড ক্যাম্পেইন",
-      "৫-৭ দিন ক্যাম্পেইন সময়কাল",
-      "১০-৪০ হাজার রিচ (আনুমানিক)",
-    ],
-  },
-  {
-    id: "gold",
-    name: "গোল্ড প্যাকেজ",
-    price: 4500,
-    features: [
-      "$৩০ ফেসবুক এড ক্যাম্পেইন",
-      "৭-১০ দিন ক্যাম্পেইন সময়কাল",
-      "২০-৬০ হাজার রিচ (আনুমানিক)",
-    ],
-  },
-  {
-    id: "diamond",
-    name: "ডায়মন্ড প্যাকেজ",
-    price: 7500,
-    features: [
-      "$৫০ ফেসবুক এড ক্যাম্পেইন",
-      "১০-১৫ দিন ক্যাম্পেইন সময়কাল",
-      "৫০-১০০ হাজার রিচ (আনুমানিক)",
-    ],
-  },
+// সকল প্যাকেজের ডেটা
+const allPackagesData = [
+    {
+        category: "ফেসবুক এড ক্যাম্পেইন",
+        packages: [
+            { id: "fb_silver", name: "সিলভার প্যাকেজ", features: ["$20 Ad Credit", "৭ দিন ক্যাম্পেইন", "১০-৪০ হাজার রিচ"], pricing: { monthly: 3000, yearly: 32000 } },
+            { id: "fb_gold", name: "গোল্ড প্যাকেজ", price: 4500, features: ["$30 Ad Credit", "১০ দিন ক্যাম্পেইন", "২০-৬০ হাজার রিচ"], pricing: { monthly: 4500, yearly: 48000 } },
+            { id: "fb_diamond", name: "ডায়মন্ড প্যাকেজ", price: 7500, features: ["$50 Ad Credit", "১৫ দিন ক্যাম্পেইন", "৫০-১০০ হাজার রিচ"], pricing: { monthly: 7500, yearly: 80000 } },
+        ]
+    },
+    {
+        category: "ওয়েবসাইট ডেভেলপমেন্ট",
+        packages: [
+            { id: "web_basic", name: "বেসিক ওয়েবসাইট", features: ["৫ পেইজ ওয়েবসাইট", "রেসপন্সিভ ডিজাইন", "ফ্রি ডোমেইন ও হোস্টিং"], pricing: { monthly: 15000, yearly: 150000 } },
+            { id: "web_standard", name: "স্ট্যান্ডার্ড ওয়েবসাইট", features: ["১০ পেইজ ওয়েবসাইট", "ই-কমার্স ফাংশনালিটি", "পেমেন্ট গেটওয়ে"], pricing: { monthly: 30000, yearly: 320000 } },
+            { id: "web_premium", name: "প্রিমিয়াম ওয়েবসাইট", features: ["আনলিমিটেড পেইজ", "কাস্টম ফিচার", "ডেডিকেটেড সাপোর্ট"], pricing: { monthly: 50000, yearly: 550000 } },
+        ]
+    },
+    {
+        category: "গ্রাফিক্স ডিজাইন",
+        packages: [
+            { id: "gfx_bronze", name: "ব্রোঞ্জ ডিজাইন প্যাকেজ", features: ["৮টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ২টি পোস্ট ডিজাইন", "প্রতি ডিজাইনে ১টি রিভিশন"], pricing: { monthly: 3200, yearly: 35000 } },
+            { id: "gfx_silver", name: "সিলভার ডিজাইন প্যাকেজ", features: ["১৬টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৪টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট"], pricing: { monthly: 6200, yearly: 68000 } },
+            { id: "gfx_gold", name: "গোল্ড ডিজাইন প্যাকেজ", features: ["২৪টি সোশ্যাল মিডিয়া পোস্ট", "সপ্তাহে ৬টি পোস্ট ডিজাইন", "প্রিমিয়াম ছবি ও ফন্ট"], pricing: { monthly: 8500, yearly: 93000 } },
+        ]
+    },
+    {
+        category: "ভিডিও এডিটিং",
+        packages: [
+            { id: "vid_basic", name: "বেসিক ভিডিও প্যাকেজ", features: ["২টি রিলস/শর্টস ভিডিও", "বেসিক কালার গ্রেডিং", "স্টক ফুটেজ"], pricing: { monthly: 4000, yearly: 42000 } },
+            { id: "vid_pro", name: "প্রো ভিডিও প্যাকেজ", features: ["৫টি রিলস/শর্টস ভিডিও", "অ্যাডভান্সড ট্রানজিশন", "কপিরাইট ফ্রি মিউজিক"], pricing: { monthly: 7000, yearly: 75000 } },
+            { id: "vid_business", name: "বিজনেস ভিডিও প্যাকেজ", features: ["১০টি রিলস/শর্টস ভিডিও", "মোশন গ্রাফিক্স", "২টি প্রোমোশনাল ভিডিও"], pricing: { monthly: 12000, yearly: 130000 } },
+        ]
+    }
 ];
 
+const flatPackages = allPackagesData.flatMap(category => category.packages);
+
 export default function PaymentPage() {
-  const [selectedPackage, setSelectedPackage] = useState(packages[0]);
+  const [isYearly, setIsYearly] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(flatPackages[0]);
 
   const handlePackageChange = (packageId: string) => {
-    const newPackage = packages.find((p) => p.id === packageId);
+    const newPackage = flatPackages.find((p) => p.id === packageId);
     if (newPackage) {
       setSelectedPackage(newPackage);
     }
   };
+  
+  const currentPrice = selectedPackage.pricing[isYearly ? 'yearly' : 'monthly'];
 
   return (
     <main className="w-full bg-gray-50 py-20 sm:py-28">
@@ -80,26 +91,41 @@ export default function PaymentPage() {
           </p>
         </div>
 
-        {/* প্যাকেজ সিলেক্ট করার ড্রপডাউন */}
-        <div className="mx-auto mb-8 max-w-md">
-          <Label htmlFor="package-select" className="text-lg font-semibold">
-            আপনার প্যাকেজটি বেছে নিন
-          </Label>
-          <Select
-            defaultValue={selectedPackage.id}
-            onValueChange={handlePackageChange}
-          >
-            <SelectTrigger id="package-select" className="mt-2 h-12 text-base">
-              <SelectValue placeholder="Select a package" />
-            </SelectTrigger>
-            <SelectContent>
-              {packages.map((pkg) => (
-                <SelectItem key={pkg.id} value={pkg.id} className="text-base">
-                  {pkg.name} - ৳{pkg.price.toLocaleString("bn-BD")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {/* প্যাকেজ সিলেক্ট এবং বিলিং সাইকেল */}
+        <div className="mx-auto mb-8 grid max-w-xl grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+                <Label htmlFor="package-select" className="text-lg font-semibold">
+                    আপনার প্যাকেজটি বেছে নিন
+                </Label>
+                <Select
+                    defaultValue={selectedPackage.id}
+                    onValueChange={handlePackageChange}
+                >
+                    <SelectTrigger id="package-select" className="mt-2 h-12 text-base">
+                    <SelectValue placeholder="Select a package" />
+                    </SelectTrigger>
+                    <SelectContent>
+                    {allPackagesData.map((category) => (
+                        <SelectGroup key={category.category}>
+                        <SelectLabel className="font-bold">{category.category}</SelectLabel>
+                        {category.packages.map((pkg) => (
+                            <SelectItem key={pkg.id} value={pkg.id} className="text-base">
+                            {pkg.name}
+                            </SelectItem>
+                        ))}
+                        </SelectGroup>
+                    ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="flex flex-col items-start justify-end">
+                 <Label className="text-lg font-semibold mb-2">বিলিং সাইকেল</Label>
+                <div className="flex items-center space-x-4 rounded-lg border bg-white p-2.5">
+                    <Label htmlFor="billing-cycle" className={cn("font-semibold", !isYearly && "text-blue-600")}>মাসিক</Label>
+                    <Switch id="billing-cycle" checked={isYearly} onCheckedChange={setIsYearly} />
+                    <Label htmlFor="billing-cycle" className={cn("font-semibold", isYearly && "text-blue-600")}>বাৎসরিক</Label>
+                </div>
+            </div>
         </div>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
@@ -119,7 +145,6 @@ export default function PaymentPage() {
                     <TabsTrigger value="card">কার্ড</TabsTrigger>
                   </TabsList>
 
-                  {/* মোবাইল ব্যাংকিং ট্যাব */}
                   <TabsContent value="mobile">
                     <div className="mt-6 text-center">
                       <p className="mb-4 text-gray-600">
@@ -127,21 +152,11 @@ export default function PaymentPage() {
                       </p>
                       <div className="mb-6 flex justify-center gap-8">
                         <div className="flex flex-col items-center">
-                          <Image
-                            src="/bkashLogo.svg"
-                            alt="Bkash Logo"
-                            width={60}
-                            height={60}
-                          />
+                          <Image src="/bkashLogo.svg" alt="Bkash Logo" width={60} height={60} />
                           <p className="mt-2 font-bold">01922-226558</p>
                         </div>
                         <div className="flex flex-col items-center">
-                          <Image
-                            src="\NagadLogo.svg"
-                            alt="Nagad Logo"
-                            width={60}
-                            height={60}
-                          />
+                          <Image src="\NagadLogo.svg" alt="Nagad Logo" width={60} height={60} />
                           <p className="mt-2 font-bold">01319-987257</p>
                         </div>
                       </div>
@@ -151,15 +166,11 @@ export default function PaymentPage() {
                     </div>
                   </TabsContent>
 
-                  {/* কার্ড ট্যাব */}
                   <TabsContent value="card">
                     <div className="mt-6 space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="card-number">কার্ড নম্বর</Label>
-                        <Input
-                          id="card-number"
-                          placeholder="1234 5678 9101 1121"
-                        />
+                        <Input id="card-number" placeholder="1234 5678 9101 1121"/>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
@@ -175,7 +186,6 @@ export default function PaymentPage() {
                   </TabsContent>
                 </Tabs>
 
-                {/* পার্সোনাল ইনফরমেশন */}
                 <div className="mt-8 border-t pt-6">
                   <h3 className="mb-4 text-lg font-semibold">আপনার তথ্য</h3>
                   <div className="space-y-4">
@@ -186,26 +196,16 @@ export default function PaymentPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">মোবাইল নম্বর</Label>
-                        <Input
-                          id="phone"
-                          placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন"
-                        />
+                        <Input id="phone" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">ই-মেইল</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="example@email.com"
-                      />
+                      <Input id="email" type="email" placeholder="example@email.com" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="trxid">ট্রানজেকশন আইডি</Label>
-                      <Input
-                        id="trxid"
-                        placeholder="Bkash/Nagad Transaction ID"
-                      />
+                      <Input id="trxid" placeholder="Bkash/Nagad Transaction ID" />
                     </div>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export default function PaymentPage() {
                 <div className="flex justify-between font-bold">
                   <span>{selectedPackage.name}</span>
                   <span className="font-semibold">
-                    ৳{selectedPackage.price.toLocaleString("bn-BD")}
+                    ৳{currentPrice.toLocaleString("bn-BD")}
                   </span>
                 </div>
                 <ul className="space-y-2 border-b pb-4 text-sm text-gray-600">
@@ -240,14 +240,11 @@ export default function PaymentPage() {
                 </div>
                 <div className="border-t pt-4 flex justify-between font-bold text-lg">
                   <span>সর্বমোট</span>
-                  <span>৳{selectedPackage.price.toLocaleString("bn-BD")}</span>
+                  <span>৳{currentPrice.toLocaleString("bn-BD")}</span>
                 </div>
               </CardContent>
               <CardFooter className="flex-col space-y-4">
-                <Button
-                  size="lg"
-                  className="w-full bg-green-600 text-white hover:bg-green-700"
-                >
+                <Button size="lg" className="w-full bg-green-600 text-white hover:bg-green-700">
                   <Lock className="mr-2 h-5 w-5" />
                   পেমেন্ট সম্পন্ন করুন
                 </Button>
