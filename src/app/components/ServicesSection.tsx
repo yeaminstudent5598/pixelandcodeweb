@@ -39,21 +39,34 @@ const servicesData = [
 export function ServicesSection() {
   return (
     <section className="w-full bg-orange-50/50 py-20 sm:py-28">
+       {/* নিচের শিরোনাম এবং বাটন */}
+        <div className="my-10 text-center">
+          <h2 className="mb-6 text-3xl font-extrabold text-gray-800 md:text-4xl">
+            সকল ডিজিটাল সলিউশন এক প্লাটফর্মে!
+          </h2>
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full bg-red-500 px-10 py-6 text-lg text-white shadow-md transition-transform hover:scale-105 hover:bg-red-600"
+          >
+            <Link href="/services">সার্ভিস সমূহ</Link>
+          </Button>
+        </div>
       <div className="container mx-auto px-4">
         {/* সার্ভিস কার্ডগুলোর গ্রিড */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {servicesData.map((service) => (
             <div
               key={service.title}
-              className={`flex transform flex-col items-center rounded-2xl border-2 bg-white p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
+              className={`flex transform flex-col items-center rounded-2xl border-2 bg-white p-6 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
             >
-              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+              <div className="mb-6 flex p-4 h-16 w-16 items-center justify-center rounded-full bg-gray-100">
                 {service.icon}
               </div>
               <h3 className="mb-3 text-2xl font-bold text-gray-800">
                 {service.title}
               </h3>
-              <p className="mb-6 min-h-[72px] text-base text-gray-600">
+              <p className="mb-6 min-h-[50px] text-base text-gray-600">
                 {service.description}
               </p>
               <Button
@@ -66,19 +79,7 @@ export function ServicesSection() {
           ))}
         </div>
 
-        {/* নিচের শিরোনাম এবং বাটন */}
-        <div className="mt-20 text-center">
-          <h2 className="mb-6 text-3xl font-extrabold text-gray-800 md:text-4xl">
-            সকল ডিজিটাল সলিউশন এক প্লাটফর্মে!
-          </h2>
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full bg-red-500 px-10 py-6 text-lg text-white shadow-md transition-transform hover:scale-105 hover:bg-red-600"
-          >
-            <Link href="/services">সার্ভিস সমূহ</Link>
-          </Button>
-        </div>
+       
       </div>
     </section>
   );
