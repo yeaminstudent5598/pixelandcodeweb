@@ -27,7 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogIn, Menu } from "lucide-react";
 
-// সার্ভিসেস ড্রপডাউনের জন্য ডেটা
+// সার্ভিসেস ড্রপডাউনের জন্য ডেটা (ভিডিও এডিটিং যুক্ত করা হয়েছে)
 const serviceComponents: { title: string; href: string; description: string }[] = [
   {
     title: "ওয়েব সার্ভিস",
@@ -48,6 +48,11 @@ const serviceComponents: { title: string; href: string; description: string }[] 
     title: "এস ই ও",
     href: "/seo",
     description: "সার্চ ইঞ্জিনে আপনার ওয়েবসাইটকে প্রথম পাতায় নিয়ে আসুন।",
+  },
+  {
+    title: "ভিডিও এডিটিং",
+    href: "/video-editing",
+    description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
   },
 ];
 
