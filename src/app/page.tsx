@@ -26,7 +26,7 @@ export default function HomePage() {
       <AchievementsSection/>
       <TeamSection/>
       <TestimonialsSection/>
-      <ClientsSection/>
+      {/* <ClientsSection/> */}
       <FaqSection/>
       {/* অন্য content এখানে */}
     </>
