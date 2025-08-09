@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Hind_Siliguri } from "next/font/google"; // Roboto এর পরিবর্তে Hind_Siliguri import করা হয়েছে
 import "./globals.css";
 import { Navbar } from "./components/shared/Navbar";
 import { Footer } from "./components/shared/Footer";
 
-const roboto = Roboto({
+// Hind Siliguri ফন্ট কনফিগার করা হয়েছে
+const hindSiliguri = Hind_Siliguri({
   weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-roboto",
+  subsets: ["bengali"], // বাংলা অক্ষরের জন্য 'bengali' subset ব্যবহার করা হয়েছে
+  variable: "--font-hind-siliguri",
 });
 
 export const metadata: Metadata = {
@@ -22,8 +23,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={roboto.variable}>
-      <body className="antialiased bg-background text-foreground">
+    // নতুন ফন্ট variable টি এখানে যুক্ত করা হয়েছে
+    <html lang="en" className={hindSiliguri.variable}>
+      <body className="antialiased bg-background text-foreground font-sans">
         <Navbar />
         <main className="min-h-[80vh]">{children}</main>
         <Footer />
