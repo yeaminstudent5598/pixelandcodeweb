@@ -1,7 +1,7 @@
 import { AboutSection } from "./components/AboutSection";
 import { ServicesSection } from "./components/ServicesSection";
 import { AchievementsSection } from "./components/shared/AchievementsSection";
-import { ClientsSection } from "./components/shared/ClientsSection";
+// import { ClientsSection } from "./components/shared/ClientsSection";
 import { FaqSection } from "./components/shared/FaqSection";
 import { FeaturedServicesSection } from "./components/shared/FeaturedServicesSection";
 import { HeroSection } from "./components/shared/HeroSection";

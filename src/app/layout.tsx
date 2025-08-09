@@ -13,9 +13,9 @@ const hindSiliguri = Hind_Siliguri({
 
 export const metadata: Metadata = {
   title: "Pixel & Code - Web Agency",
-  description: "Building modern websites with Next.js and Tailwind CSS",
+  description: "We Code, We Design and We Edit",
   icons: {
-    icon: '/logo-01.svg',
+    icon: '/logo.svg',
   },
 };
 
