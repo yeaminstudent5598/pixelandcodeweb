@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Pixel & Code - Web Agency",
   description: "We Code, We Design and We Edit",
   icons: {
-    icon: '/logo.svg',
+    icon: '/logo-01.svg',
   },
 };
 
