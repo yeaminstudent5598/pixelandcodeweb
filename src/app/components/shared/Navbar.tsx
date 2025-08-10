@@ -27,7 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogIn, Menu } from "lucide-react";
 
-// সার্ভিসেস ড্রপডাউনের জন্য ডেটা (ভিডিও এডিটিং যুক্ত করা হয়েছে)
+// সার্ভিসেস ড্রপডাউনের জন্য ডেটা (ইউআই/ইউএক্স ডিজাইন যুক্ত করা হয়েছে)
 const serviceComponents: { title: string; href: string; description: string }[] = [
   {
     title: "ওয়েব সার্ভিস",
@@ -45,7 +45,7 @@ const serviceComponents: { title: string; href: string; description: string }[] 
     description: "আপনার ব্র্যান্ডের জন্য আকর্ষণীয় লোগো, ব্যানার এবং পোস্টার ডিজাইন।",
   },
   {
-    title: "এস ই ও",
+    title: "SEO",
     href: "/seo",
     description: "সার্চ ইঞ্জিনে আপনার ওয়েবসাইটকে প্রথম পাতায় নিয়ে আসুন।",
   },
@@ -53,6 +53,11 @@ const serviceComponents: { title: string; href: string; description: string }[] 
     title: "ভিডিও এডিটিং",
     href: "/video-editing",
     description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
+  },
+  {
+    title: "UI/UK ডিজাইন",
+    href: "/ui-ux-design",
+    description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
   },
 ];
 
