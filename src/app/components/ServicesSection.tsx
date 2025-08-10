@@ -38,9 +38,9 @@ const servicesData = [
 
 export function ServicesSection() {
   return (
-    <section className="w-full bg-orange-50/50 py-16 sm:py-28">
+    <section className="w-full bg-orange-50/50 py-10 sm:py-10">
       <h2 className="mb-10 text-center text-3xl font-extrabold text-gray-800 md:text-4xl">
-            সকল ডিজিটাল সলিউশন এক প্লাটফর্মে!
+            সকল ডিজিটাল সলিউশন <br /> এক প্লাটফর্মে!
           </h2>
       <div className="container mx-auto px-4">
         {/* সার্ভিস কার্ডগুলোর গ্রিড */}
@@ -48,7 +48,7 @@ export function ServicesSection() {
           {servicesData.map((service) => (
             <div
               key={service.title}
-              className={`flex transform  flex-col items-center rounded-2xl border-2 bg-white p-4 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
+              className={`flex transform  flex-col items-center rounded-2xl border-2 bg-white p-4 lg:p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
             >
               <div className="mb-6 md:h-20 md:w-20 flex h-10 w-10 p-2 items-center justify-center rounded-full bg-gray-100">
                 {service.icon}
