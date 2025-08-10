@@ -6,7 +6,7 @@ export function HeroSection() {
     <section className="w-full">
       <div className="relative h-auto w-full">
         <Image
-          src="/hero-banner.jpg.jpg" 
+          src="/Banner_Pixel_&_Code.jpg" 
           alt="Pixel & Code promotional banner"
           width={1920} 
           height={640}
