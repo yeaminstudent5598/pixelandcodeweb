@@ -49,23 +49,21 @@ export function FeaturedServicesSection() {
               className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl"
             >
               {/* ছবির অংশ */}
-              <div className="relative w-full">
+              <div className="relative w-full overflow-hidden">
                 <Image
                   src={item.src}
                   alt={item.alt}
                   width={600}
                   height={400}
-                  className="w-full object-cover"
+                  className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 p-4 text-center text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                   <h3 className="text-2xl font-bold">{item.title}</h3>
-                   <p className="mt-2 text-lg font-semibold">{item.price}</p>
-                </div>
               </div>
               
-              {/* টেক্সট এবং বাটন অংশ */}
-              <div className="flex flex-grow flex-col p-6">
-                <p className="flex-grow text-base text-gray-600">
+              {/* টেক্সট এবং বাটন অংশ (নতুন ডিজাইন) */}
+              <div className="flex flex-grow flex-col p-6 text-left">
+                <p className="mb-2 text-sm font-semibold text-blue-600">{item.price}</p>
+                <h3 className="text-2xl font-bold text-gray-800">{item.title}</h3>
+                <p className="mt-3 flex-grow text-base text-gray-600">
                   {item.description}
                 </p>
                 <Button asChild className="mt-6 w-full rounded-md bg-blue-600 text-white hover:bg-blue-700">
