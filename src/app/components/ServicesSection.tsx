@@ -44,24 +44,24 @@ export function ServicesSection() {
           </h2>
       <div className="container mx-auto px-4">
         {/* সার্ভিস কার্ডগুলোর গ্রিড */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {servicesData.map((service) => (
             <div
               key={service.title}
-              className={`flex transform flex-col items-center rounded-2xl border-2 bg-white p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
+              className={`flex transform  flex-col items-center rounded-2xl border-2 bg-white p-4 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
             >
-              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+              <div className="mb-6 md:h-20 md:w-20 flex h-10 w-10 p-2 items-center justify-center rounded-full bg-gray-100">
                 {service.icon}
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-gray-800">
+              <h3 className="md:mb-2 lg:mb-3 md:text-xl lg:text-2xl font-bold text-gray-800">
                 {service.title}
               </h3>
-              <p className="mb-6 min-h-[72px] text-base text-gray-600">
+              <p className="md:mb-4 lg:mb-6 min-h-[72px] text-base text-gray-600">
                 {service.description}
               </p>
               <Button
                 asChild
-                className={`mt-auto w-full rounded-full text-white ${service.buttonClass}`}
+                className={`mt-auto w-full md:btn-sm rounded-full text-white ${service.buttonClass}`}
               >
                 <Link href="/services">বিস্তারিত জানুন</Link>
               </Button>
