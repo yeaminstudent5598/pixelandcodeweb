@@ -7,23 +7,44 @@ const teamMembers = [
   {
     imgSrc: "/Yeamin.png", // ❗️ আপনার নিজের ছবি দিন
     name: "Yeamin",
-    role: "প্রতিষ্ঠাতা ও পরিচালক",
+    role: "CEO & Backend Developer",
   },
   {
     imgSrc: "/Sifat.jpg", // ❗️ আপনার নিজের ছবি দিন
     name: "Sifat Hossain",
-    role: "ডিজিটাল মার্কেটার",
+    role: "Graphics Desinger",
   },
   {
     imgSrc: "/Naeem.jpg", // ❗️ আপনার নিজের ছবি দিন
     name: "Naeem Majumder",
-    role: "ওয়েব ডিজাইনার",
+    role: "Backend Developer",
+  },
+  {
+    imgSrc: "/Sabbir_Hossain.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Sabbir Hossain",
+    role: "Frontend Developer",
+  },
+  {
+    imgSrc: "/Moin_Uddin.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Moin Uddin",
+    role: "Frontend Developer",
+  },
+  {
+    imgSrc: "/Aysa_Akter.jpg", // ❗️ আপনার নিজের ছবি দিন
+    name: "Aysha Akter Urmi",
+    role: "Frontend Developer",
+  },
+  {
+    imgSrc: "/Iftiak_Hossain.webp", // ❗️ আপনার নিজের ছবি দিন
+    name: "Iftiak Hossain",
+    role: "UI/UK Desinger",
   },
   {
     imgSrc: "/Mizan.jpg", // ❗️ আপনার নিজের ছবি দিন
     name: "Mizan",
-    role: "একউন্টস ম্যানেজার",
+    role: "Video Editing",
   },
+  
 ];
 
 export function TeamSection() {
@@ -41,7 +62,7 @@ export function TeamSection() {
         </div>
 
         {/* টিম মেম্বারদের কার্ড */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {teamMembers.map((member, index) => (
             <div
               key={index}
