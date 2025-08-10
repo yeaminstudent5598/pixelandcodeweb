@@ -5,11 +5,11 @@ import React from "react";
 // পোর্টফোলিও আইটেমগুলোর ডেটা
 const portfolioItems = [
   {
-    src: "/part-01.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
+    src: "/Demo_Work_01.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
     alt: "Gadgets Social Media Post Design",
   },
   {
-    src: "/part-02.jpg", // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
+    src: "/Demo Work 02.jpg", // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
     alt: "Food Delivery Social Media Post Design",
   },
   {

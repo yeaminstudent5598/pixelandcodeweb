@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { CheckCircle, BarChart, Users, Headset, Play } from "lucide-react";
 
-// ফিচারগুলোর ডেটা
+// ফিচারগুলোর ডেটা (আপডেট করা হয়েছে)
 const features = [
   {
     icon: <CheckCircle className="h-8 w-8 text-white" />,
@@ -14,13 +14,13 @@ const features = [
   {
     icon: <BarChart className="h-8 w-8 text-white" />,
     title: "এনালিটিক্স প্রদান",
-    description: "সার্ভিস চলাকালীন সময়ে অ্যানালিটিক্স আপডেট প্রদান করা",
+    description: "সার্ভিস চলাকালীন সময়ে অ্যানালিটিক্স আপডেট প্রদান করা",
     bgColor: "bg-purple-500",
   },
   {
     icon: <Users className="h-8 w-8 text-white" />,
     title: "দক্ষ টিম মেম্বার সার্ভিস",
-    description: "মোয়াস বিডির দক্ষ টিম মেম্বার সার্বিক সেবা নিশ্চিত করে",
+    description: "পিক্সেল এন্ড কোড এর দক্ষ টিম মেম্বার সার্বিক সেবা নিশ্চিত করে",
     bgColor: "bg-yellow-500",
   },
   {
@@ -39,7 +39,7 @@ export function WhyChooseUsSection() {
           {/* বাম কলাম: টেক্সট এবং ফিচার */}
           <div className="flex flex-col">
             <h2 className="mb-10 text-3xl font-extrabold text-gray-800 md:text-4xl">
-              যে কারণে মোয়াস বিডি <br /> #১ সেরা প্রতিষ্ঠান
+              যে কারণে পিক্সেল এন্ড কোড <br /> #১ সেরা প্রতিষ্ঠান
             </h2>
             <ul className="space-y-6">
               {features.map((feature) => (
@@ -78,7 +78,7 @@ export function WhyChooseUsSection() {
             {/* মোবাইল অ্যাপের ছবি */}
             <div className="relative z-10 transform transition-transform duration-500 hover:scale-105">
               <Image
-                src="/Yeamin.png" // ✅ আপনার নতুন ছবি যুক্ত করা হয়েছে
+                src="/fbbanner.png"
                 alt="App analytics screenshot"
                 width={300}
                 height={650}
