@@ -93,7 +93,7 @@ export default function GraphicsDesignPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <Image
-              src="https://i.ibb.co/yQdC5xW/logo-design.jpg" // আপনার গ্রাফিক্স ডিজাইন সম্পর্কিত ছবি
+              src="/graphic_design.avif" // আপনার গ্রাফিক্স ডিজাইন সম্পর্কিত ছবি
               alt="Graphics Design"
               width={500}
               height={500}
@@ -160,7 +160,7 @@ export default function GraphicsDesignPage() {
             </div>
             <div className="hidden md:block">
               <Image
-                src="https://i.ibb.co/JqKxZ0x/offer-poster.jpg" // আপনার টিম বা অফিসের ছবি
+                src="/graphic team.jpg" // আপনার টিম বা অফিসের ছবি
                 alt="Our Design Team"
                 width={500}
                 height={400}

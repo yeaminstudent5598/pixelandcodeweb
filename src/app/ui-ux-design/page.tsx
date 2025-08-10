@@ -96,20 +96,33 @@ export default function UiUxDesignPage() {
           </motion.div>
 
           {/* ডান কলাম: ছবি */}
+        <motion.div
+          className="relative hidden h-[500px] w-full items-center justify-center lg:flex"
+          variants={itemVariants}
+        >
           <motion.div
-            className="relative hidden h-full min-h-[450px] items-center justify-center lg:flex"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute h-80 w-80 rounded-full bg-blue-100/50"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          ></motion.div>
+           <motion.div
+            className="absolute h-64 w-64 rounded-full bg-purple-100/50"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          ></motion.div>
+          <motion.div
+            className="z-10 flex h-48 w-48 items-center justify-center rounded-full bg-white shadow-2xl"
+            whileHover={{ scale: 1.1 }}
           >
             <Image
-              src="https://i.ibb.co/2Z5h6Tj/hero-laptop.png" // আপনার UI/UX সম্পর্কিত ছবি
-              alt="UI/UX Design Process"
-              width={500}
-              height={500}
-              className="object-contain"
-            />
+            src="/uiuklogo.png" // আপনার ছবি
+            alt="Custom Website Design"
+            width={300}
+            height={300}
+            className="object-contain w-24 h-24"
+          />
           </motion.div>
+        </motion.div>
         </div>
       </motion.section>
 
@@ -175,7 +188,7 @@ export default function UiUxDesignPage() {
             </div>
             <div className="hidden md:block">
               <Image
-                src="https://i.ibb.co/yVp4M9F/offer-fb.jpg" // আপনার টিম বা অফিসের ছবি
+                src="/Uiuk.avif" // আপনার টিম বা অফিসের ছবি
                 alt="UI/UX Design Team"
                 width={500}
                 height={400}
