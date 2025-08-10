@@ -86,20 +86,33 @@ export default function DigitalMarketingPage() {
           </motion.div>
 
           {/* ডান কলাম: ছবি */}
+        <motion.div
+          className="relative hidden h-[500px] w-full items-center justify-center lg:flex"
+          variants={itemVariants}
+        >
           <motion.div
-            className="relative hidden h-full min-h-[450px] items-center justify-center lg:flex"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute h-80 w-80 rounded-full bg-blue-100/50"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          ></motion.div>
+           <motion.div
+            className="absolute h-64 w-64 rounded-full bg-purple-100/50"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          ></motion.div>
+          <motion.div
+            className="z-10 flex h-48 w-48 items-center justify-center rounded-full bg-white shadow-2xl"
+            whileHover={{ scale: 1.1 }}
           >
             <Image
-              src="https://i.ibb.co/L8dFkR2/achievement-bg.jpg" // আপনার ডিজিটাল মার্কেটিং সম্পর্কিত ছবি
-              alt="Digital Marketing Campaign"
-              width={500}
-              height={500}
-              className="rounded-full object-cover shadow-2xl"
-            />
+            src="/digital_markteting.jpg" // আপনার ছবি
+            alt="Custom Website Design"
+            width={300}
+            height={300}
+            className="object-contain rounded-full"
+          />
           </motion.div>
+        </motion.div>
         </div>
       </motion.section>
 
@@ -160,7 +173,7 @@ export default function DigitalMarketingPage() {
             </div>
             <div className="hidden md:block">
               <Image
-                src="https://i.ibb.co/yQdC5xW/logo-design.jpg" // আপনার টিম বা অফিসের ছবি
+                src="/digital marketing team.jpg" // আপনার টিম বা অফিসের ছবি
                 alt="Our Team"
                 width={500}
                 height={400}
