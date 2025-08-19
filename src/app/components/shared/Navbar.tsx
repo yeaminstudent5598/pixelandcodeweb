@@ -15,6 +15,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+
+// import LanguageDropdown from "./LanguageDropdown";
+
 import {
   Sheet,
   SheetContent,
@@ -23,7 +26,8 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetClose,
-} from "@/components/ui/sheet";
+} from "@/components/ui/sheet"
+
 import { Button } from "@/components/ui/button";
 import { LogIn, Menu } from "lucide-react";
 
@@ -94,7 +98,7 @@ function Logo() {
         />
         <path
           style={{ fill: "currentColor" }}
-          d="M2187.72,1944.68c-1.19-8.13-2.29-12.16-2.3-16.18-.1-58.81-.34-117.61.32-176.41.08-7.07,3.43-15.91,8.36-20.83q94.37-94.07,189.84-187c6.63-6.49,6.88-9.94-.1-16.84Q2288.4,1433,2194,1337.52c-4.87-4.93-8.17-13.68-8.25-20.71-.67-57.47-.43-115-.36-172.43,0-4.11.85-8.21,1.59-14.93,4.86,3.75,7.69,5.54,10.06,7.82,57.55,55.48,115.43,110.63,172.46,166.63,68.94,67.69,137.11,136.15,205.7,204.19,7.51,7.44,15.44,14.47,23.44,21.39,5.26,4.56,6.43,8.32.79,13.79q-88.87,86.2-177.5,172.69-107.29,104.32-214.65,208.6C2201.74,1930,2196.44,1935.72,2187.72,1944.68Z"
+          d="M2187.72,1944.68c-1.19-8.13-2.29-12.16-2.3-16.18-.1-58.81-.34-117.61.32-176.41.08-7.07,3.43-15.91,8.36-20.83q94.37-94.07,189.84-187c6.63-6.49,6.88-9.94-.1-16.84Q2288.4,1433,2194,1337.52c-4.87-4.93-8.17-13.68-8.25-20.71-.67-57.47-.43-115-.36-172.43,0-4.11.85-8.21,1.59-14.93,4.86,3.75,7.69,5.54,10.06,7.82,57.55,55.48,115.43,110.63,172.46,166.63,68.94,67.69,137.11,136.15,205.7,204.19,7.51,7.44,15.44,14.47,23.44,21.39,5.26,4.56,6.43,8.32.79,13.79q-88.87,86.2-177.5,172.69-107.29,104.32-214.65,208.60C2201.74,1930,2196.44,1935.72,2187.72,1944.68Z"
           transform="translate(-555.32 -610.92)"
         />
       </svg>
@@ -165,6 +169,11 @@ export function Navbar() {
         </NavigationMenu>
 
         <div className="flex items-center gap-4">
+          {/* Language Dropdown for Desktop */}
+          <div className="hidden lg:block">
+            
+          </div>
+          
           {/* লগ-ইন বাটন */}
           <Button asChild className="hidden bg-orange-500 text-white hover:bg-orange-600 sm:flex">
             <Link href="/login">
@@ -212,6 +221,9 @@ export function Navbar() {
                      <SheetClose asChild>
                         <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">যোগাযোগ</Link>
                     </SheetClose>
+                    <div className="mt-4">
+                     {/* <LanguageDropdown /> */}
+                    </div>
                 </nav>
               </div>
             </SheetContent>
