@@ -1,40 +1,66 @@
 // src/components/shared/FaqSection.tsx
-"use client";
+'use client';
 
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from '@/components/ui/accordion';
+import { useLanguage } from '@/context/LanguageContext';
 
 // প্রশ্ন এবং উত্তরগুলোর ডেটা
-const faqData = [
+const faqDataBn = [
   {
-    question: "আপনারা কি ফেসবুক Ads Campaign কি দিয়ে করে থাকেন ?",
+    question: 'আপনারা কি ফেসবুক Ads Campaign কি দিয়ে করে থাকেন ?',
     answer:
-      "আমরা ফেসবুক Ads Campaign করার জন্য নিজস্ব ডুয়েল কারেন্সি কার্ড এবং এজেন্সি অ্যাকাউন্ট ব্যবহার করে থাকি, যা সম্পূর্ণ নিরাপদ এবং নির্ভরযোগ্য।",
+      'আমরা ফেসবুক Ads Campaign করার জন্য নিজস্ব ডুয়েল কারেন্সি কার্ড এবং এজেন্সি অ্যাকাউন্ট ব্যবহার করে থাকি, যা সম্পূর্ণ নিরাপদ এবং নির্ভরযোগ্য।',
   },
   {
-    question: "আপনারা কি HTPOOL এর অথোরাইজড এড একাউন্ট সেল করেন ?",
+    question: 'আপনারা কি HTPOOL এর অথোরাইজড এড একাউন্ট সেল করেন ?',
     answer:
-      "হ্যাঁ, আমরা HTPOOL এর একজন অথোরাইজড পার্টনার। আমাদের থেকে আপনি সম্পূর্ণ ভেরিফাইড এবং নিরাপদ এড অ্যাকাউন্ট কিনতে পারবেন।",
+      'হ্যাঁ, আমরা HTPOOL এর একজন অথোরাইজড পার্টনার। আমাদের থেকে আপনি সম্পূর্ণ ভেরিফাইড এবং নিরাপদ এড অ্যাকাউন্ট কিনতে পারবেন।',
   },
   {
-    question: "আপনাদের সাথে সরাসরি অফিসে এসে কথা বলতে চাচ্ছি।",
+    question: 'আপনাদের সাথে সরাসরি অফিসে এসে কথা বলতে চাচ্ছি।',
     answer:
-      "অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা আমাদের ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। আসার আগে ফোন দিয়ে আসলে আপনার জন্য সুবিধা হবে।",
+      'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা আমাদের ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। আসার আগে ফোন দিয়ে আসলে আপনার জন্য সুবিধা হবে।',
   },
   {
-    question: "আপনাদের ডলার রেট কত ? মিনিমাম কত ডলারের কাজ করানো যাবে ?",
+    question: 'আপনাদের ডলার রেট কত ? মিনিমাম কত ডলারের কাজ করানো যাবে ?',
     answer:
-      "ডলারের রেট আন্তর্জাতিক বাজারের উপর নির্ভর করে পরিবর্তনশীল। বর্তমান রেট এবং মিনিমাম বাজেট সম্পর্কে জানতে অনুগ্রহ করে আমাদের সাথে সরাসরি যোগাযোগ করুন।",
+      'ডলারের রেট আন্তর্জাতিক বাজারের উপর নির্ভর করে পরিবর্তনশীল। বর্তমান রেট এবং মিনিমাম বাজেট সম্পর্কে জানতে অনুগ্রহ করে আমাদের সাথে সরাসরি যোগাযোগ করুন।',
+  },
+];
+
+const faqDataEn = [
+  {
+    question: 'Do you run Facebook Ads Campaigns?',
+    answer:
+      'We use our own dual currency card and agency account to run Facebook Ads Campaigns, which are completely safe and reliable.',
+  },
+  {
+    question: 'Do you sell authorized HTPOOL ad accounts?',
+    answer:
+      'Yes, we are an authorized partner of HTPOOL. You can buy fully verified and secure ad accounts from us.',
+  },
+  {
+    question: 'I want to talk directly at your office.',
+    answer:
+      'Absolutely! You can come to our office and talk to us directly. Our office address is provided on the contact page of our website. Calling ahead will be convenient for you.',
+  },
+  {
+    question:
+      'What is your dollar rate? What is the minimum dollar amount for work?',
+    answer:
+      'The dollar rate varies depending on the international market. Please contact us directly to know the current rate and minimum budget.',
   },
 ];
 
 export function FaqSection() {
+  const { language } = useLanguage();
   return (
     <section className="w-full bg-white py-20 sm:py-28">
       <div className="container mx-auto px-4">
@@ -53,14 +79,17 @@ export function FaqSection() {
           {/* ডান কলাম: প্রশ্ন এবং উত্তর */}
           <div className="flex flex-col">
             <div className="mb-4 inline-block self-start rounded-full border border-red-200 bg-red-50 px-6 py-2 text-sm font-medium text-red-600 shadow-sm">
-              প্রশ্ন ও উত্তর
+              {language ? 'Questions & Answers' : 'প্রশ্ন ও উত্তর'}
             </div>
+
             <h2 className="mb-8 text-3xl font-extrabold text-gray-800 md:text-4xl">
-              সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!
+              {language
+                ? 'Answers to Frequently Asked Questions!'
+                : 'সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!'}
             </h2>
 
             <Accordion type="single" collapsible className="w-full">
-              {faqData.map((faq, index) => (
+              {(language ? faqDataEn : faqDataBn).map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">
                     {faq.question}
