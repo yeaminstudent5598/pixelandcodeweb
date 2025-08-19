@@ -1,30 +1,35 @@
 // src/components/shared/PortfolioSection.tsx
-import Image from "next/image";
-import React from "react";
+'use client';
+import { useLanguage } from '@/context/LanguageContext';
+import Image from 'next/image';
+import React from 'react';
 
 // পোর্টফোলিও আইটেমগুলোর ডেটা
 const portfolioItems = [
   {
-    src: "/Demo_Work_01.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
-    alt: "Gadgets Social Media Post Design",
+    src: '/Demo_Work_01.jpg', // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
+    alt: 'Gadgets Social Media Post Design',
   },
   {
-    src: "/Demo Work 02.jpg", // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
-    alt: "Food Delivery Social Media Post Design",
+    src: '/Demo Work 02.jpg', // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
+    alt: 'Food Delivery Social Media Post Design',
   },
   {
-    src: "/part-03.jpg", // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
-    alt: "Supershop Social Media Post Design",
+    src: '/part-03.jpg', // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
+    alt: 'Supershop Social Media Post Design',
   },
 ];
 
 export function PortfolioSection() {
+  const { language } = useLanguage();
   return (
     <section className="w-full bg-blue-600 py-20 sm:py-28">
       <div className="container mx-auto px-4">
         {/* সেকশনের শিরোনাম */}
         <h2 className="mb-12 text-center text-3xl font-extrabold text-white md:text-4xl">
-          আমাদের তৈরি কিছু বিজ্ঞাপন!
+          {language
+            ? 'Some of Our Created Advertisements!'
+            : 'আমাদের তৈরি কিছু বিজ্ঞাপন!'}
         </h2>
 
         {/* পোর্টফোলিও আইটেমগুলোর গ্রিড */}
@@ -32,8 +37,7 @@ export function PortfolioSection() {
           {portfolioItems.map((item, index) => (
             <div
               key={index}
-              className="group overflow-hidden rounded-lg bg-white shadow-lg"
-            >
+              className="group overflow-hidden rounded-lg bg-white shadow-lg">
               <Image
                 src={item.src}
                 alt={item.alt}

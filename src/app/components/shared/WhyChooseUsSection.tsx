@@ -1,37 +1,68 @@
 // src/components/shared/WhyChooseUsSection.tsx
-import Image from "next/image";
-import React from "react";
-import { CheckCircle, BarChart, Users, Headset, Play } from "lucide-react";
+'use client';
+import Image from 'next/image';
+import React from 'react';
+import { CheckCircle, BarChart, Users, Headset, Play } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 // ফিচারগুলোর ডেটা (আপডেট করা হয়েছে)
-const features = [
+const featuresBn = [
   {
     icon: <CheckCircle className="h-8 w-8 text-white" />,
-    title: "সেইফ এন্ড সিকিওর",
-    description: "অত্যন্ত উন্নত মানের টুলস ব্যবহার করে সার্ভিস প্রদান",
-    bgColor: "bg-orange-500",
+    title: 'সেইফ এন্ড সিকিওর',
+    description: 'অত্যন্ত উন্নত মানের টুলস ব্যবহার করে সার্ভিস প্রদান',
+    bgColor: 'bg-orange-500',
   },
   {
     icon: <BarChart className="h-8 w-8 text-white" />,
-    title: "এনালিটিক্স প্রদান",
-    description: "সার্ভিস চলাকালীন সময়ে অ্যানালিটিক্স আপডেট প্রদান করা",
-    bgColor: "bg-purple-500",
+    title: 'এনালিটিক্স প্রদান',
+    description: 'সার্ভিস চলাকালীন সময়ে অ্যানালিটিক্স আপডেট প্রদান করা',
+    bgColor: 'bg-purple-500',
   },
   {
     icon: <Users className="h-8 w-8 text-white" />,
-    title: "দক্ষ টিম মেম্বার সার্ভিস",
-    description: "পিক্সেল এন্ড কোড এর দক্ষ টিম মেম্বার সার্বিক সেবা নিশ্চিত করে",
-    bgColor: "bg-yellow-500",
+    title: 'দক্ষ টিম মেম্বার সার্ভিস',
+    description:
+      'পিক্সেল এন্ড কোড এর দক্ষ টিম মেম্বার সার্বিক সেবা নিশ্চিত করে',
+    bgColor: 'bg-yellow-500',
   },
   {
     icon: <Headset className="h-8 w-8 text-white" />,
-    title: "২৪/৭ কাস্টমার সাপোর্ট",
-    description: "আমাদের থেকে পাচ্ছেন সপ্তাহে ৭ দিন এবং দিনরাত ২৪ ঘণ্টা কাস্টমার সাপোর্ট",
-    bgColor: "bg-blue-500",
+    title: '২৪/৭ কাস্টমার সাপোর্ট',
+    description:
+      'আমাদের থেকে পাচ্ছেন সপ্তাহে ৭ দিন এবং দিনরাত ২৪ ঘণ্টা কাস্টমার সাপোর্ট',
+    bgColor: 'bg-blue-500',
+  },
+];
+const featuresEn = [
+  {
+    icon: <CheckCircle className="h-8 w-8 text-white" />,
+    title: 'Safe and Secure',
+    description: 'Providing services using highly advanced tools',
+    bgColor: 'bg-orange-500',
+  },
+  {
+    icon: <BarChart className="h-8 w-8 text-white" />,
+    title: 'Analytics Provided',
+    description: 'Regular analytics updates during the service period',
+    bgColor: 'bg-purple-500',
+  },
+  {
+    icon: <Users className="h-8 w-8 text-white" />,
+    title: 'Skilled Team Members',
+    description: 'Pixel & Code’s skilled team ensures complete service',
+    bgColor: 'bg-yellow-500',
+  },
+  {
+    icon: <Headset className="h-8 w-8 text-white" />,
+    title: '24/7 Customer Support',
+    description: 'Receive customer support 24 hours a day, 7 days a week',
+    bgColor: 'bg-blue-500',
   },
 ];
 
 export function WhyChooseUsSection() {
+  const { language } = useLanguage();
   return (
     <section className="relative w-full overflow-hidden bg-purple-50/50 py-20 sm:py-28">
       <div className="container mx-auto px-4">
@@ -39,14 +70,20 @@ export function WhyChooseUsSection() {
           {/* বাম কলাম: টেক্সট এবং ফিচার */}
           <div className="flex flex-col">
             <h2 className="mb-10 text-3xl font-extrabold text-gray-800 md:text-4xl">
-              যে কারণে পিক্সেল এন্ড কোড <br /> #১ সেরা প্রতিষ্ঠান
+              {language ? (
+                'Why Pixel & Code is the #1 Best Company'
+              ) : (
+                <>
+                  যে কারণে পিক্সেল এন্ড কোড <br /> #১ সেরা প্রতিষ্ঠান
+                </>
+              )}
             </h2>
+
             <ul className="space-y-6">
-              {features.map((feature) => (
+              {(language ? featuresEn : featuresBn).map(feature => (
                 <li key={feature.title} className="flex items-start gap-4">
                   <div
-                    className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg shadow-md ${feature.bgColor}`}
-                  >
+                    className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg shadow-md ${feature.bgColor}`}>
                     {feature.icon}
                   </div>
                   <div>
@@ -69,12 +106,12 @@ export function WhyChooseUsSection() {
             <div className="absolute bottom-1/4 right-0 h-16 w-16 translate-x-1/2 translate-y-1/2 rounded-full border-8 border-yellow-200/50"></div>
             <div className="absolute left-0 top-1/4 h-10 w-10 -translate-y-1/2 -translate-x-1/2 rounded-full bg-purple-200/50"></div>
             <div className="absolute bottom-1/2 left-0 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-200/50 p-2 text-white">
-                <Play className="h-6 w-6" />
+              <Play className="h-6 w-6" />
             </div>
-            
+
             {/* মূল বৃত্তাকার ব্যাকগ্রাউন্ড */}
             <div className="absolute h-[450px] w-[450px] rounded-full bg-purple-200/80"></div>
-            
+
             {/* মোবাইল অ্যাপের ছবি */}
             <div className="relative z-10 transform transition-transform duration-500 hover:scale-105">
               <Image
