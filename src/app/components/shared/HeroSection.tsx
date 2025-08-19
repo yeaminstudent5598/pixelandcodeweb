@@ -1,9 +1,11 @@
 // src/components/shared/HeroSection.tsx
 import Image from "next/image";
+import LanguageDropdown from "./LenguageDropdown";
 
 export function HeroSection() {
   return (
     <section className="w-full">
+      <LanguageDropdown />
       <div className="relative h-auto w-full">
         <Image
           src="/Banner_Pixel_&_Code.jpg" 
