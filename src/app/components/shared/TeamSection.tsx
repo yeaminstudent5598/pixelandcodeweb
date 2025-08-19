@@ -1,63 +1,68 @@
 // src/components/shared/TeamSection.tsx
-import Image from "next/image";
-import React from "react";
+'use client';
+import { useLanguage } from '@/context/LanguageContext';
+import Image from 'next/image';
+import React from 'react';
 
 // টিম মেম্বারদের ডেটা
 const teamMembers = [
   {
-    imgSrc: "/Yeamin.png", // ❗️ আপনার নিজের ছবি দিন
-    name: "Yeamin",
-    role: "CEO & Backend Developer",
+    imgSrc: '/Yeamin.png', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Yeamin',
+    role: 'CEO & Backend Developer',
   },
   {
-    imgSrc: "/Sifat.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Sifat Hossain",
-    role: "Graphics Desinger",
+    imgSrc: '/Sifat.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Sifat Hossain',
+    role: 'Graphics Desinger',
   },
   {
-    imgSrc: "/Naeem.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Naeem Majumder",
-    role: "Backend Developer",
+    imgSrc: '/Naeem.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Naeem Majumder',
+    role: 'Backend Developer',
   },
   {
-    imgSrc: "/Sabbir_Hossain.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Sabbir Hossain",
-    role: "Frontend Developer",
+    imgSrc: '/Sabbir_Hossain.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Sabbir Hossain',
+    role: 'Frontend Developer',
   },
   {
-    imgSrc: "/Moin_Uddin.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Moin Uddin",
-    role: "Frontend Developer",
+    imgSrc: '/Moin_Uddin.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Moin Uddin',
+    role: 'Frontend Developer',
   },
   {
-    imgSrc: "/Aysa_Akter.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Aysha Akter Urmi",
-    role: "Frontend Developer",
+    imgSrc: '/Aysa_Akter.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Aysha Akter Urmi',
+    role: 'Frontend Developer',
   },
   {
-    imgSrc: "/Iftiak_Hossain.webp", // ❗️ আপনার নিজের ছবি দিন
-    name: "Iftiak Hossain",
-    role: "UI/UK Desinger",
+    imgSrc: '/Iftiak_Hossain.webp', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Iftiak Hossain',
+    role: 'UI/UK Desinger',
   },
   {
-    imgSrc: "/Mizan.jpg", // ❗️ আপনার নিজের ছবি দিন
-    name: "Mizan",
-    role: "Video Editing",
+    imgSrc: '/Mizan.jpg', // ❗️ আপনার নিজের ছবি দিন
+    name: 'Mizan',
+    role: 'Video Editing',
   },
-  
 ];
 
 export function TeamSection() {
+  const { language } = useLanguage();
   return (
     <section className="w-full bg-gradient-to-br from-white via-pink-50 to-red-50 py-20 sm:py-28">
       <div className="container mx-auto px-4">
         {/* সেকশনের শিরোনাম */}
         <div className="mb-12 text-center">
           <div className="mb-4 inline-block rounded-full border border-red-200 bg-white px-6 py-2 text-sm font-medium text-red-500 shadow-sm">
-            টিম মেম্বার
+            {language ? 'Team Members' : 'টিম মেম্বার'}
           </div>
+
           <h2 className="text-3xl font-extrabold text-gray-800 md:text-4xl">
-            আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!
+            {language
+              ? 'The Heroes Behind Ensuring Your Perfect Service!!'
+              : 'আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!'}
           </h2>
         </div>
 
@@ -66,8 +71,7 @@ export function TeamSection() {
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-            >
+              className="group flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <div className="relative mb-4 h-36 w-36 overflow-hidden rounded-full border-4 border-white shadow-md">
                 <Image
                   src={member.imgSrc}
