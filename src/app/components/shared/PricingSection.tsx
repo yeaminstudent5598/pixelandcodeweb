@@ -85,13 +85,13 @@ export function PricingSection() {
         {/* সেকশনের শিরোনাম */}
         <h2 className="mb-12 text-center text-3xl font-extrabold text-green-700 md:text-4xl">
           {language
-            ? 'Reach the Right Customers Through Advertise Marketing!'
-            : 'অ্যাডভার্টাইজ মার্কেটিং করে পৌঁছে যান সঠিক কাস্টমারের কাছে!'}
+            ? 'অ্যাডভার্টাইজ মার্কেটিং করে পৌঁছে যান সঠিক কাস্টমারের কাছে!'
+            : 'Reach the Right Customers Through Advertise Marketing!'}
         </h2>
 
         {/* প্যাকেজ কার্ডগুলোর গ্রিড */}
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {(language ? packagesDataEn : packagesDataBn).map((item, index) => (
+          {(language ? packagesDataBn : packagesDataEn).map((item, index) => (
             <div
               key={index}
               className={`relative flex flex-col overflow-hidden rounded-lg border-2 bg-gray-50 shadow-lg transition-transform duration-300 ${
@@ -101,7 +101,7 @@ export function PricingSection() {
               }`}>
               {item.isPopular && (
                 <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-green-500 px-4 py-1 text-sm font-bold text-white">
-                  {language ? 'Popular' : 'জনপ্রিয়'}
+                  {language ? 'জনপ্রিয়' : 'Popular'}
                 </div>
               )}
 
@@ -124,12 +124,12 @@ export function PricingSection() {
               <div className="flex flex-grow flex-col p-6 pt-2 text-center">
                 <p className="font-bold text-gray-800">
                   {language
-                    ? `Boost your post for ${item.boostAmount.toLocaleString(
-                        'en-US'
-                      )} BDT!`
-                    : `পোস্ট বুস্ট করুন ${item.boostAmount.toLocaleString(
+                    ? `পোস্ট বুস্ট করুন ${item.boostAmount.toLocaleString(
                         'bn-BD'
-                      )} টাকায়!`}
+                      )} টাকায়!`
+                    : `Boost your post for ${item.boostAmount.toLocaleString(
+                        'en-US'
+                      )} BDT!`}
                 </p>
 
                 <p className="mt-1 text-sm text-gray-500">
@@ -140,7 +140,7 @@ export function PricingSection() {
                   asChild
                   className="mt-6 w-full rounded-md bg-green-600 text-white hover:bg-green-700">
                   <Link href={item.link}>
-                    {language ? 'Set Campaign' : 'ক্যাম্পেইন সেট করুন'}
+                    {language ? 'ক্যাম্পেইন সেট করুন' : 'Set Campaign'}
                   </Link>
                 </Button>
               </div>
@@ -154,7 +154,7 @@ export function PricingSection() {
             size="lg"
             className="rounded-full bg-green-600 px-10 py-6 text-lg text-white shadow-md transition-transform hover:scale-105 hover:bg-green-700">
             <Link href="/packages">
-              {language ? 'View Packages...' : 'প্যাকেজ সমূহ...'}
+              {language ? 'প্যাকেজ সমূহ...' : 'View Packages...'}
             </Link>
           </Button>
         </div>

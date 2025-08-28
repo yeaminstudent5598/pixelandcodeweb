@@ -29,7 +29,7 @@ export function TechStackSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}>
-          {language ? 'Technologies We Use' : 'আমরা যেসকল টেকনোলজি ব্যবহার করি'}
+          {language ? 'আমরা যেসকল টেকনোলজি ব্যবহার করি' : 'Technologies We Use'}
         </motion.h2>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
           {techStack.map((tech, index) => (

@@ -74,13 +74,13 @@ export function FeaturedServicesSection() {
         {/* সেকশনের শিরোনাম */}
         <h2 className="mb-12 text-center text-3xl font-extrabold text-gray-800 md:text-4xl">
           {language
-            ? 'Start Your Creative Business Journey!!'
-            : 'শুরু করুন আপনার ব্যবসার ক্রিয়েটিভ যাত্রা!!'}
+            ? 'শুরু করুন আপনার ব্যবসার ক্রিয়েটিভ যাত্রা!!'
+            : 'Start Your Creative Business Journey!!'}
         </h2>
 
         {/* সার্ভিস কার্ডগুলোর গ্রিড */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {(language ? servicesDataEn : servicesDataBn).map((item, index) => (
+          {(language ? servicesDataBn : servicesDataEn).map((item, index) => (
             <div
               key={index}
               className="group flex flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl">
@@ -110,7 +110,7 @@ export function FeaturedServicesSection() {
                   asChild
                   className="mt-6 w-full rounded-md bg-blue-600 text-white hover:bg-blue-700">
                   <Link href={item.link}>
-                    {language ? 'View Details' : 'বিস্তারিত দেখুন'}
+                    {language ? 'বিস্তারিত দেখুন' : 'View Details'}
                   </Link>
                 </Button>
               </div>

@@ -28,19 +28,19 @@ export function TestimonialsSection() {
           {/* বাম কলাম: টেক্সট কনটেন্ট */}
           <div className="flex flex-col">
             <div className="mb-4 inline-block rounded-full border border-red-200 bg-white px-6 py-2 text-sm font-medium text-red-500 shadow-sm">
-              {language ? 'Customer Feedback' : 'কাস্টমার ফিডব্যাক'}
+              {language ? 'কাস্টমার ফিডব্যাক' : 'Customer Feedback'}
             </div>
 
             <h2 className="mb-6 text-3xl font-extrabold text-gray-800 md:text-4xl">
               {language
-                ? 'Comments from Customers Who Expressed Satisfaction with Our #1 Service!'
-                : 'আমাদের #১ সেবায় যারা সন্তুষ্টি প্রকাশ করেছেন তাদের মন্তব্য!'}
+                ? 'আমাদের #১ সেবায় যারা সন্তুষ্টি প্রকাশ করেছেন তাদের মন্তব্য!'
+                : 'Comments from Customers Who Expressed Satisfaction with Our #1 Service!'}
             </h2>
 
             <p className="mb-8 text-base leading-relaxed text-gray-600 md:text-lg">
               {language
-                ? 'For the past 7 years, we have been providing digital services across Mymensingh and nationwide with great reputation. We have experience working with over 400 brands.'
-                : 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত ময়মনসিংহ এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'}
+                ? 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত ময়মনসিংহ এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'
+                : 'For the past 7 years, we have been providing digital services across Mymensingh and nationwide with great reputation. We have experience working with over 400 brands.'}
             </p>
 
             <Button
@@ -48,7 +48,7 @@ export function TestimonialsSection() {
               variant="link"
               className="group p-0 text-lg font-semibold text-orange-600 hover:text-orange-700">
               <Link href="/testimonials" className="flex items-center gap-2">
-                <span>আরও ফিডব্যাক দেখুন</span>
+                <span>{language ? 'আরও ফিডব্যাক দেখুন' : 'See More Feedback'}</span>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>

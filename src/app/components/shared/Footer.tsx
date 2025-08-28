@@ -90,8 +90,8 @@ export function Footer() {
             </Link>
             <p className="mb-6 text-sm leading-relaxed text-gray-600">
               {language
-                ? 'We provide all the necessary services to successfully establish your business on digital platforms.'
-                : 'আমরা আপনার ব্যবসাকে ডিজিটাল প্ল্যাটফর্মে সফলভাবে প্রতিষ্ঠিত করতে প্রয়োজনীয় সকল সেবা প্রদান করি।'}
+                ? 'আমরা আপনার ব্যবসাকে ডিজিটাল প্ল্যাটফর্মে সফলভাবে প্রতিষ্ঠিত করতে প্রয়োজনীয় সকল সেবা প্রদান করি।'
+                : 'We provide all the necessary services to successfully establish your business on digital platforms.'}
             </p>
 
             <div className="flex space-x-4">
@@ -110,11 +110,11 @@ export function Footer() {
           {/* Column 2: Quick Links */}
           <div>
             <h3 className="mb-6 text-lg font-semibold text-gray-900">
-              {language ? 'Quick Links' : 'কুইক লিংকস'}
+              {language ? 'কুইক লিংকস' : 'Quick Links'}
             </h3>
 
             <ul className="space-y-3">
-              {(language ? quickLinksEn : quickLinksBn).map(link => (
+              {(language ? quickLinksBn : quickLinksEn).map(link => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -129,7 +129,7 @@ export function Footer() {
           {/* Column 3: Legal */}
           <div>
             <h3 className="mb-6 text-lg font-semibold text-gray-900">
-              {language ? 'Legal' : 'লিগ্যাল'}
+              {language ? 'লিগ্যাল' : 'Legal'}
             </h3>
 
             <ul className="space-y-3">
@@ -148,7 +148,7 @@ export function Footer() {
           {/* Column 4: Contact Info */}
           <div>
             <h3 className="mb-6 text-lg font-semibold text-gray-900">
-              {language ? 'Contact Us' : 'যোগাযোগ করুন'}
+              {language ? 'যোগাযোগ করুন' : 'Contact Us'}
             </h3>
 
             <ul className="space-y-4 text-sm">

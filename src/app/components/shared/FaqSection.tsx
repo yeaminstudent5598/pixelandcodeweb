@@ -79,17 +79,17 @@ export function FaqSection() {
           {/* ডান কলাম: প্রশ্ন এবং উত্তর */}
           <div className="flex flex-col">
             <div className="mb-4 inline-block self-start rounded-full border border-red-200 bg-red-50 px-6 py-2 text-sm font-medium text-red-600 shadow-sm">
-              {language ? 'Questions & Answers' : 'প্রশ্ন ও উত্তর'}
+              {language ? 'প্রশ্ন ও উত্তর' : 'Questions & Answers'}
             </div>
 
             <h2 className="mb-8 text-3xl font-extrabold text-gray-800 md:text-4xl">
               {language
-                ? 'Answers to Frequently Asked Questions!'
-                : 'সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!'}
+                ? 'সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!'
+                : 'Answers to Frequently Asked Questions!'}
             </h2>
 
             <Accordion type="single" collapsible className="w-full">
-              {(language ? faqDataEn : faqDataBn).map((faq, index) => (
+              {(language ? faqDataBn : faqDataEn).map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">
                     {faq.question}

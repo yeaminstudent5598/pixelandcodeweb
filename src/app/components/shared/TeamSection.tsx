@@ -56,13 +56,13 @@ export function TeamSection() {
         {/* সেকশনের শিরোনাম */}
         <div className="mb-12 text-center">
           <div className="mb-4 inline-block rounded-full border border-red-200 bg-white px-6 py-2 text-sm font-medium text-red-500 shadow-sm">
-            {language ? 'Team Members' : 'টিম মেম্বার'}
+            {language ? 'টিম মেম্বার' : 'Team Members'}
           </div>
 
           <h2 className="text-3xl font-extrabold text-gray-800 md:text-4xl">
             {language
-              ? 'The Heroes Behind Ensuring Your Perfect Service!!'
-              : 'আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!'}
+              ? 'আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!'
+              : 'The Heroes Behind Ensuring Your Perfect Service!!'}
           </h2>
         </div>
 
