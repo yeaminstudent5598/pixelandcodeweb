@@ -71,16 +71,16 @@ export function WhyChooseUsSection() {
           <div className="flex flex-col">
             <h2 className="mb-10 text-3xl font-extrabold text-gray-800 md:text-4xl">
               {language ? (
-                'Why Pixel & Code is the #1 Best Company'
-              ) : (
                 <>
                   যে কারণে পিক্সেল এন্ড কোড <br /> #১ সেরা প্রতিষ্ঠান
                 </>
+              ) : (
+                'Why Pixel & Code is the #1 Best Company'
               )}
             </h2>
 
             <ul className="space-y-6">
-              {(language ? featuresEn : featuresBn).map(feature => (
+              {(language ? featuresBn : featuresEn).map(feature => (
                 <li key={feature.title} className="flex items-start gap-4">
                   <div
                     className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg shadow-md ${feature.bgColor}`}>

@@ -103,13 +103,16 @@ export default function DigitalMarketingPage() {
             <motion.h1
               className="mb-6 text-4xl font-extrabold text-gray-800 md:text-5xl"
               variants={itemVariants}>
-              ডিজিটাল মার্কেটিং এর মাধ্যমে আপনার ব্যবসাকে দিন নতুন গতি
+              {language
+                ? 'ডিজিটাল মার্কেটিং এর মাধ্যমে আপনার ব্যবসাকে দিন নতুন গতি'
+                : 'Accelerate Your Business with Digital Marketing'}
             </motion.h1>
             <motion.p
               className="mb-10 text-lg text-gray-600"
               variants={itemVariants}>
-              আমরা আপনার ব্র্যান্ডের জন্য সঠিক ডিজিটাল মার্কেটিং স্ট্র্যাটেজি
-              তৈরি করি যা আপনার ব্যবসাকে কয়েক ধাপ এগিয়ে নিয়ে যাবে।
+              {language
+                ? 'আমরা আপনার ব্র্যান্ডের জন্য সঠিক ডিজিটাল মার্কেটিং স্ট্র্যাটেজি তৈরি করি যা আপনার ব্যবসাকে কয়েক ধাপ এগিয়ে নিয়ে যাবে।'
+                : 'We craft the right digital marketing strategy for your brand to move your business forward.'}
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button
@@ -117,7 +120,7 @@ export default function DigitalMarketingPage() {
                 size="lg"
                 className="group w-full rounded-full bg-blue-600 px-8 py-6 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:bg-blue-700 sm:w-auto">
                 <Link href="/contact">
-                  ফ্রি কনসালটেন্সি নিন
+                  {language ? 'ফ্রি কনসালটেন্সি নিন' : 'Get Free Consultancy'}
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </Button>
@@ -164,11 +167,11 @@ export default function DigitalMarketingPage() {
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-gray-800">
-              আমাদের ডিজিটাল মার্কেটিং সার্ভিসসমূহ
+              {language ? 'আমাদের ডিজিটাল মার্কেটিং সার্ভিসসমূহ' : 'Our Digital Marketing Services'}
             </h2>
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {(language ? marketingServicesEn : marketingServicesBn).map(
+            {(language ? marketingServicesBn : marketingServicesEn).map(
               (service, index) => (
                 <motion.div
                   key={index}
@@ -196,36 +199,33 @@ export default function DigitalMarketingPage() {
           <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
             <div>
               <h2 className="mb-6 text-3xl font-bold text-gray-800">
-                কেন আমাদের বেছে নিবেন?
+                {language ? 'কেন আমাদের বেছে নিবেন?' : 'Why Choose Us?'}
               </h2>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
                   <div>
-                    <h4 className="font-semibold">ডেটা-ড্রিভেন স্ট্র্যাটেজি</h4>
+                    <h4 className="font-semibold">{language ? 'ডেটা-ড্রিভেন স্ট্র্যাটেজি' : 'Data-driven Strategy'}</h4>
                     <p className="text-gray-600">
-                      আমরা প্রতিটি ক্যাম্পেইন অ্যানালাইসিস করে সেরা ফলাফল
-                      নিশ্চিত করি।
+                      {language ? 'আমরা প্রতিটি ক্যাম্পেইন অ্যানালাইসিস করে সেরা ফলাফল নিশ্চিত করি।' : 'We analyze every campaign to ensure the best results.'}
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
                   <div>
-                    <h4 className="font-semibold">অভিজ্ঞ টিম</h4>
+                    <h4 className="font-semibold">{language ? 'অভিজ্ঞ টিম' : 'Experienced Team'}</h4>
                     <p className="text-gray-600">
-                      আমাদের রয়েছে ডিজিটাল মার্কেটিং ইন্ডাস্ট্রির অভিজ্ঞ
-                      এক্সপার্ট।
+                      {language ? 'আমাদের রয়েছে ডিজিটাল মার্কেটিং ইন্ডাস্ট্রির অভিজ্ঞ এক্সপার্ট।' : 'We have experienced experts in the digital marketing industry.'}
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
                   <div>
-                    <h4 className="font-semibold">স্বচ্ছ রিপোর্টিং</h4>
+                    <h4 className="font-semibold">{language ? 'স্বচ্ছ রিপোর্টিং' : 'Transparent Reporting'}</h4>
                     <p className="text-gray-600">
-                      প্রতিটি ক্যাম্পেইনের শেষে আমরা বিস্তারিত রিপোর্ট প্রদান
-                      করি।
+                      {language ? 'প্রতিটি ক্যাম্পেইনের শেষে আমরা বিস্তারিত রিপোর্ট প্রদান করি।' : 'We provide detailed reports at the end of every campaign.'}
                     </p>
                   </div>
                 </li>

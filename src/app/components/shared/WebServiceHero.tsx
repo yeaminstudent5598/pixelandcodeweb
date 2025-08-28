@@ -7,10 +7,14 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 
 // 1. Banner Section Component (আপনার সাদা থিমের জন্য নতুন ডিজাইন)
 export function WebServiceHero() {
-  const services = ["Websites", "E-commerce Stores", "Web Apps"];
+  const { language } = useLanguage();
+  const servicesEn = ["Websites", "E-commerce Stores", "Web Apps"];
+  const servicesBn = ["ওয়েবসাইট", "ই-কমার্স স্টোর", "ওয়েব অ্যাপ"];
+  const services = language ? servicesBn : servicesEn;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -60,7 +64,7 @@ export function WebServiceHero() {
             className="mb-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl"
             variants={itemVariants}
           >
-            We Build Modern
+            {language ? "আমরা তৈরি করি আধুনিক" : "We Build Modern"}
             <br />
             <span className="relative inline-block h-20 text-blue-600">
               <AnimatePresence mode="wait">
@@ -81,7 +85,9 @@ export function WebServiceHero() {
             className="mx-auto mb-10 max-w-xl text-lg text-gray-600 lg:mx-0"
             variants={itemVariants}
           >
-            আপনার আইডিয়াকে বাস্তবে রূপান্তর করুন। আমরা আপনার ব্যবসার জন্য দ্রুত, নিরাপদ এবং আকর্ষণীয় ডিজিটাল প্ল্যাটফর্ম তৈরি করি।
+            {language
+              ? "আপনার আইডিয়াকে বাস্তবে রূপান্তর করুন। আমরা আপনার ব্যবসার জন্য দ্রুত, নিরাপদ এবং আকর্ষণীয় ডিজিটাল প্ল্যাটফর্ম তৈরি করি।"
+              : "Turn your idea into reality. We build fast, secure, and engaging digital platforms for your business."}
           </motion.p>
           
           <motion.div variants={itemVariants}>
@@ -91,7 +97,7 @@ export function WebServiceHero() {
               className="group rounded-full bg-blue-600 px-8 py-6 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-blue-600/30"
             >
               <Link href="/contact">
-                শুরু করুন
+                {language ? "শুরু করুন" : "Get Started"}
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </Button>
