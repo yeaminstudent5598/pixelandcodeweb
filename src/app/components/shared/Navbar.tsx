@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -113,6 +115,7 @@ function Logo() {
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, setLanguage } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 shadow-sm backdrop-blur-md">
@@ -171,7 +174,14 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           {/* Language Dropdown for Desktop */}
           <div className="hidden lg:block">
-            
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium select-none">{language ? "BN" : "EN"}</span>
+              <Switch
+                checked={language}
+                onCheckedChange={(checked) => setLanguage(Boolean(checked))}
+                aria-label="Toggle language"
+              />
+            </div>
           </div>
           
           {/* লগ-ইন বাটন */}
@@ -222,7 +232,17 @@ export function Navbar() {
                         <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">যোগাযোগ</Link>
                     </SheetClose>
                     <div className="mt-4">
-                     {/* <LanguageDropdown /> */}
+                      <div className="flex items-center justify-between rounded-md border p-3">
+                        <span className="text-sm font-medium">Language</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs select-none">{language ? "BN" : "EN"}</span>
+                          <Switch
+                            checked={language}
+                            onCheckedChange={(checked) => setLanguage(Boolean(checked))}
+                            aria-label="Toggle language"
+                          />
+                        </div>
+                      </div>
                     </div>
                 </nav>
               </div>
