@@ -15,17 +15,17 @@ export function AboutSection() {
           {/* বাম কলাম: টেক্সট কনটেন্ট */}
           <div className="flex flex-col items-start">
             <span className="mb-4 rounded-full border border-orange-200 bg-white px-4 py-1 text-sm font-medium text-orange-600 shadow-sm">
-              {language ? 'About Us' : 'আমাদের পরিচিতি'}
+              {language ? 'আমাদের পরিচিতি' : 'About Us'}
             </span>
             <h2 className="mb-6 text-3xl font-extrabold text-gray-800 md:text-4xl">
               {language
-                ? "Shariatpur's #1 Digital Service Provider!"
-                : 'শরীয়তপুর এর #১ ডিজিটাল সার্ভিস প্রদানকারী প্রতিষ্ঠান!'}
+                ? 'শরীয়তপুর এর #১ ডিজিটাল সার্ভিস প্রদানকারী প্রতিষ্ঠান!'
+                : "Shariatpur's #1 Digital Service Provider!"}
             </h2>
             <p className="mb-8 text-base leading-relaxed text-gray-600 md:text-lg">
               {language
-                ? 'For over 7 years, we have been fulfilling all kinds of digital service needs with reputation in Shariatpur and across the country. We also have experience working with more than 400 brands.'
-                : 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত শরীয়তপুর এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'}
+                ? 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত শরীয়তপুর এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'
+                : 'For over 7 years, we have been fulfilling all kinds of digital service needs with reputation in Shariatpur and across the country. We also have experience working with more than 400 brands.'}
             </p>
 
             <Button
@@ -33,7 +33,7 @@ export function AboutSection() {
               variant="link"
               className="p-0 text-lg text-orange-600 hover:text-orange-700">
               <Link href="/about" className="flex items-center gap-2">
-                <span>{language ? 'Learn More' : 'আরও জানুন'}</span>
+                <span>{language ? 'আরও জানুন' : 'Learn More'}</span>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>

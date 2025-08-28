@@ -65,23 +65,23 @@ export function AchievementsSection() {
           <div className="relative z-10 flex flex-col items-center text-center">
             {/* উপরের ট্যাগ */}
             <div className="mb-4 rounded-full border-2 border-white/30 bg-white/10 px-6 py-2 text-sm font-medium backdrop-blur-sm">
-              {language ? 'Success & Achievements' : 'সফলতা ও অর্জন'}
+              {language ? 'সফলতা ও অর্জন' : 'Success & Achievements'}
             </div>
 
             {/* প্রধান শিরোনাম */}
             <h2 className="mb-10 text-3xl font-extrabold md:text-4xl">
               {language ? (
-                "Moas BD's Success & Achievements in the Last 5 Years!"
-              ) : (
                 <>
                   বিগত ৫ বছরে মোয়াস বিডির <br /> সফলতা ও অর্জন!
                 </>
+              ) : (
+                " Success & Achievements in the Last 5 Years!"
               )}
             </h2>
 
             {/* স্ট্যাটাস কার্ডগুলোর গ্রিড */}
             <div className="grid w-full max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
-              {(language ? achievementsEn : achievementsBn).map(
+              {(language ? achievementsBn : achievementsEn).map(
                 (item, index) => (
                   <div
                     key={index}

@@ -28,8 +28,8 @@ export function PortfolioSection() {
         {/* সেকশনের শিরোনাম */}
         <h2 className="mb-12 text-center text-3xl font-extrabold text-white md:text-4xl">
           {language
-            ? 'Some of Our Created Advertisements!'
-            : 'আমাদের তৈরি কিছু বিজ্ঞাপন!'}
+            ? 'আমাদের তৈরি কিছু বিজ্ঞাপন!'
+            : 'Some of Our Created Advertisements!'}
         </h2>
 
         {/* পোর্টফোলিও আইটেমগুলোর গ্রিড */}

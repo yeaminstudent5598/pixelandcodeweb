@@ -39,14 +39,14 @@ export function TechnologySection() {
       <div className="container mx-auto flex flex-col items-center px-4">
         {/* উপরের ট্যাগ */}
         <div className="mb-4 rounded-full border-2 border-white/50 px-6 py-2 text-sm font-medium text-white">
-          {language ? 'Software & Tools' : 'সফটওয়্যার ও টুলস'}
+          {language ? 'সফটওয়্যার ও টুলস' : 'Software & Tools'}
         </div>
 
         {/* প্রধান শিরোনাম */}
         <h2 className="mb-10 text-center text-3xl font-extrabold text-white md:text-4xl">
           {language
-            ? 'Technologies We Use!'
-            : 'আমরা যেসকল টেকনোলজি ব্যবহার করে থাকি!'}
+            ? 'আমরা যেসকল টেকনোলজি ব্যবহার করে থাকি!'
+            : 'Technologies We Use!'}
         </h2>
 
         {/* লোগো স্লাইডার */}

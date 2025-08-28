@@ -77,20 +77,20 @@ export function ServicesSection() {
       <h2 className="mb-10 text-center text-3xl font-extrabold text-gray-800 md:text-4xl">
         {language ? (
           <>
-            All digital solutions <br />
-            on one platform!
+            সকল ডিজিটাল সলিউশন <br />
+            এক প্লাটফর্মে!
           </>
         ) : (
           <>
-            সকল ডিজিটাল সলিউশন <br />
-            এক প্লাটফর্মে!
+            All digital solutions <br />
+            on one platform!
           </>
         )}
       </h2>
       <div className="container mx-auto px-4">
         {/* সার্ভিস কার্ডগুলোর গ্রিড */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {(language ? servicesDataEn : servicesDataBn).map(service => (
+          {(language ? servicesDataBn : servicesDataEn).map(service => (
             <div
               key={service.title}
               className={`flex transform  flex-col items-center rounded-2xl border-2 bg-white p-4 lg:p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}>
@@ -107,7 +107,7 @@ export function ServicesSection() {
                 asChild
                 className={`mt-auto w-full md:btn-sm rounded-full text-white ${service.buttonClass}`}>
                 <Link href="/services">
-                  {language ? 'Learn More' : 'বিস্তারিত জানুন'}
+                  {language ? 'বিস্তারিত জানুন' : 'Learn More'}
                 </Link>
               </Button>
             </div>
@@ -121,7 +121,7 @@ export function ServicesSection() {
             size="lg"
             className="rounded-full bg-red-500 px-10 py-6 text-lg text-white shadow-md transition-transform hover:scale-105 hover:bg-red-600">
             <Link href="/services">
-              {language ? 'Learn More' : 'বিস্তারিত জানুন'}
+              {language ? 'বিস্তারিত জানুন' : 'Learn More'}
             </Link>
           </Button>
         </div>
