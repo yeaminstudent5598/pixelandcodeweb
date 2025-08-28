@@ -1,10 +1,9 @@
-// src/app/components/shared/Navbar.tsx
+
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/context/LanguageContext";
@@ -17,9 +16,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-
-// import LanguageDropdown from "./LanguageDropdown";
-
 import {
   Sheet,
   SheetContent,
@@ -28,10 +24,9 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetClose,
-} from "@/components/ui/sheet"
-
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { LogIn, Menu } from "lucide-react";
+import { LogIn, Menu, ChevronDown, ChevronUp } from "lucide-react";
 
 // Services data in both languages
 const serviceComponentsBN: { title: string; href: string; description: string }[] = [
@@ -76,7 +71,7 @@ const serviceComponentsEN: { title: string; href: string; description: string }[
   { title: "UI/UX Design", href: "/ui-ux-design", description: "User-friendly and engaging designs for your app and website." },
 ];
 
-// লোগো কম্পোনেন্ট
+// Logo Component
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2">
@@ -120,10 +115,11 @@ function Logo() {
   );
 }
 
-// মূল নেভিগেশন বার কম্পোনেন্ট
+// Main Navbar Component
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false); // Added state for services dropdown in mobile
   const { language, setLanguage } = useLanguage();
   const t = language
     ? {
@@ -153,7 +149,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Logo />
 
-        {/* ডেক্সটপ মেনু */}
+        {/* Desktop Menu */}
         <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -215,7 +211,7 @@ export function Navbar() {
             </div>
           </div>
           
-          {/* লগ-ইন বাটন */}
+          {/* Login Button */}
           <Button asChild className="hidden bg-orange-500 text-white hover:bg-orange-600 sm:flex">
             <Link href="/login">
               <LogIn className="mr-2 h-4 w-4" />
@@ -223,7 +219,7 @@ export function Navbar() {
             </Link>
           </Button>
 
-          {/* মোবাইল মেনু (হ্যামবার্গার আইকন) */}
+          {/* Mobile Menu (Hamburger Icon) */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="lg:hidden">
@@ -241,40 +237,58 @@ export function Navbar() {
               <div className="flex flex-col gap-6 px-6">
                 <Logo />
                 <nav className="flex flex-col gap-2">
-                    <SheetClose asChild>
-                        <Link href="/" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.home}</Link>
-                    </SheetClose>
-                    <p className="px-3 py-2 text-lg font-semibold">{t.services}</p>
-                    {serviceComponents.map((item) => (
-                        <SheetClose asChild key={item.href}>
-                            <Link href={item.href} className="rounded-md px-6 py-2 text-base font-medium text-gray-600 hover:bg-gray-100">{item.title}</Link>
-                        </SheetClose>
-                    ))}
-                    <SheetClose asChild>
-                        <Link href="/packages" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.packages}</Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                        <Link href="/portfolio" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.portfolio}</Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                        <Link href="/about" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.about}</Link>
-                    </SheetClose>
-                     <SheetClose asChild>
-                        <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.contact}</Link>
-                    </SheetClose>
-                    <div className="mt-4">
-                      <div className="flex items-center justify-between rounded-md border p-3">
-                        <span className="text-sm font-medium">{t.languageLabel}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs select-none">{language ? "BN" : "EN"}</span>
-                          <Switch
-                            checked={language}
-                            onCheckedChange={(checked) => setLanguage(Boolean(checked))}
-                            aria-label="Toggle language"
-                          />
-                        </div>
+                  <SheetClose asChild>
+                    <Link href="/" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.home}</Link>
+                  </SheetClose>
+                  {/* Services Dropdown for Mobile */}
+                  <div>
+                    <button
+                      onClick={() => setServicesOpen(!servicesOpen)}
+                      className="flex items-center justify-between w-full rounded-md px-3 py-2 text-lg font-semibold hover:bg-gray-100"
+                    >
+                      {t.services}
+                      {servicesOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                    </button>
+                    {servicesOpen && (
+                      <div className="pl-4 pt-2 pb-1">
+                        {serviceComponents.map((item) => (
+                          <SheetClose asChild key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100"
+                            >
+                              {item.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <SheetClose asChild>
+                    <Link href="/packages" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.packages}</Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/portfolio" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.portfolio}</Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/about" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.about}</Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.contact}</Link>
+                  </SheetClose>
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between rounded-md border p-3">
+                      <span className="text-sm font-medium">{t.languageLabel}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs select-none">{language ? "BN" : "EN"}</span>
+                        <Switch
+                          checked={language}
+                          onCheckedChange={(checked) => setLanguage(Boolean(checked))}
+                          aria-label="Toggle language"
+                        />
                       </div>
                     </div>
+                  </div>
                 </nav>
               </div>
             </SheetContent>
@@ -285,7 +299,7 @@ export function Navbar() {
   );
 }
 
-// ড্রপডাউনের জন্য ListItem কম্পোনেন্ট
+// Dropdown ListItem Component
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
