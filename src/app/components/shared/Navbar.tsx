@@ -59,7 +59,7 @@ const serviceComponents: { title: string; href: string; description: string }[] 
     description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
   },
   {
-    title: "UI/UK ডিজাইন",
+    title: "UI/UX ডিজাইন",
     href: "/ui-ux-design",
     description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
   },

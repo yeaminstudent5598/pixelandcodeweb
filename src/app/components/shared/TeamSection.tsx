@@ -39,7 +39,7 @@ const teamMembers = [
   {
     imgSrc: '/Iftiak_Hossain.webp', // ❗️ আপনার নিজের ছবি দিন
     name: 'Iftiak Hossain',
-    role: 'UI/UK Desinger',
+    role: 'UI/UX Desinger',
   },
   {
     imgSrc: '/Mizan.jpg', // ❗️ আপনার নিজের ছবি দিন
