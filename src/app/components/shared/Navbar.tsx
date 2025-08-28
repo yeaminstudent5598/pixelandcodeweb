@@ -33,8 +33,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogIn, Menu } from "lucide-react";
 
-// সার্ভিসেস ড্রপডাউনের জন্য ডেটা (ইউআই/ইউএক্স ডিজাইন যুক্ত করা হয়েছে)
-const serviceComponents: { title: string; href: string; description: string }[] = [
+// Services data in both languages
+const serviceComponentsBN: { title: string; href: string; description: string }[] = [
   {
     title: "ওয়েব সার্ভিস",
     href: "/web-service",
@@ -65,6 +65,15 @@ const serviceComponents: { title: string; href: string; description: string }[] 
     href: "/ui-ux-design",
     description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
   },
+];
+
+const serviceComponentsEN: { title: string; href: string; description: string }[] = [
+  { title: "Web Service", href: "/web-service", description: "Modern, responsive and fast websites for your business." },
+  { title: "Digital Marketing", href: "/digital-marketing", description: "Grow your business through Facebook and Google Ads." },
+  { title: "Graphics Design", href: "/graphics-design", description: "Attractive logos, banners and posters for your brand." },
+  { title: "SEO", href: "/seo", description: "Bring your website to the first page of search engines." },
+  { title: "Video Editing", href: "/video-editing", description: "Create attractive and professional videos for your product." },
+  { title: "UI/UX Design", href: "/ui-ux-design", description: "User-friendly and engaging designs for your app and website." },
 ];
 
 // লোগো কম্পোনেন্ট
@@ -116,6 +125,28 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const t = language
+    ? {
+        home: "হোম",
+        services: "সার্ভিসেস",
+        packages: "প্যাকেজসমূহ",
+        portfolio: "পোর্টফোলিও",
+        about: "আমাদের সম্পর্কে",
+        contact: "যোগাযোগ",
+        login: "লগ-ইন",
+        languageLabel: "Language",
+      }
+    : {
+        home: "Home",
+        services: "Services",
+        packages: "Packages",
+        portfolio: "Portfolio",
+        about: "About",
+        contact: "Contact",
+        login: "Login",
+        languageLabel: "Language",
+      };
+  const serviceComponents = language ? serviceComponentsBN : serviceComponentsEN;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 shadow-sm backdrop-blur-md">
@@ -127,12 +158,12 @@ export function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink asChild active={pathname === "/"} className={navigationMenuTriggerStyle()}>
-                <Link href="/">হোম</Link>
+                <Link href="/">{t.home}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             
             <NavigationMenuItem>
-              <NavigationMenuTrigger>সার্ভিসেস</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t.services}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   {serviceComponents.map((component) => (
@@ -150,22 +181,22 @@ export function Navbar() {
 
             <NavigationMenuItem>
               <NavigationMenuLink asChild active={pathname === "/packages"} className={navigationMenuTriggerStyle()}>
-                <Link href="/packages">প্যাকেজসমূহ</Link>
+                <Link href="/packages">{t.packages}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild active={pathname === "/portfolio"} className={navigationMenuTriggerStyle()}>
-                <Link href="/portfolio">পোর্টফোলিও</Link>
+                <Link href="/portfolio">{t.portfolio}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild active={pathname === "/about"} className={navigationMenuTriggerStyle()}>
-                <Link href="/about">আমাদের সম্পর্কে</Link>
+                <Link href="/about">{t.about}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild active={pathname === "/contact"} className={navigationMenuTriggerStyle()}>
-                <Link href="/contact">যোগাযোগ</Link>
+                <Link href="/contact">{t.contact}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -188,7 +219,7 @@ export function Navbar() {
           <Button asChild className="hidden bg-orange-500 text-white hover:bg-orange-600 sm:flex">
             <Link href="/login">
               <LogIn className="mr-2 h-4 w-4" />
-              <span>লগ-ইন</span>
+              <span>{t.login}</span>
             </Link>
           </Button>
 
@@ -211,29 +242,29 @@ export function Navbar() {
                 <Logo />
                 <nav className="flex flex-col gap-2">
                     <SheetClose asChild>
-                        <Link href="/" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">হোম</Link>
+                        <Link href="/" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.home}</Link>
                     </SheetClose>
-                    <p className="px-3 py-2 text-lg font-semibold">সার্ভিসেস</p>
+                    <p className="px-3 py-2 text-lg font-semibold">{t.services}</p>
                     {serviceComponents.map((item) => (
                         <SheetClose asChild key={item.href}>
                             <Link href={item.href} className="rounded-md px-6 py-2 text-base font-medium text-gray-600 hover:bg-gray-100">{item.title}</Link>
                         </SheetClose>
                     ))}
                     <SheetClose asChild>
-                        <Link href="/packages" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">প্যাকেজসমূহ</Link>
+                        <Link href="/packages" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.packages}</Link>
                     </SheetClose>
                     <SheetClose asChild>
-                        <Link href="/portfolio" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">পোর্টফোলিও</Link>
+                        <Link href="/portfolio" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.portfolio}</Link>
                     </SheetClose>
                     <SheetClose asChild>
-                        <Link href="/about" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">আমাদের সম্পর্কে</Link>
+                        <Link href="/about" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.about}</Link>
                     </SheetClose>
                      <SheetClose asChild>
-                        <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">যোগাযোগ</Link>
+                        <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.contact}</Link>
                     </SheetClose>
                     <div className="mt-4">
                       <div className="flex items-center justify-between rounded-md border p-3">
-                        <span className="text-sm font-medium">Language</span>
+                        <span className="text-sm font-medium">{t.languageLabel}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xs select-none">{language ? "BN" : "EN"}</span>
                           <Switch
