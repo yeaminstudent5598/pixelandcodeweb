@@ -20,37 +20,37 @@ const portfolioItems = [
   {
     category: "Web Design",
     title: "ই-কমার্স ওয়েবসাইট",
-    imgSrc: "https://i.ibb.co/yVp4M9F/offer-fb.jpg",
-    link: "#",
+    imgSrc: "/web design.jpg",
+    link: "https://ready-fish-farm.netlify.app",
   },
   {
     category: "Graphics",
     title: "সোশ্যাল মিডিয়া পোস্ট",
-    imgSrc: "https://i.ibb.co/JqKxZ0x/offer-poster.jpg",
+    imgSrc: "/social design 01.jpeg",
     link: "#",
   },
   {
     category: "Web Design",
     title: "কর্পোরেট ওয়েবসাইট",
-    imgSrc: "https://i.ibb.co/yQdC5xW/logo-design.jpg",
+    imgSrc: "/web02.jpeg",
     link: "#",
   },
   {
     category: "Marketing",
     title: "ফেসবুক এড ক্যাম্পেইন",
-    imgSrc: "https://i.ibb.co/L8dFkR2/achievement-bg.jpg",
+    imgSrc: "/facebookadscampaign.jpeg",
     link: "#",
   },
   {
     category: "Graphics",
     title: "লোগো ডিজাইন",
-    imgSrc: "https://i.ibb.co/6rC0d2Z/uts-de.png",
+    imgSrc: "/demologo.jpeg",
     link: "#",
   },
   {
     category: "Marketing",
     title: "গুগল এডস",
-    imgSrc: "https://i.ibb.co/dK9B2kF/ajoy-goshwami.png",
+    imgSrc: "/google ads 01.jpeg",
     link: "#",
   },
 ];
@@ -114,12 +114,12 @@ export default function PortfolioPage() {
                   <CardHeader className="p-0">
                     <div className="relative h-60 w-full">
                       <Image
-                        src={item.imgSrc}
-                        alt={item.title}
-                        layout="fill"
-                        objectFit="cover"
-                        className="transition-transform duration-500 group-hover:scale-105"
-                      />
+                      src={item.imgSrc}
+                      alt={item.title}
+                      fill // 'layout="fill"' এর পরিবর্তে 'fill' ব্যবহার করা এখনকার স্ট্যান্ডার্ড
+                      style={{ objectFit: "contain" }} // <-- এখানে 'contain' ব্যবহার করুন
+                      className="transition-transform duration-500 group-hover:scale-105"
+                    />
                     </div>
                   </CardHeader>
                   <CardContent className="p-6">
