@@ -3,25 +3,33 @@
 import { useLanguage } from '@/context/LanguageContext';
 import Image from 'next/image';
 import React from 'react';
+import { motion } from 'framer-motion'; // Framer Motion ইম্পোর্ট করুন
 
 // পোর্টফোলিও আইটেমগুলোর ডেটা
 const portfolioItems = [
   {
-    src: '/Demo_Work_01.jpg', // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
+    src: '/Demo_Work_01.jpg',
     alt: 'Gadgets Social Media Post Design',
   },
   {
-    src: '/Demo Work 02.jpg', // ✅ ছবির নাম এবং এক্সটেনশন ঠিক করা হয়েছে
+    src: '/Demo Work 02.jpg',
     alt: 'Food Delivery Social Media Post Design',
   },
   {
-    src: '/part-03.jpg', // ✅ .jpg এক্সটেনশন যুক্ত করা হয়েছে
+    src: '/part-03.jpg',
     alt: 'Supershop Social Media Post Design',
   },
 ];
 
+// একটি আইটেমের আনুমানিক প্রস্থ (width + gap)
+// 350px width + 32px (mx-4 = 1rem = 16px * 2) gap
+const itemWidth = 350 + 32;
+// মোট প্রস্থ (অ্যানিমেশনের জন্য)
+const totalWidth = itemWidth * portfolioItems.length;
+
 export function PortfolioSection() {
   const { language } = useLanguage();
+
   return (
     <section className="w-full bg-blue-600 py-20 sm:py-28">
       <div className="container mx-auto px-4">
@@ -32,30 +40,62 @@ export function PortfolioSection() {
             : 'Some of Our Created Advertisements!'}
         </h2>
 
-        {/* পোর্টফোলিও আইটেমগুলোর গ্রিড */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {portfolioItems.map((item, index) => (
-            <div
-              key={index}
-              className="group overflow-hidden rounded-lg bg-white shadow-lg">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                width={600}
-                height={800}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-          ))}
-        </div>
+        {/* অটো-স্ক্রলিং ক্যারোসেল */}
+        <div
+          className="w-full overflow-hidden" // মেইন কন্টেইনার
+        >
+          {/* অ্যানিমেটেড কন্টেন্ট */}
+          <motion.div
+            className="flex" // ফ্লেক্স কন্টেইনার
+            animate={{
+              x: [0, -totalWidth], // 0 থেকে মোট প্রস্থ (-totalWidth) পর্যন্ত সরবে
+            }}
+            transition={{
+              ease: 'linear', // রৈখিক গতি
+              duration: 20, // অ্যানিমেশনের মোট সময় (সেকেন্ডে)
+              repeat: Infinity, // অসীমভাবে চলতে থাকবে
+            }}
+            // ❌ ওই problematic 'whileHover' লাইনটি এখান থেকে মুছে ফেলা হয়েছে
+          >
+            {/* মূল ইমেজগুলো */}
+            {portfolioItems.map((item, index) => (
+              <div
+                key={`item-${index}`}
+                className="mx-4 flex-shrink-0"
+                style={{ width: '350px' }} // প্রতিটি আইটেমের প্রস্থ
+              >
+                <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={600}
+                    height={800}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+            ))}
 
-        {/* নেভিগেশন ডট */}
-        <div className="mt-12 flex justify-center space-x-2">
-          <div className="h-3 w-3 rounded-full bg-white"></div>
-          <div className="h-3 w-3 rounded-full bg-white/50"></div>
-          <div className="h-3 w-3 rounded-full bg-white/50"></div>
-          <div className="h-3 w-3 rounded-full bg-white/50"></div>
-          <div className="h-3 w-3 rounded-full bg-white/50"></div>
+            {/* লুপের জন্য ডুপ্লিকেট করা ইমেজগুলো */}
+            {portfolioItems.map((item, index) => (
+              <div
+                key={`duplicate-${index}`}
+                className="mx-4 flex-shrink-0"
+                style={{ width: '350px' }}
+                aria-hidden="true" // Screen reader থেকে হাইড
+              >
+                <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={600}
+                    height={800}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>
