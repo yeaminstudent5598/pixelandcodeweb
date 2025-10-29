@@ -4,9 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.ibb.co',
+        hostname: 'i.ibb.co.com',
         port: '',
-        pathname: '/**',
+        pathname: '/**', // i.ibb.co.com এর যেকোনো পাথ থেকে ছবি লোড করার অনুমতি দিন
       },
       {
         protocol: 'https',
