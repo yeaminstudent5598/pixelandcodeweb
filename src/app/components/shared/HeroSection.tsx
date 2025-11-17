@@ -1,5 +1,6 @@
 // src/components/shared/HeroSection.tsx
 import Image from "next/image";
+import { HeroAnimation } from "./HeroAnimation";
 
 export function HeroSection() {
   return (
@@ -14,6 +15,7 @@ export function HeroSection() {
           priority
         />
       </div>
+      <HeroAnimation/>
     </section>
   );
 }
