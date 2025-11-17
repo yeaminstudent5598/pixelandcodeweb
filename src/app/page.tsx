@@ -15,7 +15,7 @@ import { WhyChooseUsSection } from "./components/shared/WhyChooseUsSection";
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
+    <HeroSection/>
       <ServicesSection />
       <AboutSection/>
       <PortfolioSection/>
