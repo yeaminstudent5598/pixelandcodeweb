@@ -122,3 +122,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* "no-scrollbar" ক্লাসটি এখানে ডিফাইন করা হয়েছে */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+}
