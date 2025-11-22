@@ -1,8 +1,7 @@
-// D:\yeamin student\PixelandCode Web\pixelandcode\src\app\components\shared\PixelCodeLogo3D.tsx
 'use client';
 
 import React, { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   Environment,
   PerspectiveCamera,
@@ -11,6 +10,7 @@ import {
 import * as THREE from 'three';
 import { SVGLoader } from 'three-stdlib';
 
+// ✅ সম্পূর্ণ লোগোর ৫টি পাথ এখানে দেওয়া হয়েছে
 const svgData = `
 <svg
   id="Layer_1"
@@ -52,6 +52,7 @@ interface SVGModelProps {
 
 function SVGModel({ fillColor = '#3B82F6' }: SVGModelProps) {
   const groupRef = useRef<THREE.Group>(null!);
+  const { viewport } = useThree(); // স্ক্রিনের সাইজ নেওয়ার জন্য
 
   const shapes = useMemo(() => {
     const loader = new SVGLoader();
@@ -71,43 +72,47 @@ function SVGModel({ fillColor = '#3B82F6' }: SVGModelProps) {
     return allShapes;
   }, []);
 
-  // Professional Multi-Axis Animation with Floating & Pulsing
+  // ✅ Responsive Scale Logic (লোগো যাতে কেটে না যায়)
+  const responsiveScale = useMemo(() => {
+    const width = viewport.width;
+    // মোবাইল স্ক্রিনে (width < 7) লোগোকে ছোট করা হচ্ছে
+    // ডেস্কটপে (width > 7) লোগো স্বাভাবিক সাইজে থাকবে
+    if (width < 7) return width / 2800; 
+    return 0.004; // ডিফল্ট সাইজ
+  }, [viewport.width]);
+
   useFrame((state) => {
     if (groupRef.current) {
       const time = state.clock.getElapsedTime();
       
-      // Smooth multi-axis rotation (cinematic feel)
-      groupRef.current.rotation.y = Math.sin(time * 0.3) * 0.3 + time * 0.15;
-      groupRef.current.rotation.x = Math.cos(time * 0.2) * 0.1;
-      groupRef.current.rotation.z = Math.sin(time * 0.15) * 0.05;
+      // স্মুথ রোটেশন
+      groupRef.current.rotation.y = Math.sin(time * 0.3) * 0.2 + time * 0.1;
+      groupRef.current.rotation.x = Math.cos(time * 0.2) * 0.05;
       
-      // Floating effect (up and down)
-      groupRef.current.position.y = Math.sin(time * 0.5) * 0.5;
+      // ফ্লোটিং ইফেক্ট
+      groupRef.current.position.y = Math.sin(time * 0.5) * 0.2;
       
-      // Subtle scale pulsing (breathing effect)
-      const scale = 0.005 + Math.sin(time * 0.8) * 0.0002;
-      groupRef.current.scale.setScalar(scale);
+      // স্কেল সেট করা হচ্ছে
+      groupRef.current.scale.setScalar(responsiveScale);
     }
   });
 
   return (
     <Center>
-      <group ref={groupRef} scale={0.005}>
+      {/* লোগোকে সেন্টারে রাখা হচ্ছে */}
+      <group ref={groupRef} scale={responsiveScale}>
         {shapes.map((shape, i) => (
           <mesh key={i} castShadow receiveShadow>
-            <extrudeGeometry args={[shape, { depth: 100, bevelEnabled: true, bevelThickness: 2, bevelSize: 1 }]} />
+            {/* depth কমানো হয়েছে যাতে লোগো বেশি মোটা না দেখায় */}
+            <extrudeGeometry args={[shape, { depth: 40, bevelEnabled: true, bevelThickness: 2, bevelSize: 1 }]} />
             <meshPhysicalMaterial
               color={fillColor}
-              metalness={0.9}
-              roughness={0.1}
+              metalness={0.8}
+              roughness={0.2}
               clearcoat={1.0}
-              clearcoatRoughness={0.1}
               reflectivity={1}
-              transmission={0.1}
-              thickness={0.5}
-              ior={1.5}
               emissive={fillColor}
-              emissiveIntensity={0.2}
+              emissiveIntensity={0.1}
             />
           </mesh>
         ))}
@@ -121,44 +126,36 @@ export function PixelLogo3DAnimation() {
     <div className="h-full w-full">
       <Canvas shadows dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
         <React.Suspense fallback={null}>
-          <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={50} />
+          {/* ✅ ক্যামেরা পজিশন এডজাস্ট করা হয়েছে (Z=40) যাতে লোগো পুরোপুরি দেখা যায় */}
+          <PerspectiveCamera makeDefault position={[0, 0, 25]} fov={45} />
           
-          {/* Professional Studio Lighting Setup */}
-          <ambientLight intensity={0.3} />
+          <ambientLight intensity={0.5} />
           
-          {/* Main Key Light */}
           <directionalLight 
             position={[10, 10, 10]} 
             intensity={1} 
             castShadow
-            shadow-mapSize={[2048, 2048]}
           />
           
-          {/* Blue Rim Light */}
           <spotLight
             position={[-10, 15, -5]}
-            angle={0.3}
+            angle={0.4}
             penumbra={0.5}
             intensity={2}
-            castShadow
             color="#3B82F6"
           />
           
-          {/* Orange Fill Light */}
           <spotLight
             position={[10, -10, 10]}
-            angle={0.3}
+            angle={0.4}
             penumbra={0.5}
             intensity={1.5}
             color="#F59E0B"
           />
           
-          {/* Pink Accent Light */}
-          <pointLight position={[0, 0, 15]} intensity={1} color="#EC4899" />
+          <Environment preset="city" />
           
-          {/* Cinematic Environment */}
-          <Environment preset="sunset" />
-          
+          {/* লোগোর কালার সেট করা হয়েছে */}
           <SVGModel fillColor="#3B82F6" />
         </React.Suspense>
       </Canvas>
