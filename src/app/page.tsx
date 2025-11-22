@@ -4,6 +4,7 @@ import { AchievementsSection } from "./components/shared/AchievementsSection";
 // import { ClientsSection } from "./components/shared/ClientsSection";
 import { FaqSection } from "./components/shared/FaqSection";
 import { FeaturedServicesSection } from "./components/shared/FeaturedServicesSection";
+import { Hero } from "./components/shared/Hero";
 import { HeroSection } from "./components/shared/HeroSection";
 import { PortfolioSection } from "./components/shared/PortfolioSection";
 import { PricingSection } from "./components/shared/PricingSection";
@@ -16,6 +17,8 @@ export default function HomePage() {
   return (
     <>
     <HeroSection/>
+      <Hero />
+    
       <ServicesSection />
       <AboutSection/>
       <PortfolioSection/>
