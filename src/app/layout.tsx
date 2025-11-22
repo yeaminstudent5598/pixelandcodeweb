@@ -5,6 +5,7 @@ import './globals.css';
 import { Navbar } from './components/shared/Navbar';
 import { Footer } from './components/shared/Footer';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { ThemeProvider } from './components/theme-provider';
 
 // Hind Siliguri ফন্ট কনফিগার করা হয়েছে
 const hindSiliguri = Hind_Siliguri({
@@ -27,6 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={hindSiliguri.variable}>
       <body className="antialiased bg-background text-foreground font-sans">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
         <LanguageProvider>
           <Navbar />
           <main className="min-h-[80vh]">
@@ -34,6 +41,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
