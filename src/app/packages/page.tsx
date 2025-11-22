@@ -74,56 +74,55 @@ export default function PackagesPage() {
   const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <main className="w-full bg-gray-50 py-20 sm:py-28">
+    <main className="w-full bg-gray-50 dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
       <div className="container mx-auto px-4">
         {/* সেকশনের শিরোনাম */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-extrabold text-gray-800 md:text-5xl">
+          <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white md:text-5xl">
             আমাদের সার্ভিস প্যাকেজসমূহ
           </h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
             আপনার ব্যবসার জন্য সঠিক প্যাকেজটি বেছে নিন।
           </p>
         </div>
 
         {/* মাসিক/বাৎসরিক টগল */}
         <div className="mb-10 flex items-center justify-center space-x-4">
-          <Label htmlFor="billing-cycle" className={cn("font-semibold", !isYearly && "text-blue-600")}>মাসিক</Label>
+          <Label htmlFor="billing-cycle" className={cn("font-semibold dark:text-gray-300", !isYearly && "text-blue-600 dark:text-blue-400")}>মাসিক</Label>
           <Switch id="billing-cycle" checked={isYearly} onCheckedChange={setIsYearly} />
-          <Label htmlFor="billing-cycle" className={cn("font-semibold", isYearly && "text-blue-600")}>বাৎসরিক (১০% ছাড়)</Label>
+          <Label htmlFor="billing-cycle" className={cn("font-semibold dark:text-gray-300", isYearly && "text-blue-600 dark:text-blue-400")}>বাৎসরিক (১০% ছাড়)</Label>
         </div>
 
         <Tabs defaultValue="facebook" className="w-full">
-          <TabsList className="mx-auto grid w-full max-w-2xl grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="facebook">ফেসবুক এড</TabsTrigger>
-            <TabsTrigger value="website">ওয়েবসাইট</TabsTrigger>
-            <TabsTrigger value="graphics">গ্রাফিক্স ডিজাইন</TabsTrigger>
-            <TabsTrigger value="video">ভিডিও এডিটিং</TabsTrigger>
+          <TabsList className="mx-auto grid w-full max-w-2xl grid-cols-2 sm:grid-cols-4 bg-gray-200 dark:bg-gray-800">
+            <TabsTrigger value="facebook" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 dark:text-gray-300 dark:data-[state=active]:text-white">ফেসবুক এড</TabsTrigger>
+            <TabsTrigger value="website" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 dark:text-gray-300 dark:data-[state=active]:text-white">ওয়েবসাইট</TabsTrigger>
+            <TabsTrigger value="graphics" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 dark:text-gray-300 dark:data-[state=active]:text-white">গ্রাফিক্স ডিজাইন</TabsTrigger>
+            <TabsTrigger value="video" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 dark:text-gray-300 dark:data-[state=active]:text-white">ভিডিও এডিটিং</TabsTrigger>
           </TabsList>
 
           {/* ফেসবুক এড ক্যাম্পেইন ট্যাব */}
           <TabsContent value="facebook">
             <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
               {(isYearly ? fbPackages.yearly : fbPackages.monthly).map((pkg) => (
-                <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
+                <Card key={pkg.name} className={cn("flex flex-col shadow-lg bg-white dark:bg-gray-900 dark:border-gray-800", pkg.popular && "border-2 border-blue-500 dark:border-blue-500 relative")}>
                    {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                    <CardDescription className="text-4xl font-bold text-gray-800">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
+                    <CardTitle className="text-2xl dark:text-white">{pkg.name}</CardTitle>
+                    <CardDescription className="text-4xl font-bold text-gray-800 dark:text-gray-100">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500 dark:text-gray-400">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <ul className="space-y-3">
                         {pkg.features.map(feature => (
                             <li key={feature} className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500" />
-                                <span>{feature}</span>
+                                <span className="dark:text-gray-300">{feature}</span>
                             </li>
                         ))}
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    {/* === পরিবর্তন এখানে === */}
-                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         <Link href={`/payment?service=facebook&name=${pkg.name}&price=${pkg.price}&billing=${isYearly ? 'yearly' : 'monthly'}`}>প্যাকেজটি কিনুন</Link>
                     </Button>
                   </CardFooter>
@@ -136,25 +135,24 @@ export default function PackagesPage() {
           <TabsContent value="website">
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
               {(isYearly ? webPackages.yearly : webPackages.monthly).map((pkg) => (
-                <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
+                <Card key={pkg.name} className={cn("flex flex-col shadow-lg bg-white dark:bg-gray-900 dark:border-gray-800", pkg.popular && "border-2 border-blue-500 dark:border-blue-500 relative")}>
                    {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                    <CardDescription className="text-4xl font-bold text-gray-800">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
+                    <CardTitle className="text-2xl dark:text-white">{pkg.name}</CardTitle>
+                    <CardDescription className="text-4xl font-bold text-gray-800 dark:text-gray-100">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500 dark:text-gray-400">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <ul className="space-y-3">
                         {pkg.features.map(feature => (
                             <li key={feature} className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500" />
-                                <span>{feature}</span>
+                                <span className="dark:text-gray-300">{feature}</span>
                             </li>
                         ))}
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    {/* === পরিবর্তন এখানে === */}
-                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         <Link href={`/payment?service=website&name=${pkg.name}&price=${pkg.price}&billing=${isYearly ? 'yearly' : 'monthly'}`}>প্যাকেজটি কিনুন</Link>
                     </Button>
                   </CardFooter>
@@ -167,25 +165,24 @@ export default function PackagesPage() {
           <TabsContent value="graphics">
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
               {(isYearly ? graphicsPackages.yearly : graphicsPackages.monthly).map((pkg) => (
-                <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
+                <Card key={pkg.name} className={cn("flex flex-col shadow-lg bg-white dark:bg-gray-900 dark:border-gray-800", pkg.popular && "border-2 border-blue-500 dark:border-blue-500 relative")}>
                    {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                    <CardDescription className="text-4xl font-bold text-gray-800">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
+                    <CardTitle className="text-2xl dark:text-white">{pkg.name}</CardTitle>
+                    <CardDescription className="text-4xl font-bold text-gray-800 dark:text-gray-100">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500 dark:text-gray-400">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <ul className="space-y-3">
                         {pkg.features.map(feature => (
                             <li key={feature} className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500" />
-                                <span>{feature}</span>
+                                <span className="dark:text-gray-300">{feature}</span>
                             </li>
                         ))}
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    {/* === পরিবর্তন এখানে === */}
-                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         <Link href={`/payment?service=graphics&name=${pkg.name}&price=${pkg.price}&billing=${isYearly ? 'yearly' : 'monthly'}`}>প্যাকেজটি কিনুন</Link>
                     </Button>
                   </CardFooter>
@@ -193,30 +190,29 @@ export default function PackagesPage() {
               ))}
             </div>
           </TabsContent>
-          
+           
           {/* ভিডিও এডিটিং ট্যাব */}
           <TabsContent value="video">
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
               {(isYearly ? videoPackages.yearly : videoPackages.monthly).map((pkg) => (
-                <Card key={pkg.name} className={cn("flex flex-col shadow-lg", pkg.popular && "border-2 border-blue-500 relative")}>
+                <Card key={pkg.name} className={cn("flex flex-col shadow-lg bg-white dark:bg-gray-900 dark:border-gray-800", pkg.popular && "border-2 border-blue-500 dark:border-blue-500 relative")}>
                    {pkg.popular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-white flex items-center gap-1"><Star className="h-4 w-4" /> জনপ্রিয়</div>}
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                    <CardDescription className="text-4xl font-bold text-gray-800">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
+                    <CardTitle className="text-2xl dark:text-white">{pkg.name}</CardTitle>
+                    <CardDescription className="text-4xl font-bold text-gray-800 dark:text-gray-100">৳{pkg.price.toLocaleString('bn-BD')}<span className="text-base font-normal text-gray-500 dark:text-gray-400">/{isYearly ? 'বছর' : 'মাস'}</span></CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <ul className="space-y-3">
                         {pkg.features.map(feature => (
                             <li key={feature} className="flex items-center gap-3">
                                 <Check className="h-5 w-5 text-green-500" />
-                                <span>{feature}</span>
+                                <span className="dark:text-gray-300">{feature}</span>
                             </li>
                         ))}
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    {/* === পরিবর্তন এখানে === */}
-                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                    <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         <Link href={`/payment?service=video&name=${pkg.name}&price=${pkg.price}&billing=${isYearly ? 'yearly' : 'monthly'}`}>প্যাকেজটি কিনুন</Link>
                     </Button>
                   </CardFooter>
