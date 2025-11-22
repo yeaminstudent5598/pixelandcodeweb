@@ -6,7 +6,7 @@ import { Code, Clapperboard, PenTool, InfinityIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-// সার্ভিসগুলোর ডেটা একটি অ্যারেতে রাখা হয়েছে
+// সার্ভিসগুলোর ডেটা একটি অ্যারেতে রাখা হয়েছে
 const servicesDataBn = [
   {
     icon: <InfinityIcon className="h-12 w-12 text-blue-500" />,
@@ -20,7 +20,7 @@ const servicesDataBn = [
     title: 'গ্রাফিক্স ডিজাইন',
     description: 'গ্রাফিক্স ডিজাইন করে আপনার পণ্যের ডিজিটাল পরিচিতি তৈরি করুন।',
     borderColor: 'border-yellow-300 hover:border-yellow-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600', // বাটনের রঙ একই রাখা হয়েছে
+    buttonClass: 'bg-blue-500 hover:bg-blue-600', 
   },
   {
     icon: <Clapperboard className="h-12 w-12 text-purple-500" />,
@@ -31,8 +31,8 @@ const servicesDataBn = [
   },
   {
     icon: <Code className="h-12 w-12 text-red-500" />,
-    title: 'ওয়েব ডিজাইন',
-    description: 'ওয়েবসাইট এর মাধ্যমে আপনার ব্যবসাকে করুন আরও স্মার্ট।',
+    title: 'ওয়েব ডিজাইন',
+    description: 'ওয়েবসাইট এর মাধ্যমে আপনার ব্যবসাকে করুন আরও স্মার্ট।',
     borderColor: 'border-red-300 hover:border-red-500',
     buttonClass: 'bg-blue-500 hover:bg-blue-600',
   },
@@ -52,7 +52,7 @@ const servicesDataEn = [
     description:
       'Create a strong digital identity for your product with graphics design.',
     borderColor: 'border-yellow-300 hover:border-yellow-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600', // Button color kept same
+    buttonClass: 'bg-blue-500 hover:bg-blue-600', 
   },
   {
     icon: <Clapperboard className="h-12 w-12 text-purple-500" />,
@@ -73,8 +73,8 @@ const servicesDataEn = [
 export function ServicesSection() {
   const { language } = useLanguage();
   return (
-    <section className="w-full bg-orange-50/50 py-10 sm:py-10">
-      <h2 className="mb-10 text-center text-3xl font-extrabold text-gray-800 md:text-4xl">
+    <section className="w-full bg-orange-50/50 dark:bg-background py-10 sm:py-10 transition-colors duration-300">
+      <h2 className="mb-10 text-center text-3xl font-extrabold text-gray-800 dark:text-gray-100 md:text-4xl">
         {language ? (
           <>
             সকল ডিজিটাল সলিউশন <br />
@@ -93,14 +93,15 @@ export function ServicesSection() {
           {(language ? servicesDataBn : servicesDataEn).map(service => (
             <div
               key={service.title}
-              className={`flex transform  flex-col items-center rounded-2xl border-2 bg-white p-4 lg:p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}>
-              <div className="mb-6 md:h-20 md:w-20 flex h-10 w-10 p-2 items-center justify-center rounded-full bg-gray-100">
+              className={`flex transform flex-col items-center rounded-2xl border-2 bg-white dark:bg-gray-900 dark:border-gray-700 p-4 lg:p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
+            >
+              <div className="mb-6 md:h-20 md:w-20 flex h-10 w-10 p-2 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
                 {service.icon}
               </div>
-              <h3 className="md:mb-2 lg:mb-3 md:text-xl lg:text-2xl font-bold text-gray-800">
+              <h3 className="md:mb-2 lg:mb-3 md:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {service.title}
               </h3>
-              <p className="md:mb-4 lg:mb-6 min-h-[72px] text-base text-gray-600">
+              <p className="md:mb-4 lg:mb-6 min-h-[72px] text-base text-gray-600 dark:text-gray-400">
                 {service.description}
               </p>
               <Button
