@@ -31,7 +31,8 @@ export function PortfolioSection() {
   const { language } = useLanguage();
 
   return (
-    <section className="w-full bg-blue-600 py-20 sm:py-28">
+    // ✅ FIXED: dark:bg-blue-950 পরিবর্তন করে dark:bg-gray-950 করা হয়েছে যাতে নীল না দেখায়
+    <section className="w-full bg-blue-600 dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
       <div className="container mx-auto px-4">
         {/* সেকশনের শিরোনাম */}
         <h2 className="mb-12 text-center text-3xl font-extrabold text-white md:text-4xl">
@@ -52,10 +53,9 @@ export function PortfolioSection() {
             }}
             transition={{
               ease: 'linear', // রৈখিক গতি
-              duration: 20, // অ্যানিমেশনের মোট সময় (সেকেন্ডে)
+              duration: 20, // অ্যানিমেশনের মোট সময় (সেকেন্ডে)
               repeat: Infinity, // অসীমভাবে চলতে থাকবে
             }}
-            // ❌ ওই problematic 'whileHover' লাইনটি এখান থেকে মুছে ফেলা হয়েছে
           >
             {/* মূল ইমেজগুলো */}
             {portfolioItems.map((item, index) => (
@@ -64,7 +64,8 @@ export function PortfolioSection() {
                 className="mx-4 flex-shrink-0"
                 style={{ width: '350px' }} // প্রতিটি আইটেমের প্রস্থ
               >
-                <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+                {/* কার্ডের ব্যাকগ্রাউন্ড ডার্ক মোডে সামান্য হালকা রাখা হয়েছে যাতে বোঝা যায় */}
+                <div className="overflow-hidden rounded-lg bg-white dark:bg-gray-900 shadow-lg">
                   <Image
                     src={item.src}
                     alt={item.alt}
@@ -84,7 +85,7 @@ export function PortfolioSection() {
                 style={{ width: '350px' }}
                 aria-hidden="true" // Screen reader থেকে হাইড
               >
-                <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+                <div className="overflow-hidden rounded-lg bg-white dark:bg-gray-900 shadow-lg">
                   <Image
                     src={item.src}
                     alt={item.alt}
