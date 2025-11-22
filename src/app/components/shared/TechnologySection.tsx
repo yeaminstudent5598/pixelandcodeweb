@@ -10,25 +10,24 @@ import {
   Database,
   DatabaseZap,
   Container,
-  Smartphone, // 👈 Added this icon for Flutter
+  Smartphone,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { motion, useAnimation, Variants } from 'framer-motion';
 
 export function TechnologySection() {
+  // আইকনগুলোর কালার ডার্ক মোডের জন্য অ্যাডজাস্ট করা হয়েছে
   const technologies = [
     { name: 'React', icon: <Atom size={48} className="text-sky-500" /> },
-    { name: 'Next.js', icon: <Code size={48} className="text-black" /> },
-    { name: 'Node.js', icon: <Hexagon size={48} className="text-green-600" /> },
-    { name: 'Express.js', icon: <Server size={48} className="text-gray-700" /> },
-    { name: 'MongoDB', icon: <Database size={48} className="text-green-700" /> },
-    { name: 'PostgreSQL', icon: <Database size={48} className="text-blue-700" /> },
-    { name: 'Prisma', icon: <DatabaseZap size={48} className="text-teal-500" /> },
+    { name: 'Next.js', icon: <Code size={48} className="text-black dark:text-white" /> },
+    { name: 'Node.js', icon: <Hexagon size={48} className="text-green-600 dark:text-green-500" /> },
+    { name: 'Express.js', icon: <Server size={48} className="text-gray-700 dark:text-gray-300" /> },
+    { name: 'MongoDB', icon: <Database size={48} className="text-green-700 dark:text-green-500" /> },
+    { name: 'PostgreSQL', icon: <Database size={48} className="text-blue-700 dark:text-blue-400" /> },
+    { name: 'Prisma', icon: <DatabaseZap size={48} className="text-teal-500 dark:text-teal-400" /> },
     { name: 'Docker', icon: <Container size={48} className="text-blue-500" /> },
-    { name: 'Figma', icon: <Figma size={48} className="text-gray-600" /> },
-    { name: 'Framer', icon: <Framer size={48} className="text-gray-600" /> },
-
-    // 👇 Added Flutter
+    { name: 'Figma', icon: <Figma size={48} className="text-gray-600 dark:text-gray-300" /> },
+    { name: 'Framer', icon: <Framer size={48} className="text-gray-600 dark:text-gray-300" /> },
     { name: 'Flutter', icon: <Smartphone size={48} className="text-sky-400" /> },
   ];
 
@@ -52,7 +51,7 @@ export function TechnologySection() {
   }, [controls]);
 
   return (
-    <section className="w-full bg-blue-600 py-20 sm:py-28">
+    <section className="w-full bg-blue-600 dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
       <div className="container mx-auto flex flex-col items-center px-4">
         <div className="mb-4 rounded-full border-2 border-white/50 px-6 py-2 text-sm font-medium text-white">
           {language ? 'সফটওয়্যার ও টুলস' : 'Software & Tools'}
@@ -64,7 +63,8 @@ export function TechnologySection() {
             : 'Technologies We Use!'}
         </h2>
 
-        <div className="relative w-full max-w-5xl overflow-hidden rounded-full bg-white p-4 shadow-lg">
+        {/* স্লাইডার কন্টেইনারে ডার্ক ব্যাকগ্রাউন্ড যুক্ত করা হয়েছে */}
+        <div className="relative w-full max-w-5xl overflow-hidden rounded-full bg-white dark:bg-gray-900 p-4 shadow-lg dark:shadow-gray-900/50">
           <motion.div
             className="flex whitespace-nowrap"
             variants={marqueeVariants}
