@@ -5,14 +5,15 @@ import { motion, useAnimation, Variants } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { useEffect } from 'react';
 
+// Node.js এর আইকনের কালার ডার্ক মোডের জন্য এডজাস্ট করা হয়েছে (text-gray-700 dark:text-gray-300)
 const techStack = [
   { icon: <Code className="h-10 w-10 text-blue-500" />, name: 'Next.js' },
   { icon: <Palette className="h-10 w-10 text-pink-500" />, name: 'Tailwind CSS' },
   { icon: <Figma className="h-10 w-10 text-purple-500" />, name: 'Figma' },
   { icon: <Database className="h-10 w-10 text-green-500" />, name: 'MongoDB' },
-  { icon: <Server className="h-10 w-10 text-gray-700" />, name: 'Node.js' },
+  { icon: <Server className="h-10 w-10 text-gray-700 dark:text-gray-300" />, name: 'Node.js' },
   { icon: <Cpu className="h-10 w-10 text-orange-500" />, name: 'Framer Motion' },
-  { icon: <Smartphone className="h-10 w-10 text-sky-400" />, name: 'Flutter' }, // 👈 added Flutter
+  { icon: <Smartphone className="h-10 w-10 text-sky-400" />, name: 'Flutter' },
 ];
 
 export function TechStackSection() {
@@ -39,10 +40,10 @@ export function TechStackSection() {
   const duplicatedTechs = [...techStack, ...techStack];
 
   return (
-    <section className="bg-white py-20">
+    <section className="bg-white dark:bg-gray-950 py-20 transition-colors duration-300">
       <div className="container mx-auto px-4 overflow-hidden">
         <motion.h2
-          className="mb-12 text-center text-3xl font-bold text-gray-800"
+          className="mb-12 text-center text-3xl font-bold text-gray-800 dark:text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}>
@@ -60,13 +61,13 @@ export function TechStackSection() {
             {duplicatedTechs.map((tech, index) => (
               <motion.div
                 key={index}
-                className="mx-6 flex min-w-[140px] flex-col items-center justify-center rounded-lg border bg-white p-6 shadow-sm"
+                className="mx-6 flex min-w-[140px] flex-col items-center justify-center rounded-lg border bg-white dark:bg-gray-900 dark:border-gray-800 p-6 shadow-sm"
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}>
                 {tech.icon}
-                <p className="mt-3 text-center font-semibold">{tech.name}</p>
+                <p className="mt-3 text-center font-semibold text-gray-800 dark:text-gray-200">{tech.name}</p>
               </motion.div>
             ))}
           </motion.div>
