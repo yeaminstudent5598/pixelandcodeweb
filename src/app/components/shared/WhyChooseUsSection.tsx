@@ -5,7 +5,7 @@ import React from 'react';
 import { CheckCircle, BarChart, Users, Headset, Play } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-// ফিচারগুলোর ডেটা (আপডেট করা হয়েছে)
+// ফিচারগুলোর ডেটা (আপডেট করা হয়েছে)
 const featuresBn = [
   {
     icon: <CheckCircle className="h-8 w-8 text-white" />,
@@ -64,12 +64,12 @@ const featuresEn = [
 export function WhyChooseUsSection() {
   const { language } = useLanguage();
   return (
-    <section className="relative w-full overflow-hidden bg-purple-50/50 py-20 sm:py-28">
+    <section className="relative w-full overflow-hidden bg-purple-50/50 dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           {/* বাম কলাম: টেক্সট এবং ফিচার */}
           <div className="flex flex-col">
-            <h2 className="mb-10 text-3xl font-extrabold text-gray-800 md:text-4xl">
+            <h2 className="mb-10 text-3xl font-extrabold text-gray-800 dark:text-white md:text-4xl">
               {language ? (
                 <>
                   যে কারণে পিক্সেল এন্ড কোড <br /> #১ সেরা প্রতিষ্ঠান
@@ -87,10 +87,10 @@ export function WhyChooseUsSection() {
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                       {feature.title}
                     </h3>
-                    <p className="mt-1 text-base text-gray-600">
+                    <p className="mt-1 text-base text-gray-600 dark:text-gray-400">
                       {feature.description}
                     </p>
                   </div>
@@ -102,15 +102,15 @@ export function WhyChooseUsSection() {
           {/* ডান কলাম: ছবি এবং ডেকোরেশন */}
           <div className="relative hidden h-full min-h-[550px] items-center justify-center lg:flex">
             {/* ডেকোরেটিভ শেপ */}
-            <div className="absolute right-0 top-0 h-12 w-12 translate-x-1/2 -translate-y-1/2 rounded-lg bg-green-200/50 transform rotate-45"></div>
-            <div className="absolute bottom-1/4 right-0 h-16 w-16 translate-x-1/2 translate-y-1/2 rounded-full border-8 border-yellow-200/50"></div>
-            <div className="absolute left-0 top-1/4 h-10 w-10 -translate-y-1/2 -translate-x-1/2 rounded-full bg-purple-200/50"></div>
-            <div className="absolute bottom-1/2 left-0 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-200/50 p-2 text-white">
+            <div className="absolute right-0 top-0 h-12 w-12 translate-x-1/2 -translate-y-1/2 rounded-lg bg-green-200/50 dark:bg-green-500/20 transform rotate-45"></div>
+            <div className="absolute bottom-1/4 right-0 h-16 w-16 translate-x-1/2 translate-y-1/2 rounded-full border-8 border-yellow-200/50 dark:border-yellow-500/20"></div>
+            <div className="absolute left-0 top-1/4 h-10 w-10 -translate-y-1/2 -translate-x-1/2 rounded-full bg-purple-200/50 dark:bg-purple-500/20"></div>
+            <div className="absolute bottom-1/2 left-0 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-200/50 dark:bg-pink-500/20 p-2 text-white">
               <Play className="h-6 w-6" />
             </div>
 
             {/* মূল বৃত্তাকার ব্যাকগ্রাউন্ড */}
-            <div className="absolute h-[450px] w-[450px] rounded-full bg-purple-200/80"></div>
+            <div className="absolute h-[450px] w-[450px] rounded-full bg-purple-200/80 dark:bg-purple-900/30"></div>
 
             {/* মোবাইল অ্যাপের ছবি */}
             <div className="relative z-10 transform transition-transform duration-500 hover:scale-105">
@@ -119,7 +119,7 @@ export function WhyChooseUsSection() {
                 alt="App analytics screenshot"
                 width={300}
                 height={650}
-                className="rounded-[32px] shadow-2xl"
+                className="rounded-[32px] shadow-2xl dark:shadow-gray-900/50"
               />
             </div>
           </div>

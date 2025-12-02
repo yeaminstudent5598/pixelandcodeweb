@@ -9,7 +9,7 @@ const achievementsBn = [
   {
     icon: <Users className="h-7 w-7 text-blue-500" />,
     count: '৪০০+',
-    label: 'ক্লায়েন্ট',
+    label: 'ক্লায়েন্ট',
   },
   {
     icon: <Palette className="h-7 w-7 text-yellow-500" />,
@@ -24,7 +24,7 @@ const achievementsBn = [
   {
     icon: <Code className="h-7 w-7 text-orange-500" />,
     count: '৫০+',
-    label: 'ওয়েবসাইট',
+    label: 'ওয়েবসাইট',
   },
 ];
 const achievementsEn = [
@@ -54,13 +54,14 @@ export function AchievementsSection() {
   const backgroundImageUrl = 'https://i.ibb.co/L8dFkR2/achievement-bg.jpg'; // ❗️ আপনার নিজের ব্যাকগ্রাউন্ড ছবি দিন
   const { language } = useLanguage();
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-20 sm:py-28 dark:bg-gray-950 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div
           className="relative w-full overflow-hidden rounded-2xl bg-cover bg-center p-8 text-white md:p-12"
-          style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
+          style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        >
           {/* ছবির উপর একটি ডার্ক ওভারলে */}
-          <div className="absolute inset-0 bg-black/70"></div>
+          <div className="absolute inset-0 bg-black/70 dark:bg-black/80"></div>
 
           <div className="relative z-10 flex flex-col items-center text-center">
             {/* উপরের ট্যাগ */}
@@ -72,10 +73,10 @@ export function AchievementsSection() {
             <h2 className="mb-10 text-3xl font-extrabold md:text-4xl">
               {language ? (
                 <>
-                  বিগত ৫ বছরে মোয়াস বিডির <br /> সফলতা ও অর্জন!
+                  বিগত ৫ বছরে মোয়াস বিডির <br /> সফলতা ও অর্জন!
                 </>
               ) : (
-                " Success & Achievements in the Last 5 Years!"
+                ' Success & Achievements in the Last 5 Years!'
               )}
             </h2>
 
@@ -85,11 +86,14 @@ export function AchievementsSection() {
                 (item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-center space-x-3 rounded-lg bg-white/90 p-4 text-gray-800 shadow-md backdrop-blur-md">
+                    className="flex items-center justify-center space-x-3 rounded-lg bg-white/90 dark:bg-gray-900/80 p-4 text-gray-800 dark:text-white shadow-md backdrop-blur-md transition-colors duration-300"
+                  >
                     <div className="flex-shrink-0">{item.icon}</div>
                     <div className="text-left">
                       <p className="text-xl font-bold">{item.count}</p>
-                      <p className="text-xs text-gray-600">{item.label}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-300">
+                        {item.label}
+                      </p>
                     </div>
                   </div>
                 )

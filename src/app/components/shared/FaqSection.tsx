@@ -14,7 +14,7 @@ import { useLanguage } from '@/context/LanguageContext';
 // প্রশ্ন এবং উত্তরগুলোর ডেটা
 const faqDataBn = [
   {
-    question: 'আপনারা কি ফেসবুক Ads Campaign কি দিয়ে করে থাকেন ?',
+    question: 'আপনারা কি ফেসবুক Ads Campaign কি দিয়ে করে থাকেন ?',
     answer:
       'আমরা ফেসবুক Ads Campaign করার জন্য নিজস্ব ডুয়েল কারেন্সি কার্ড এবং এজেন্সি অ্যাকাউন্ট ব্যবহার করে থাকি, যা সম্পূর্ণ নিরাপদ এবং নির্ভরযোগ্য।',
   },
@@ -26,7 +26,7 @@ const faqDataBn = [
   {
     question: 'আপনাদের সাথে সরাসরি অফিসে এসে কথা বলতে চাচ্ছি।',
     answer:
-      'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা আমাদের ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। আসার আগে ফোন দিয়ে আসলে আপনার জন্য সুবিধা হবে।',
+      'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা আমাদের ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। আসার আগে ফোন দিয়ে আসলে আপনার জন্য সুবিধা হবে।',
   },
   {
     question: 'আপনাদের ডলার রেট কত ? মিনিমাম কত ডলারের কাজ করানো যাবে ?',
@@ -62,7 +62,7 @@ const faqDataEn = [
 export function FaqSection() {
   const { language } = useLanguage();
   return (
-    <section className="w-full bg-white py-20 sm:py-28">
+    <section className="w-full bg-white dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* বাম কলাম: ছবি */}
@@ -72,17 +72,17 @@ export function FaqSection() {
               alt="Profile of Uts De"
               width={450}
               height={600}
-              className="rounded-lg object-cover"
+              className="rounded-lg object-cover shadow-lg dark:shadow-gray-900/50"
             />
           </div>
 
           {/* ডান কলাম: প্রশ্ন এবং উত্তর */}
           <div className="flex flex-col">
-            <div className="mb-4 inline-block self-start rounded-full border border-red-200 bg-red-50 px-6 py-2 text-sm font-medium text-red-600 shadow-sm">
+            <div className="mb-4 inline-block self-start rounded-full border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900 px-6 py-2 text-sm font-medium text-red-600 dark:text-red-400 shadow-sm">
               {language ? 'প্রশ্ন ও উত্তর' : 'Questions & Answers'}
             </div>
 
-            <h2 className="mb-8 text-3xl font-extrabold text-gray-800 md:text-4xl">
+            <h2 className="mb-8 text-3xl font-extrabold text-gray-800 dark:text-white md:text-4xl">
               {language
                 ? 'সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!'
                 : 'Answers to Frequently Asked Questions!'}
@@ -90,11 +90,15 @@ export function FaqSection() {
 
             <Accordion type="single" collapsible className="w-full">
               {(language ? faqDataBn : faqDataEn).map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  className="border-b-gray-200 dark:border-b-gray-800"
+                >
+                  <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline text-gray-900 dark:text-gray-100">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-base text-gray-600">
+                  <AccordionContent className="text-base text-gray-600 dark:text-gray-400">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

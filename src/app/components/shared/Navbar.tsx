@@ -1,12 +1,12 @@
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTheme } from "next-themes";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -26,39 +26,54 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { LogIn, Menu, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  LogIn,
+  Menu,
+  ChevronDown,
+  ChevronUp,
+  Search,
+  Home,
+  Briefcase,
+  Package,
+  ShoppingBag,
+  Mail,
+  Sun,
+  Moon,
+  Laptop,
+  type LucideIcon, // 👈 Icon Type Import kora hoyeche
+} from "lucide-react";
 
-// Services data in both languages
+// Services data
 const serviceComponentsBN: { title: string; href: string; description: string }[] = [
   {
     title: "ওয়েব সার্ভিস",
     href: "/web-service",
-    description: "আপনার ব্যবসার জন্য আধুনিক, রেসপন্সিভ এবং দ্রুতগতির ওয়েবসাইট।",
+    description: "আপনার ব্যবসার জন্য আধুনিক, রেসপন্সিভ এবং দ্রুতগতির ওয়েবসাইট।",
   },
   {
     title: "ডিজিটাল মার্কেটিং",
     href: "/digital-marketing",
-    description: "ফেসবুক, গুগল অ্যাডের মাধ্যমে আপনার ব্যবসাকে ছড়িয়ে দিন।",
+    description: "ফেসবুক, গুগল অ্যাডের মাধ্যমে আপনার ব্যবসাকে ছড়িয়ে দিন।",
   },
   {
     title: "গ্রাফিক্স ডিজাইন",
     href: "/graphics-design",
-    description: "আপনার ব্র্যান্ডের জন্য আকর্ষণীয় লোগো, ব্যানার এবং পোস্টার ডিজাইন।",
+    description: "আপনার ব্র্যান্ডের জন্য আকর্ষণীয় লোগো, ব্যানার এবং পোস্টার ডিজাইন।",
   },
   {
     title: "SEO",
     href: "/seo",
-    description: "সার্চ ইঞ্জিনে আপনার ওয়েবসাইটকে প্রথম পাতায় নিয়ে আসুন।",
+    description: "সার্চ ইঞ্জিনে আপনার ওয়েবসাইটকে প্রথম পাতায় নিয়ে আসুন।",
   },
   {
     title: "ভিডিও এডিটিং",
     href: "/video-editing",
-    description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
+    description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
   },
   {
     title: "UI/UX ডিজাইন",
     href: "/ui-ux-design",
-    description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
+    description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
   },
 ];
 
@@ -71,12 +86,12 @@ const serviceComponentsEN: { title: string; href: string; description: string }[
   { title: "UI/UX Design", href: "/ui-ux-design", description: "User-friendly and engaging designs for your app and website." },
 ];
 
-// Logo Component
+// ✅ Logo Component
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2">
       <svg
-        className="h-8 w-8 text-blue-600"
+        className="h-8 w-8 text-blue-600 dark:text-blue-500"
         id="Layer_1"
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
@@ -115,187 +130,440 @@ function Logo() {
   );
 }
 
+// ✅ মোবাইল বটম নেভিগেশনের জন্য আইটেম কম্পোনেন্ট (SOLVED HERE)
+function BottomNavItem({
+  href,
+  label,
+  icon: Icon,
+  active,
+}: {
+  href: string;
+  label: string;
+  icon: LucideIcon; // 👈 Fix: Use LucideIcon or React.ElementType<{ className?: string }>
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors",
+        active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+      )}
+    >
+      {/* এখন আর এখানে কোনো Error দেবে না */}
+      <Icon className={cn("h-6 w-6", active && "fill-current")} />
+      <span>{label}</span>
+    </Link>
+  );
+}
+
 // Main Navbar Component
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false); // Added state for services dropdown in mobile
+  const [servicesOpen, setServicesOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
+  
+  // ✅ Theme Hook & Mounted State for Hydration Fix
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const t = language
     ? {
         home: "হোম",
         services: "সার্ভিসেস",
-        packages: "প্যাকেজসমূহ",
+        store: "স্টোর",
+        packages: "প্যাকেজ",
         portfolio: "পোর্টফোলিও",
         about: "আমাদের সম্পর্কে",
         contact: "যোগাযোগ",
         login: "লগ-ইন",
         languageLabel: "Language",
+        themeLabel: "থিম",
+        light: "লাইট",
+        dark: "ডার্ক",
+        system: "সিস্টেম",
       }
     : {
         home: "Home",
         services: "Services",
+        store: "Store",
         packages: "Packages",
         portfolio: "Portfolio",
         about: "About",
         contact: "Contact",
         login: "Login",
         languageLabel: "Language",
+        themeLabel: "Theme",
+        light: "Light",
+        dark: "Dark",
+        system: "System",
       };
   const serviceComponents = language ? serviceComponentsBN : serviceComponentsEN;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 shadow-sm backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <Logo />
-
-        {/* Desktop Menu */}
-        <NavigationMenu className="hidden lg:flex">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild active={pathname === "/"} className={navigationMenuTriggerStyle()}>
-                <Link href="/">{t.home}</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>{t.services}</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {serviceComponents.map((component) => (
-                    <ListItem
-                      key={component.title}
-                      title={component.title}
-                      href={component.href}
-                    >
-                      {component.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild active={pathname === "/packages"} className={navigationMenuTriggerStyle()}>
-                <Link href="/packages">{t.packages}</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild active={pathname === "/portfolio"} className={navigationMenuTriggerStyle()}>
-                <Link href="/portfolio">{t.portfolio}</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild active={pathname === "/about"} className={navigationMenuTriggerStyle()}>
-                <Link href="/about">{t.about}</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild active={pathname === "/contact"} className={navigationMenuTriggerStyle()}>
-                <Link href="/contact">{t.contact}</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        <div className="flex items-center gap-4">
-          {/* Language Dropdown for Desktop */}
-          <div className="hidden lg:block">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium select-none">{language ? "BN" : "EN"}</span>
-              <Switch
-                checked={language}
-                onCheckedChange={(checked) => setLanguage(Boolean(checked))}
-                aria-label="Toggle language"
-              />
-            </div>
-          </div>
+    <>
+      {/* --- টপ নেভিগেশন বার (ডেস্কটপ এবং মোবাইল) --- */}
+      <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-background/80 dark:border-border shadow-sm backdrop-blur-md transition-colors duration-300">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           
-          {/* Login Button */}
-          <Button asChild className="hidden bg-orange-500 text-white hover:bg-orange-600 sm:flex">
-            <Link href="/login">
-              <LogIn className="mr-2 h-4 w-4" />
-              <span>{t.login}</span>
-            </Link>
-          </Button>
+          {/* ✅ ফিক্সড লোগো (মোবাইল) */}
+          <div className="flex items-center gap-2 lg:hidden">
+             <Logo />
+          </div>
 
-          {/* Mobile Menu (Hamburger Icon) */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="lg:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0">
-              <SheetHeader className="p-6">
-                <SheetTitle className="sr-only">Menu</SheetTitle>
-                <SheetDescription className="sr-only">
-                  Main navigation menu for the website.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="flex flex-col gap-6 px-6">
-                <Logo />
-                <nav className="flex flex-col gap-2">
-                  <SheetClose asChild>
-                    <Link href="/" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.home}</Link>
-                  </SheetClose>
-                  {/* Services Dropdown for Mobile */}
-                  <div>
-                    <button
-                      onClick={() => setServicesOpen(!servicesOpen)}
-                      className="flex items-center justify-between w-full rounded-md px-3 py-2 text-lg font-semibold hover:bg-gray-100"
-                    >
-                      {t.services}
-                      {servicesOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                    </button>
-                    {servicesOpen && (
-                      <div className="pl-4 pt-2 pb-1">
-                        {serviceComponents.map((item) => (
-                          <SheetClose asChild key={item.href}>
-                            <Link
-                              href={item.href}
-                              className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100"
-                            >
-                              {item.title}
-                            </Link>
-                          </SheetClose>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <SheetClose asChild>
-                    <Link href="/packages" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.packages}</Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href="/portfolio" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.portfolio}</Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href="/about" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.about}</Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href="/contact" className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100">{t.contact}</Link>
-                  </SheetClose>
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between rounded-md border p-3">
-                      <span className="text-sm font-medium">{t.languageLabel}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs select-none">{language ? "BN" : "EN"}</span>
-                        <Switch
-                          checked={language}
-                          onCheckedChange={(checked) => setLanguage(Boolean(checked))}
-                          aria-label="Toggle language"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </nav>
+          {/* ডেস্কটপ লোগো */}
+          <div className="hidden lg:block">
+            <Logo />
+          </div>
+
+          {/* --- ডেস্কটপ মেনু --- */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/">{t.home}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>{t.services}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {serviceComponents.map((component) => (
+                      <ListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                      >
+                        {component.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/store"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/store" className="text-blue-600 dark:text-blue-400 font-semibold">
+                    {t.store}
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/packages"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/packages">{t.packages}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/portfolio"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/portfolio">{t.portfolio}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/about"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/about">{t.about}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  active={pathname === "/contact"}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href="/contact">{t.contact}</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* --- ডান পাশের আইকন গ্রুপ --- */}
+          <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-4 lg:flex">
+              
+              {/* ✅ Desktop Theme Toggle Button */}
+              {mounted && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="rounded-full"
+                  title="Toggle Theme"
+                >
+                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-orange-500" />
+                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-blue-400" />
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              )}
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium select-none">
+                  {language ? "BN" : "EN"}
+                </span>
+                <Switch
+                  checked={language}
+                  onCheckedChange={(checked) => setLanguage(Boolean(checked))}
+                  aria-label="Toggle language"
+                />
               </div>
-            </SheetContent>
-          </Sheet>
+              <Button
+                asChild
+                className="bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700"
+              >
+                <Link href="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>{t.login}</span>
+                </Link>
+              </Button>
+            </div>
+
+            <Button variant="ghost" size="icon" className="lg:hidden">
+              <Search className="h-6 w-6" />
+              <span className="sr-only">Search</span>
+            </Button>
+
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex lg:hidden"
+                >
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Open navigation menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 bg-background">
+                <SheetHeader className="p-6">
+                  <SheetTitle className="sr-only">Menu</SheetTitle>
+                  <SheetDescription className="sr-only">
+                    Main navigation menu for the website.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-screen pb-20">
+                  <Logo />
+                  <nav className="flex flex-col gap-2">
+                    <SheetClose asChild>
+                      <Link
+                        href="/"
+                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        {t.home}
+                      </Link>
+                    </SheetClose>
+
+                    <div>
+                      <button
+                        onClick={() => setServicesOpen(!servicesOpen)}
+                        className="flex items-center justify-between w-full rounded-md px-3 py-2 text-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        {t.services}
+                        {servicesOpen ? (
+                          <ChevronUp className="h-5 w-5" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5" />
+                        )}
+                      </button>
+                      {servicesOpen && (
+                        <div className="pl-4 pt-2 pb-1 border-l-2 border-gray-200 dark:border-gray-700 ml-3">
+                          {serviceComponents.map((item) => (
+                            <SheetClose asChild key={item.href}>
+                              <Link
+                                href={item.href}
+                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                              >
+                                {item.title}
+                              </Link>
+                            </SheetClose>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <SheetClose asChild>
+                      <Link
+                        href="/store"
+                        className="rounded-md px-3 py-2 text-lg font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
+                      >
+                        {t.store}
+                      </Link>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <Link
+                        href="/packages"
+                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        {t.packages}
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link
+                        href="/portfolio"
+                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        {t.portfolio}
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link
+                        href="/about"
+                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        {t.about}
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link
+                        href="/contact"
+                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        {t.contact}
+                      </Link>
+                    </SheetClose>
+
+                    <div className="mt-4 border-t dark:border-gray-700 pt-4">
+                      <SheetClose asChild>
+                        <Button
+                          asChild
+                          className="w-full bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700"
+                        >
+                          <Link href="/login">
+                            <LogIn className="mr-2 h-4 w-4" />
+                            <span>{t.login}</span>
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                    </div>
+
+                    {/* ✅ Mobile Settings Section (Language & Theme) */}
+                    <div className="mt-4 flex flex-col gap-3">
+                      
+                      {/* Language */}
+                      <div className="flex items-center justify-between rounded-md border dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/50">
+                        <span className="text-sm font-medium flex items-center gap-2">
+                           {t.languageLabel}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs select-none font-bold">
+                            {language ? "BN" : "EN"}
+                          </span>
+                          <Switch
+                            checked={language}
+                            onCheckedChange={(checked) =>
+                              setLanguage(Boolean(checked))
+                            }
+                            aria-label="Toggle language"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Theme */}
+                      {mounted && (
+                        <div className="flex items-center justify-between rounded-md border dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/50">
+                            <span className="text-sm font-medium">{t.themeLabel}</span>
+                            <div className="flex gap-1 bg-white dark:bg-black rounded-full border dark:border-gray-700 p-1">
+                                <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className={cn("h-7 w-7 rounded-full", theme === 'light' && "bg-gray-200 text-orange-500")}
+                                    onClick={() => setTheme('light')}
+                                >
+                                    <Sun className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className={cn("h-7 w-7 rounded-full", theme === 'system' && "bg-gray-200 dark:bg-gray-700")}
+                                    onClick={() => setTheme('system')}
+                                >
+                                    <Laptop className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className={cn("h-7 w-7 rounded-full", theme === 'dark' && "bg-gray-800 text-blue-400")}
+                                    onClick={() => setTheme('dark')}
+                                >
+                                    <Moon className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                      )}
+
+                    </div>
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* --- মোবাইল বটম নেভিগেশন বার --- */}
+      <nav className="fixed bottom-0 z-50 w-full border-t bg-white dark:bg-black dark:border-gray-800 shadow-[0_-2px_6px_rgba(0,0,0,0.06)] lg:hidden">
+        <div className="mx-auto flex h-16 max-w-md items-center justify-around px-4">
+          <BottomNavItem
+            href="/"
+            label={t.home}
+            icon={Home}
+            active={pathname === "/"}
+          />
+          <BottomNavItem
+            href="/portfolio"
+            label={t.portfolio}
+            icon={Briefcase}
+            active={pathname === "/portfolio"}
+          />
+          <BottomNavItem
+            href="/store"
+            label={t.store}
+            icon={ShoppingBag}
+            active={pathname === "/store"}
+          />
+          <BottomNavItem
+            href="/packages"
+            label={t.packages}
+            icon={Package}
+            active={pathname === "/packages"}
+          />
+          <BottomNavItem
+            href="/contact"
+            label={t.contact}
+            icon={Mail}
+            active={pathname === "/contact"}
+          />
+        </div>
+      </nav>
+    </>
   );
 }
 
@@ -310,7 +578,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground dark:hover:bg-gray-800 dark:focus:bg-gray-800",
             className
           )}
           {...props}
