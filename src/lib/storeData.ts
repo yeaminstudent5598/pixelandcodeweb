@@ -21,7 +21,7 @@ export const products: Product[] = [
     shortDescription: 'মধু, ঘি, তেল এবং প্রিমিয়াম অর্গানিক ফুড ব্যবসার জন্য "ঘরের বাজার" স্টাইল ই-কমার্স।',
     price: 22000, // একটু বেশি ভ্যালু কারণ এটি প্রিমিয়াম লুক
     originalPrice: 30000,
-    image: '/images/porer-bazar.png', // ⚠️ নোট: এই নামে একটি স্ক্রিনশট public ফোল্ডারে রাখবেন
+    image: '/images/porer-bazar.jpg', // ⚠️ নোট: এই নামে একটি স্ক্রিনশট public ফোল্ডারে রাখবেন
     category: 'Premium Grocery',
     techStack: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'React'],
     features: [
@@ -41,7 +41,7 @@ export const products: Product[] = [
     shortDescription: 'মাছ, মাংস, শাকসবজি এবং নিত্যপ্রয়োজনীয় কাঁচাবাজার ব্যবসার জন্য পারফেক্ট।',
     price: 20000,
     originalPrice: 28000,
-    image: '/images/amader-shodai.png',
+    image: '/images/amader-shodai.jpg',
     category: 'Grocery & Food',
     techStack: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'React'],
     features: [
@@ -61,7 +61,7 @@ export const products: Product[] = [
     shortDescription: 'ফ্যাশন, গ্যাজেট বা বড় পরিসরের ই-কমার্স ব্যবসার জন্য মাল্টি-ভেন্ডার সলিউশন।',
     price: 300000,
     originalPrice: 500000,
-    image: '/images/ecommerce.png',
+    image: '/images/ecommerce.jpg',
     category: 'E-Commerce',
     techStack: ['Next.js', 'MongoDB', 'Tailwind CSS', 'Stripe'],
     features: [

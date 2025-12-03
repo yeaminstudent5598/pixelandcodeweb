@@ -1,13 +1,60 @@
+// File Path: src/app/components/shared/Hero.tsx
+
 "use client";
 
-import React from "react";
-import SplineModel from "./SplineModel";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import Image from "next/image"; // Image component import kora holo
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
+// Spline Model Dynamic Import (SSR False)
+// এটি সার্ভারে রেন্ডার হবে না, শুধু ক্লায়েন্টে লোড হবে
+const SplineModel = dynamic(() => import("./SplineModel"), {
+  ssr: false,
+  loading: () => null, 
+});
+
 export function Hero() {
+  // ডিফল্ট false রাখুন। এর মানে সার্ভার এবং প্রথম লোডে সবসময় "ইমেজ" দেখাবে।
+  // এতে Hydration Mismatch হওয়ার কোনো সুযোগই নেই।
+  const [show3D, setShow3D] = useState(false);
+
+  useEffect(() => {
+    // এই কোড শুধুমাত্র ব্রাউজারে রান হবে
+    const checkScreen = () => {
+      // ১০২৪ পিক্সেলের বেশি হলে আমরা 3D মুড অন করব
+      if (window.innerWidth > 1024) {
+        // একটু ডিলে দিয়ে 3D আনব যাতে সাইট আগে লোড হয়ে যায় (Performance Hack)
+        setTimeout(() => {
+          setShow3D(true);
+        }, 1000);
+      }
+    };
+
+    checkScreen();
+    
+    // রিসাইজ হ্যান্ডলার
+    let timeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (window.innerWidth > 1024) {
+          setShow3D(true);
+        } else {
+          setShow3D(false);
+        }
+      }, 500);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <section className="relative w-full overflow-hidden bg-background py-12 md:py-20 lg:py-24">
       <div className="container mx-auto px-4 md:px-6">
@@ -38,25 +85,42 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right 3D Robot Section */}
-          <div className="relative h-[400px] md:h-[500px] w-full flex items-center justify-center lg:order-last order-first overflow-hidden">
+          {/* Right Section */}
+          <div className="relative h-[350px] md:h-[500px] w-full flex items-center justify-center lg:order-last order-first overflow-hidden">
             
-            {/* Background Gradient/Blur Effect */}
+            {/* Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 to-orange-50 dark:from-slate-900 dark:to-slate-900 rounded-full blur-3xl opacity-30 -z-10" />
             
-            <SplineModel
-              scene="https://prod.spline.design/EyT5-iTgphWIpH2g/scene.splinecode"
-              className="w-full h-full"
-            />
+            {/* --- HYDRATION SAFE LOGIC --- */}
+            {/* ১. show3D সত্য হলে Spline দেখাবে (শুধুমাত্র Desktop এ ১ সেকেন্ড পর) */}
+            {/* ২. show3D মিথ্যা হলে Image দেখাবে (Server + Mobile + Initial Load) */}
+            
+            {show3D ? (
+               <div className="relative w-full h-full animate-in fade-in duration-1000">
+                 <SplineModel
+                   scene="https://prod.spline.design/EyT5-iTgphWIpH2g/scene.splinecode"
+                   className="w-full h-full"
+                 />
+                 {/* Logo Remover */}
+                 <div className="absolute bottom-2 right-2 w-[160px] h-[50px] bg-background z-50 pointer-events-none select-none"></div>
+               </div>
+            ) : (
+               // এই অংশটি সার্ভার এবং ক্লায়েন্ট উভয়েই প্রথমে রেন্ডার হবে। তাই এরর আসবে না।
+               <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px]">
+                  <Image 
+                    src="/logo-01.svg" 
+                    alt="Hero Visual"
+                    fill
+                    className="object-contain drop-shadow-2xl"
+                    priority={true} // LCP ফিক্স
+                    sizes="(max-width: 768px) 100vw, 500px"
+                  />
+               </div>
+            )}
 
-            {/* --- LOGO REMOVER HACK --- */}
-            <div className="absolute bottom-0 right-0 w-[180px] h-[90px] bg-background z-20 pointer-events-none"></div>
-
-            {/* --- FLOATING BADGE WITH CUSTOM LOGO --- */}
+            {/* Floating Badge */}
             <div className="absolute top-10 right-4 md:right-10 z-30 animate-bounce duration-[3000ms]">
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl dark:bg-black/20 dark:border-white/10">
-                
-                {/* Logo Container */}
                 <div className="bg-white/90 dark:bg-white/10 p-1.5 rounded-full shadow-sm">
                     <Image 
                       src="/logo-01.svg" 
@@ -66,8 +130,6 @@ export function Hero() {
                       className="w-6 h-6 object-contain"
                     />
                 </div>
-
-                {/* Text Info */}
                 <div>
                     <p className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold">Agency</p>
                     <p className="text-sm font-bold text-blue-600 dark:text-blue-400 leading-none">Pixel & Code</p>

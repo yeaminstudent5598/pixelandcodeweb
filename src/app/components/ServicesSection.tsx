@@ -1,130 +1,124 @@
-// src/components/shared/ServicesSection.tsx
+// src/components/shared/AboutSection.tsx
 'use client';
+
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
-import { Code, Clapperboard, PenTool, InfinityIcon } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 
-// সার্ভিসগুলোর ডেটা একটি অ্যারেতে রাখা হয়েছে
-const servicesDataBn = [
-  {
-    icon: <InfinityIcon className="h-12 w-12 text-blue-500" />,
-    title: 'মেটা মার্কেটিং',
-    description: 'মেটা মার্কেটিং করে পৌঁছে যান কাঙ্ক্ষিত কাস্টমারের কাছে!',
-    borderColor: 'border-blue-300 hover:border-blue-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-  {
-    icon: <PenTool className="h-12 w-12 text-yellow-500" />,
-    title: 'গ্রাফিক্স ডিজাইন',
-    description: 'গ্রাফিক্স ডিজাইন করে আপনার পণ্যের ডিজিটাল পরিচিতি তৈরি করুন।',
-    borderColor: 'border-yellow-300 hover:border-yellow-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600', 
-  },
-  {
-    icon: <Clapperboard className="h-12 w-12 text-purple-500" />,
-    title: 'ভিডিও এডিটিং',
-    description: 'ভিডিও তৈরি করে সহজেই আপনার পণ্যের পরিচিতি বিজ্ঞাপন করুন।',
-    borderColor: 'border-purple-300 hover:border-purple-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-  {
-    icon: <Code className="h-12 w-12 text-red-500" />,
-    title: 'ওয়েব ডিজাইন',
-    description: 'ওয়েবসাইট এর মাধ্যমে আপনার ব্যবসাকে করুন আরও স্মার্ট।',
-    borderColor: 'border-red-300 hover:border-red-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-];
-
-const servicesDataEn = [
-  {
-    icon: <InfinityIcon className="h-12 w-12 text-blue-500" />,
-    title: 'Meta Marketing',
-    description: 'Reach your desired customers through Meta Marketing!',
-    borderColor: 'border-blue-300 hover:border-blue-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-  {
-    icon: <PenTool className="h-12 w-12 text-yellow-500" />,
-    title: 'Graphics Design',
-    description:
-      'Create a strong digital identity for your product with graphics design.',
-    borderColor: 'border-yellow-300 hover:border-yellow-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600', 
-  },
-  {
-    icon: <Clapperboard className="h-12 w-12 text-purple-500" />,
-    title: 'Video Editing',
-    description: 'Promote your products easily through engaging video ads.',
-    borderColor: 'border-purple-300 hover:border-purple-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-  {
-    icon: <Code className="h-12 w-12 text-red-500" />,
-    title: 'Web Design',
-    description: 'Make your business smarter with a professional website.',
-    borderColor: 'border-red-300 hover:border-red-500',
-    buttonClass: 'bg-blue-500 hover:bg-blue-600',
-  },
-];
-
-export function ServicesSection() {
+export function AboutSection() {
   const { language } = useLanguage();
-  return (
-    <section className="w-full bg-orange-50/50 dark:bg-background py-10 sm:py-10 transition-colors duration-300">
-      <h2 className="mb-10 text-center text-3xl font-extrabold text-gray-800 dark:text-gray-100 md:text-4xl">
-        {language ? (
-          <>
-            সকল ডিজিটাল সলিউশন <br />
-            এক প্লাটফর্মে!
-          </>
-        ) : (
-          <>
-            All digital solutions <br />
-            on one platform!
-          </>
-        )}
-      </h2>
-      <div className="container mx-auto px-4">
-        {/* সার্ভিস কার্ডগুলোর গ্রিড */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {(language ? servicesDataBn : servicesDataEn).map(service => (
-            <div
-              key={service.title}
-              className={`flex transform flex-col items-center rounded-2xl border-2 bg-white dark:bg-gray-900 dark:border-gray-700 p-4 lg:p-8 text-center shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${service.borderColor}`}
-            >
-              <div className="mb-6 md:h-20 md:w-20 flex h-10 w-10 p-2 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                {service.icon}
-              </div>
-              <h3 className="md:mb-2 lg:mb-3 md:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100">
-                {service.title}
-              </h3>
-              <p className="md:mb-4 lg:mb-6 min-h-[72px] text-base text-gray-600 dark:text-gray-400">
-                {service.description}
-              </p>
-              <Button
-                asChild
-                className={`mt-auto w-full md:btn-sm rounded-full text-white ${service.buttonClass}`}>
-                <Link href="/services">
-                  {language ? 'বিস্তারিত জানুন' : 'Learn More'}
-                </Link>
-              </Button>
-            </div>
-          ))}
-        </div>
+  const [showVideo, setShowVideo] = useState(false);
 
-        {/* নিচের শিরোনাম এবং বাটন */}
-        <div className="mt-10 text-center">
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full bg-red-500 px-10 py-6 text-lg text-white shadow-md transition-transform hover:scale-105 hover:bg-red-600">
-            <Link href="/services">
-              {language ? 'বিস্তারিত জানুন' : 'Learn More'}
-            </Link>
-          </Button>
+  // আপনার ভিডিও আইডি (বর্তমানে এটি একটি ডেমো আইডি দেওয়া আছে, আপনার আসল ভিডিও আইডি বসাবেন)
+  const videoId = "dQw4w9WgXcQ"; 
+  const videoTitle = language ? "Pixel & Code - শরীয়তপুর এর সেরা ডিজিটাল এজেন্সি" : "Pixel & Code - Best Digital Agency in Shariatpur";
+  const videoDesc = language 
+    ? "Pixel & Code এর পরিচিতি এবং আমাদের ৭ বছরের অভিজ্ঞতা সম্পর্কে জানুন।" 
+    : "Introduction to Pixel & Code and our 7 years of experience in digital services.";
+
+  // ✅ SEO: Structured Data (Schema Markup)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Pixel & Code',
+    'url': 'https://pixelandcode.agency',
+    'description': videoDesc,
+    'subjectOf': {
+      '@type': 'VideoObject',
+      'name': videoTitle,
+      'description': videoDesc,
+      'thumbnailUrl': `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+      'uploadDate': '2024-01-01T08:00:00+08:00', // ভিডিও আপলোডের তারিখ দিলে ভালো হয়
+      'contentUrl': `https://www.youtube.com/watch?v=${videoId}`,
+      'embedUrl': `https://www.youtube.com/embed/${videoId}`
+    }
+  };
+
+  return (
+    <section className="w-full bg-orange-50/50 dark:bg-background py-20 sm:py-28 transition-colors duration-300">
+      
+      {/* ✅ SEO: Schema Markup ইনজেক্ট করা */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* বাম কলাম */}
+          <div className="flex flex-col items-start">
+            <span className="mb-4 rounded-full border border-orange-200 bg-white dark:bg-gray-800 dark:border-gray-700 px-4 py-1 text-sm font-medium text-orange-600 dark:text-orange-400 shadow-sm">
+              {language ? 'আমাদের পরিচিতি' : 'About Us'}
+            </span>
+            <h2 className="mb-6 text-3xl font-extrabold text-gray-800 dark:text-gray-100 md:text-4xl">
+              {language
+                ? 'শরীয়তপুর এর #১ ডিজিটাল সার্ভিস প্রদানকারী প্রতিষ্ঠান!'
+                : "Shariatpur's #1 Digital Service Provider!"}
+            </h2>
+            <p className="mb-8 text-base leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg">
+              {language
+                ? 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত শরীয়তপুর এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'
+                : 'For over 7 years, we have been fulfilling all kinds of digital service needs with reputation in Shariatpur and across the country. We also have experience working with more than 400 brands.'}
+            </p>
+
+            <Button
+              asChild
+              variant="link"
+              className="p-0 text-lg text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400">
+              <Link 
+                href="/about" 
+                className="flex items-center gap-2"
+                // ✅ SEO: এক্সেসিবিলিটি এবং লিংক টাইটেল
+                aria-label={language ? 'আমাদের সম্পর্কে আরও জানুন' : 'Learn more about us'}
+                title={language ? 'Pixel & Code সম্পর্কে বিস্তারিত' : 'More about Pixel & Code'}
+              >
+                <span>{language ? 'আরও জানুন' : 'Learn More'}</span>
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+          </div>
+
+          {/* ডান কলাম: Lazy YouTube */}
+          <div className="relative w-full overflow-hidden rounded-2xl pb-[56.25%] shadow-2xl dark:shadow-gray-900/50 bg-gray-900">
+            {!showVideo ? (
+              // Thumbnail with play button
+              <div 
+                className="absolute inset-0 cursor-pointer group"
+                onClick={() => setShowVideo(true)}
+                // ✅ SEO: বাটন হিসেবে ডিফাইন করা
+                role="button"
+                aria-label="Play Video"
+                tabIndex={0}
+              >
+                <Image
+                  src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                  alt={language ? "Pixel and Code এজেন্সি পরিচিতি ভিডিও" : "Pixel and Code Agency Intro Video"} // ✅ SEO: বর্ণনামূলক Alt text
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={false} // Lazy load by default
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                  <div className="rounded-full bg-red-600 p-4 group-hover:scale-110 transition-transform">
+                    <Play className="h-12 w-12 text-white" fill="white" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // YouTube iframe
+              <iframe
+                className="absolute left-0 top-0 h-full w-full"
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                title={videoTitle} // ✅ SEO: ভিডিওর জন্য সঠিক টাইটেল
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+          </div>
         </div>
       </div>
     </section>
