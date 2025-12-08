@@ -56,6 +56,11 @@ const serviceComponentsBN: { title: string; href: string; description: string }[
     description: "ফেসবুক, গুগল অ্যাডের মাধ্যমে আপনার ব্যবসাকে ছড়িয়ে দিন।",
   },
   {
+    "title": "Meta Marketing",
+    "href": "/meta-marketing",
+    "description": "Facebook Ads-এর মাধ্যমে আপনার ব্যবসার বিক্রয় এবং ব্র্যান্ড গ্রোথ বৃদ্ধি করুন।"
+  },
+  {
     title: "গ্রাফিক্স ডিজাইন",
     href: "/graphics-design",
     description: "আপনার ব্র্যান্ডের জন্য আকর্ষণীয় লোগো, ব্যানার এবং পোস্টার ডিজাইন।",
@@ -79,6 +84,7 @@ const serviceComponentsBN: { title: string; href: string; description: string }[
 
 const serviceComponentsEN: { title: string; href: string; description: string }[] = [
   { title: "Web Service", href: "/web-service", description: "Modern, responsive and fast websites for your business." },
+  { title: "Meta Marketing", href: "/meta-marketing", description: "Boost your business using Facebook Ads strategies."},
   { title: "Digital Marketing", href: "/digital-marketing", description: "Grow your business through Facebook and Google Ads." },
   { title: "Graphics Design", href: "/graphics-design", description: "Attractive logos, banners and posters for your brand." },
   { title: "SEO", href: "/seo", description: "Bring your website to the first page of search engines." },
