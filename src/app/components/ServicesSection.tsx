@@ -55,13 +55,13 @@ export function AboutSection() {
             </span>
             <h2 className="mb-6 text-3xl font-extrabold text-gray-800 dark:text-gray-100 md:text-4xl">
               {language
-                ? 'শরীয়তপুর এর #১ ডিজিটাল সার্ভিস প্রদানকারী প্রতিষ্ঠান!'
-                : "Shariatpur's #1 Digital Service Provider!"}
+                ? 'বাংলাদেশ ডিজিটাল সার্ভিস প্রদানকারী প্রতিষ্ঠান!'
+                : "Bangladesh Digital Service Provider!"}
             </h2>
             <p className="mb-8 text-base leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg">
               {language
-                ? 'আমরা দীর্ঘ ৭ বছর যাবত সুনামের সহিত শরীয়তপুর এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'
-                : 'For over 7 years, we have been fulfilling all kinds of digital service needs with reputation in Shariatpur and across the country. We also have experience working with more than 400 brands.'}
+                ? 'আমরা দীর্ঘ 1 বছর যাবত সুনামের সহিত শরীয়তপুর এবং সারাদেশব্যাপী ডিজিটাল সার্ভিস রিলেটেড সকল চাহিদা পূরণ করে আসছি। আমাদের রয়েছে ৪০০ এরও অধিক ব্র্যান্ডের সাথে কাজ করার অভিজ্ঞতা।'
+                : 'For over 1 years, we have been fulfilling all kinds of digital service needs with reputation in Shariatpur and across the country. We also have experience working with more than 400 brands.'}
             </p>
 
             <Button
@@ -112,7 +112,7 @@ export function AboutSection() {
               <iframe
                 className="absolute left-0 top-0 h-full w-full"
                 src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                title={videoTitle} // ✅ SEO: ভিডিওর জন্য সঠিক টাইটেল
+                title={videoTitle}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
