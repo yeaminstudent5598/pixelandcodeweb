@@ -1,4 +1,7 @@
-// src/app/graphics-design/page.tsx
+// ==========================================
+// 2️⃣ GRAPHICS DESIGN PAGE
+// File: src/app/graphics-design/page.tsx
+// ==========================================
 "use client";
 
 import React from "react";
@@ -6,15 +9,20 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Check, Palette, PenTool, Image as ImageIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Palette,
+  Image as ImageIcon,
+  FileText,
+  Package,
+} from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
-// অ্যানিমেশনের জন্য ভ্যারিয়েন্ট
+// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
 };
 
 const itemVariants = {
@@ -22,155 +30,284 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-// সার্ভিসগুলোর ডেটা
-const graphicsServices = [
-    {
-        icon: <Palette className="h-10 w-10 text-purple-500" />,
-        title: "লোগো ডিজাইন",
-        description: "আপনার ব্র্যান্ডের জন্য ইউনিক এবং স্মরণীয় লোগো তৈরি করুন যা আপনার পরিচিতি বহন করবে।",
-    },
-    {
-        icon: <ImageIcon className="h-10 w-10 text-orange-500" />,
-        title: "ব্যানার ও পোস্টার ডিজাইন",
-        description: "সোশ্যাল মিডিয়া, ওয়েবসাইট বা প্রিন্টের জন্য আকর্ষণীয় ব্যানার ও পোস্টার ডিজাইন।",
-    },
-    {
-        icon: <PenTool className="h-10 w-10 text-blue-500" />,
-        title: "UI/UX ডিজাইন",
-        description: "আপনার ওয়েবসাইট ও অ্যাপের জন্য ইউজার-ফ্রেন্ডলি এবং সুন্দর ইন্টারফেস ডিজাইন।",
-    },
-    {
-        icon: <ImageIcon className="h-10 w-10 text-red-500" />, // ✅ ঠিক করা হয়েছে
-        title: "ব্র্যান্ডিং মেটেরিয়াল",
-        description: "আপনার কোম্পানির জন্য বিজনেস কার্ড, ফ্লায়ার, ব্রোশিউরসহ সকল ব্র্যান্ডিং মেটেরিয়াল ডিজাইন।",
-    }
+// Services data - English & Bangla
+const servicesEn = [
+  {
+    icon: <Palette className="h-10 w-10 text-blue-500" />,
+    title: "Logo & Brand Identity",
+    description:
+      "Create a memorable brand identity with professional logo design and branding materials.",
+  },
+  {
+    icon: <ImageIcon className="h-10 w-10 text-purple-500" />,
+    title: "Social Media Graphics",
+    description:
+      "Eye-catching designs for Facebook, Instagram, and all social media platforms.",
+  },
+  {
+    icon: <FileText className="h-10 w-10 text-green-500" />,
+    title: "Print Materials",
+    description:
+      "Business cards, flyers, brochures, posters, and all print design needs.",
+  },
+  {
+    icon: <Package className="h-10 w-10 text-orange-500" />,
+    title: "Packaging Design",
+    description:
+      "Stand out on shelves with attractive and professional packaging design.",
+  },
 ];
 
+const servicesBn = [
+  {
+    icon: <Palette className="h-10 w-10 text-blue-500" />,
+    title: "লোগো এবং ব্র্যান্ড আইডেন্টিটি",
+    description:
+      "প্রফেশনাল লোগো ডিজাইন এবং ব্র্যান্ডিং ম্যাটেরিয়াল দিয়ে একটি স্মরণীয় ব্র্যান্ড আইডেন্টিটি তৈরি করুন।",
+  },
+  {
+    icon: <ImageIcon className="h-10 w-10 text-purple-500" />,
+    title: "সোশ্যাল মিডিয়া গ্রাফিক্স",
+    description:
+      "ফেসবুক, ইন্সটাগ্রাম এবং সকল সোশ্যাল মিডিয়া প্ল্যাটফর্মের জন্য আকর্ষণীয় ডিজাইন।",
+  },
+  {
+    icon: <FileText className="h-10 w-10 text-green-500" />,
+    title: "প্রিন্ট ম্যাটেরিয়াল",
+    description:
+      "ব্যবসায়িক কার্ড, ফ্লায়ার, ব্রোশিওর, পোস্টার এবং সকল প্রিন্ট ডিজাইনের প্রয়োজন।",
+  },
+  {
+    icon: <Package className="h-10 w-10 text-orange-500" />,
+    title: "প্যাকেজিং ডিজাইন",
+    description:
+      "আকর্ষণীয় এবং প্রফেশনাল প্যাকেজিং ডিজাইন দিয়ে শেল্ফে আলাদা হয়ে উঠুন।",
+  },
+];
+
+// Features
+const featuresEn = [
+  {
+    title: "Unlimited Revisions",
+    description: "We refine until you're 100% satisfied with the design.",
+  },
+  {
+    title: "Fast Turnaround",
+    description:
+      "Get your designs delivered quickly without compromising quality.",
+  },
+  {
+    title: "Print-Ready Files",
+    description: "All files optimized and ready for printing or digital use.",
+  },
+];
+
+const featuresBn = [
+  {
+    title: "আনলিমিটেড রিভিশন",
+    description: "আপনি ১০০% সন্তুষ্ট না হওয়া পর্যন্ত আমরা ডিজাইন পরিমার্জন করি।",
+  },
+  {
+    title: "দ্রুত ডেলিভারি",
+    description: "গুণমান না কমিয়ে দ্রুত আপনার ডিজাইন ডেলিভার করা হয়।",
+  },
+  {
+    title: "প্রিন্ট-রেডি ফাইল",
+    description:
+      "প্রিন্টিং বা ডিজিটাল ব্যবহারের জন্য সম্পূর্ণ অপটিমাইজড ফাইল।",
+  },
+];
+
+// JSON-LD Schema
+const graphicsSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Graphic Design",
+  provider: {
+    "@type": "Organization",
+    name: "Pixel & Code",
+    url: "https://pixelandcode.agency",
+  },
+  areaServed: { "@type": "Country", name: "Bangladesh" },
+  description:
+    "Professional graphic design services including logo design, branding, social media graphics, and print materials.",
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://pixelandcode.agency",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Graphics Design",
+      item: "https://pixelandcode.agency/graphics-design",
+    },
+  ],
+};
 
 export default function GraphicsDesignPage() {
+  const { language } = useLanguage();
+  const services = language ? servicesBn : servicesEn;
+  const features = language ? featuresBn : featuresEn;
+
   return (
-    <main className="w-full bg-white">
-      <motion.section
-        className="relative w-full overflow-hidden bg-purple-50 py-24 md:py-32"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 lg:grid-cols-2">
-          {/* বাম কলাম: টেক্সট কনটেন্ট */}
-          <motion.div className="z-10 text-center lg:text-left" variants={containerVariants}>
-            <motion.h1
-              className="mb-6 text-4xl font-extrabold text-gray-800 md:text-5xl"
-              variants={itemVariants}
-            >
-              সৃজনশীল গ্রাফিক্স ডিজাইনের মাধ্যমে আপনার ব্র্যান্ডকে ফুটিয়ে তুলুন
-            </motion.h1>
-            <motion.p
-              className="mb-10 text-lg text-gray-600"
-              variants={itemVariants}
-            >
-              আমাদের অভিজ্ঞ ডিজাইনারদের হাত ধরে আপনার ব্র্যান্ডের জন্য তৈরি করুন আকর্ষণীয় এবং অর্থবহ ডিজাইন।
-            </motion.p>
-            <motion.div variants={itemVariants}>
-              <Button
-                asChild
-                size="lg"
-                className="group w-full rounded-full bg-purple-600 px-8 py-6 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:bg-purple-700 sm:w-auto"
-              >
-                <Link href="/portfolio">
-                  আমাদের কাজ দেখুন
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </Button>
-            </motion.div>
-          </motion.div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(graphicsSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-          {/* ডান কলাম: ছবি */}
-          <motion.div
-            className="relative hidden h-full min-h-[450px] items-center justify-center lg:flex"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <Image
-              src="/graphic_design.avif" // আপনার গ্রাফিক্স ডিজাইন সম্পর্কিত ছবি
-              alt="Graphics Design"
-              width={500}
-              height={500}
-              className="rounded-lg object-cover shadow-2xl"
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      <section className="py-20 sm:py-28">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-gray-800">আমাদের গ্রাফিক্স ডিজাইন সার্ভিসসমূহ</h2>
-          </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {graphicsServices.map((service, index) => (
-              <motion.div
-                key={index}
-                className="rounded-lg border p-8 text-center shadow-sm transition-shadow hover:shadow-lg"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+      <main className="w-full bg-white dark:bg-gray-950">
+        {/* HERO SECTION */}
+        <motion.section
+          className="relative w-full bg-blue-50 dark:bg-gray-900 py-24 md:py-32"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 lg:grid-cols-2">
+            <motion.div variants={containerVariants}>
+              <motion.h1
+                className="mb-6 text-4xl font-extrabold text-gray-800 dark:text-white md:text-5xl"
+                variants={itemVariants}
               >
-                <div className="mb-4 inline-block rounded-full bg-gray-100 p-4">
-                  {service.icon}
-                </div>
-                <h3 className="mb-2 text-xl font-semibold">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
+                {language
+                  ? "আপনার ব্র্যান্ডকে জীবন্ত করে তুলুন প্রফেশনাল গ্রাফিক্স ডিজাইনে"
+                  : "Bring Your Brand to Life with Professional Graphics Design"}
+              </motion.h1>
+
+              <motion.p
+                className="mb-10 text-lg text-gray-600 dark:text-gray-300"
+                variants={itemVariants}
+              >
+                {language
+                  ? "আমাদের সৃজনশীল ডিজাইনার টিম আপনার ব্র্যান্ডের জন্য অনন্য এবং আকর্ষণীয় ভিজ্যুয়াল তৈরি করবে।"
+                  : "Our creative design team will create unique and attractive visuals for your brand."}
+              </motion.p>
+
+              <motion.div variants={itemVariants}>
+                <Button
+                  asChild
+                  size="lg"
+                  className="group w-full rounded-full bg-blue-600 px-8 py-6 text-lg font-bold text-white shadow-lg hover:bg-blue-700 sm:w-auto"
+                >
+                  <Link href="/contact">
+                    {language ? "আমাদের সাথে যোগাযোগ করুন" : "Contact Us"}
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition" />
+                  </Link>
+                </Button>
               </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </motion.div>
 
-      <section className="bg-gray-50 py-20 sm:py-28">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-            <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-800">কেন আমাদের ডিজাইন সার্ভিস সেরা?</h2>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
-                  <div>
-                    <h4 className="font-semibold">সৃজনশীল এবং অভিজ্ঞ ডিজাইনার</h4>
-                    <p className="text-gray-600">আমাদের টিমের প্রতিটি সদস্য তাদের নিজ নিজ ক্ষেত্রে অত্যন্ত দক্ষ।</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
-                  <div>
-                    <h4 className="font-semibold">সময়মতো ডেলিভারি</h4>
-                    <p className="text-gray-600">আমরা নির্ধারিত সময়ের মধ্যে আপনার কাজ সম্পন্ন করতে প্রতিশ্রুতিবদ্ধ।</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
-                  <div>
-                    <h4 className="font-semibold">আনলিমিটেড রিভিশন</h4>
-                    <p className="text-gray-600">আপনার সম্পূর্ণ সন্তুষ্টি না হওয়া পর্যন্ত আমরা রিভিশন দিয়ে থাকি।</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div className="hidden md:block">
-              <Image
-                src="/graphic team.jpg" // আপনার টিম বা অফিসের ছবি
-                alt="Our Design Team"
-                width={500}
-                height={400}
-                className="rounded-lg object-cover shadow-lg"
+            {/* IMAGE */}
+            <motion.div
+              className="relative hidden h-[500px] w-full items-center justify-center lg:flex"
+              variants={itemVariants}
+            >
+              <motion.div
+                className="absolute h-80 w-80 rounded-full bg-purple-100/50 dark:bg-purple-900/20"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 8, repeat: Infinity }}
               />
+              <motion.div className="z-10 flex h-48 w-48 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-2xl">
+                <Image
+                  src="/logo-01.svg"
+                  alt={language ? "গ্রাফিক্স ডিজাইন" : "Graphics Design"}
+                  width={96}
+                  height={96}
+                  className="object-contain"
+                />
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* SERVICES */}
+        <section className="py-20 sm:py-28 bg-white dark:bg-gray-950">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-12 text-center text-3xl font-bold text-gray-800 dark:text-white">
+              {language
+                ? "আমাদের গ্রাফিক্স ডিজাইন সার্ভিস"
+                : "Our Graphics Design Services"}
+            </h2>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {services.map((service, index) => (
+                <motion.div
+                  key={index}
+                  className="rounded-lg border dark:border-gray-800 bg-white dark:bg-gray-900 p-8 text-center shadow-sm hover:shadow-lg"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="mb-4 inline-block rounded-full bg-gray-100 dark:bg-gray-800 p-4">
+                    {service.icon}
+                  </div>
+                  <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {service.description}
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-    </main>
+        {/* FEATURES */}
+        <section className="bg-gray-50 dark:bg-gray-900 py-20 sm:py-28">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+              <div>
+                <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-white">
+                  {language
+                    ? "কেন আমাদের বেছে নিবেন?"
+                    : "Why Choose Us?"}
+                </h2>
+
+                <ul className="space-y-4">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <Check className="h-6 w-6 flex-shrink-0 text-green-500" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">
+                          {feature.title}
+                        </h4>
+                        <p className="text-gray-600 dark:text-gray-400">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="hidden md:block">
+                <Image
+                  src="/logo-01.svg"
+                  alt={language ? "ডিজাইন টিম" : "Design Team"}
+                  width={500}
+                  height={400}
+                  className="rounded-lg object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
