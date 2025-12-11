@@ -10,7 +10,7 @@ import { AboutSection } from "./components/AboutSection";
 // 🎯 SEO METADATA - HOME PAGE
 // ==========================================
 export const metadata: Metadata = {
-  title: 'Pixel & Code - Professional Web Design, Graphics & Digital Marketing Agency Bangladesh',
+  title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ টাইটেল আপডেট করা হয়েছে
   description: 'Leading digital agency in Bangladesh offering professional web design, web development, graphic design, video editing, and digital marketing services. Transform your business with our expert solutions in Shariatpur and across Bangladesh.',
   keywords: [
     // English Keywords
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     locale: 'bn_BD',
     alternateLocale: ['en_US'],
     url: 'https://pixelandcode.agency',
-    title: 'Pixel & Code - Professional Digital Agency in Bangladesh',
+    title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেট করা হয়েছে
     description: 'Complete digital solutions: Web Design, Web Development, Graphics Design, Video Editing & Digital Marketing. Your trusted partner for business growth in Bangladesh.',
     siteName: 'Pixel & Code',
     images: [
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@pixelandcode',
     creator: '@pixelandcode',
-    title: 'Pixel & Code - Digital Solutions Bangladesh',
+    title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেট করা হয়েছে
     description: 'Professional web design, graphic design, video editing & digital marketing services',
     images: ['https://pixelandcode.agency/og-home.jpg'],
   },

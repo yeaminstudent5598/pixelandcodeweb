@@ -45,7 +45,7 @@ const teamMembers = [
   {
     imgSrc: '/Mizan.jpg', // ❗️ আপনার নিজের ছবি দিন
     name: 'Mizan',
-    role: 'Video Editing',
+    role: 'Video Editor',
   },
 ];
 

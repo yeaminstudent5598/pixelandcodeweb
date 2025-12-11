@@ -22,7 +22,7 @@ const hindSiliguri = Hind_Siliguri({
 export const metadata: Metadata = {
   metadataBase: new URL('https://pixelandcode.agency'),
   title: {
-    default: 'Pixel & Code - Professional Web Design & Digital Marketing Agency in Bangladesh',
+    default: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেটেড টাইটেল
     template: '%s | Pixel & Code'
   },
   description: 'Leading digital agency in Bangladesh specializing in web design, graphic design, video editing, and meta marketing. Transform your business with our expert digital solutions.',
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     locale: 'bn_BD',
     alternateLocale: ['en_US'],
     url: 'https://pixelandcode.agency',
-    title: 'Pixel & Code - Professional Digital Marketing Agency in Bangladesh',
+    title: 'Pixel & Code - Your All-in-one Digital Edge',
     description: 'Transform your business with expert web design, graphic design, video editing, and meta marketing services. Your trusted digital partner in Bangladesh.',
     siteName: 'Pixel & Code',
     images: [
@@ -215,7 +215,7 @@ export default function RootLayout({
               "alternateName": "Pixel and Code",
               "url": "https://pixelandcode.agency",
               "logo": "https://pixelandcode.agency/logo-01.svg",
-              "description": "Professional digital marketing agency in Bangladesh",
+              "description": "Your All-in-one Digital Edge",
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Shariatpur",
