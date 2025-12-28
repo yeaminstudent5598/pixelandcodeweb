@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { HeroSection } from "./components/shared/HeroSection";
 import { Hero } from "./components/shared/Hero";
 import { AboutSection } from "./components/AboutSection";
+import { TechStackSection } from './components/shared/TechStackSection';
 
 // ==========================================
 // 🎯 SEO METADATA - HOME PAGE
@@ -329,6 +330,7 @@ export default function HomePage() {
       
       {/* Below the fold - lazy loaded for better performance */}
       <PortfolioSection/>
+      <TechStackSection/>
       <FeaturedServicesSection/>
       <PricingSection/>
       <TechnologySection/>
