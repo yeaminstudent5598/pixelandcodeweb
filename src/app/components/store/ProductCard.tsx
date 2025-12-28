@@ -1,85 +1,111 @@
 // src/app/components/store/ProductCard.tsx
+'use client'; // Client Component for Language Context
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/storeData';
 import { Button } from '@/components/ui/button';
-import { Eye, ExternalLink } from 'lucide-react';
+import { Eye, ExternalLink, Zap } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { language } = useLanguage(); // Language Hook
+  
+  const discount = product.originalPrice 
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+    : 0;
+
+  // Language variables
+  const title = language ? product.titleBn : product.titleEn;
+  const description = language ? product.shortDescriptionBn : product.shortDescriptionEn;
+  const category = language ? product.categoryBn : product.categoryEn;
+
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-gray-900/50">
+    <div className="group relative flex flex-col h-full overflow-hidden rounded-2xl border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 dark:hover:shadow-blue-900/20">
       
       {/* Image Section */}
-      {/* ✅ মোবাইলে হাইট কম (h-32), ডেস্কটপে বেশি (h-56) */}
-      <div className="relative h-32 sm:h-56 w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+        
+        {/* Badges */}
+        <div className="absolute top-3 left-3 z-10 flex gap-2">
+            {product.isPopular && (
+            <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-lg">
+                <Zap className="h-3 w-3 fill-white" /> {language ? 'জনপ্রিয়' : 'POPULAR'}
+            </div>
+            )}
+            {discount > 0 && (
+            <div className="rounded-full bg-red-600 px-3 py-1 text-[10px] font-bold text-white shadow-md">
+                -{discount}% OFF
+            </div>
+            )}
+        </div>
+
         {product.image ? (
-           <div className="relative h-full w-full">
-             {/* eslint-disable-next-line @next/next/no-img-element */}
-             <img 
-               src={product.image} 
-               alt={product.title} 
-               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" 
-             />
-           </div>
+           <Image
+             src={product.image}
+             alt={title}
+             fill
+             className="object-cover transition-transform duration-700 group-hover:scale-110"
+           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-400 dark:text-gray-500">
-             <span className="text-xl sm:text-4xl font-bold text-gray-200 dark:text-gray-700">Image</span>
+          <div className="flex h-full items-center justify-center">
+             <span className="text-slate-400">No Image</span>
           </div>
         )}
-        
-        {/* Sale Badge: মোবাইলে ছোট */}
-        {product.originalPrice && (
-          <span className="absolute left-2 top-2 rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white shadow-md sm:left-3 sm:top-3 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs">
-            SALE
-          </span>
-        )}
+
+        {/* Overlay Action Buttons */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+           <Link href={`/store/${product.id}`}>
+             <Button variant="secondary" className="rounded-full h-12 w-12 p-0 bg-white text-black hover:bg-slate-200 shadow-lg">
+               <Eye className="h-5 w-5" />
+             </Button>
+           </Link>
+           <a href={product.livePreviewUrl} target="_blank" rel="noopener noreferrer">
+             <Button className="rounded-full h-12 w-12 p-0 bg-blue-600 hover:bg-blue-700 text-white shadow-lg">
+               <ExternalLink className="h-5 w-5" />
+             </Button>
+           </a>
+        </div>
       </div>
 
       {/* Content Section */}
-      {/* ✅ মোবাইলে প্যাডিং খুব কম (p-2.5) */}
-      <div className="flex flex-1 flex-col p-2.5 sm:p-5">
-        
-        {/* Category & Price */}
-        <div className="mb-1 sm:mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-          <span className="w-fit rounded bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 sm:rounded-full sm:px-2">
-            {product.category}
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            {category}
           </span>
-          <span className="text-xs sm:text-lg font-bold text-gray-900 dark:text-white">
-            ৳{product.price.toLocaleString()}
-          </span>
+          <div className="flex flex-col items-end">
+             {product.originalPrice && (
+               <span className="text-xs text-slate-400 line-through">৳{product.originalPrice.toLocaleString()}</span>
+             )}
+             <span className="text-lg font-bold text-slate-900 dark:text-white">
+               ৳{product.price.toLocaleString()}
+             </span>
+          </div>
         </div>
 
-        {/* Title: মোবাইলে ছোট এবং ২ লাইনের বেশি হবে না */}
-        <h3 className="mb-2 text-xs sm:text-xl font-bold text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-          {product.title}
+        <h3 className="mb-2 text-lg font-bold text-slate-800 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <Link href={`/store/${product.id}`}>{title}</Link>
         </h3>
         
-        {/* Description: ✅ মোবাইলে হাইড করা হয়েছে (hidden), শুধু পিসিতে দেখাবে (sm:block) */}
-        <p className="mb-4 hidden line-clamp-2 text-sm text-gray-600 dark:text-gray-400 sm:block">
-          {product.shortDescription}
+        <p className="mb-4 text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+          {description}
         </p>
 
-        {/* Action Buttons */}
-        {/* ✅ মোবাইলে বাটনগুলো নিচে নিচে (flex-col), পিসিতে পাশাপাশি (sm:flex-row) */}
-        <div className="mt-auto flex flex-col gap-2 sm:flex-row sm:gap-3">
-          
-          {/* Details Button */}
-          <Button asChild variant="outline" className="h-8 w-full flex-1 border-gray-300 dark:border-gray-700 text-[10px] sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-300 sm:h-10">
-            <Link href={`/store/${product.id}`}>
-              <Eye className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" /> Details
-            </Link>
-          </Button>
-          
-          {/* Demo Button */}
-          <Button asChild className="h-8 w-full flex-1 bg-blue-600 text-[10px] text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 sm:text-sm sm:h-10">
-            <a href={product.livePreviewUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" /> Demo
-            </a>
-          </Button>
+        {/* Tech Stack Preview */}
+        <div className="mt-auto flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+           {product.techStack.slice(0,3).map(tech => (
+             <span key={tech} className="text-[10px] font-medium text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+               {tech}
+             </span>
+           ))}
+           {product.techStack.length > 3 && (
+             <span className="text-[10px] font-medium text-slate-400 px-1 py-1">+More</span>
+           )}
         </div>
       </div>
     </div>
