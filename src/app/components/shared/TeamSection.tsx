@@ -1,155 +1,161 @@
-// src/components/shared/TeamSection.tsx
 'use client';
+
 import { useLanguage } from '@/context/LanguageContext';
 import Image from 'next/image';
-import React, { useRef } from 'react';
-import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion';
+import React from 'react';
+import { Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react';
 
 // টিম মেম্বারদের ডেটা
 const teamMembers = [
   {
-    imgSrc: '/Yeamin.png', // ❗️ আপনার নিজের ছবি দিন
-    name: 'Yeamin',
-    role: 'CEO & Backend Developer',
+    imgSrc: '/Yeamin.png',
+    name: 'Yeamin Madbor',
+    role: 'CEO & Founder',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Sifat.jpg', // ❗️ আপনার নিজের ছবি দিন
+    imgSrc: '/Sifat.jpg',
     name: 'Sifat Hossain',
-    role: 'Graphics Desinger',
+    role: 'Lead Designer',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Naeem.jpg', // ❗️ আপনার নিজের ছবি দিন
+    imgSrc: '/Naeem.jpg',
     name: 'Naeem Majumder',
-    role: 'Backend Developer',
+    role: 'Senior Backend Dev',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Sabbir_Hossain.jpg', // ❗️ আপনার নিজের ছবি দিন
+    imgSrc: '/Sabbir_Hossain.jpg',
     name: 'Sabbir Hossain',
-    role: 'Frontend Developer',
+    role: 'Frontend Engineer',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Moin_Uddin.jpg', // ❗️ আপনার নিজের ছবি দিন
+    imgSrc: '/Moin_Uddin.jpg',
     name: 'Moin Uddin',
     role: 'Frontend Developer',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Aysa_Akter.jpg', // ❗️ আপনার নিজের ছবি দিন
-    name: 'Aysha Akter Urmi',
+    imgSrc: '/Aysa_Akter.jpg',
+    name: 'Aysha Akter',
     role: 'Frontend Developer',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Iftiak_Hossain.webp', // ❗️ আপনার নিজের ছবি দিন
+    imgSrc: '/Iftiak_Hossain.webp',
     name: 'Iftiak Hossain',
-    role: 'UI/UX Desinger',
+    role: 'UI/UX Designer',
+    linkedin: '#',
+    twitter: '#',
   },
   {
-    imgSrc: '/Mizan.jpg', // ❗️ আপনার নিজের ছবি দিন
-    name: 'Mizan',
+    imgSrc: '/Mizan.jpg',
+    name: 'Mizanur Rahman',
     role: 'Video Editor',
+    linkedin: '#',
+    twitter: '#',
   },
 ];
 
-// 3D কার্ড কম্পোনেন্ট
-const TeamCard3D = ({ member }: { member: typeof teamMembers[0] }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Motion values for 3D effect
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // Smooth spring animation
-  const xSpring = useSpring(x);
-  const ySpring = useSpring(y);
-
-  const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    const mouseX = (e.clientX - rect.left) * 32.5;
-    const mouseY = (e.clientY - rect.top) * 32.5;
-
-    const rX = (mouseY / height - 32.5 / 2) * -1;
-    const rY = (mouseX / width - 32.5 / 2) * 1;
-
-    x.set(rX);
-    y.set(rY);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transformStyle: 'preserve-3d',
-        transform,
-      }}
-      className="group relative flex flex-col items-center rounded-2xl bg-white dark:bg-gray-900 p-6 text-center shadow-lg transition-all duration-200 hover:shadow-2xl dark:border dark:border-gray-800"
-    >
-      <div
-        style={{ transform: 'translateZ(50px)' }}
-        className="relative mb-4 h-36 w-36 overflow-hidden rounded-full border-4 border-white dark:border-gray-700 shadow-md"
-      >
-        <Image
-          src={member.imgSrc}
-          alt={`Profile picture of ${member.name}`}
-          width={144}
-          height={144}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-      </div>
-      <h3
-        style={{ transform: 'translateZ(30px)' }}
-        className="text-xl font-bold text-gray-900 dark:text-white"
-      >
-        {member.name}
-      </h3>
-      <p
-        style={{ transform: 'translateZ(20px)' }}
-        className="mt-1 text-base text-gray-500 dark:text-gray-400"
-      >
-        {member.role}
-      </p>
-    </motion.div>
-  );
-};
-
 export function TeamSection() {
   const { language } = useLanguage();
-  return (
-    <section className="w-full bg-gradient-to-br from-white via-pink-50 to-red-50 dark:from-gray-950 dark:via-gray-900 dark:to-red-950/20 py-20 sm:py-28 transition-colors duration-300 perspective-1000">
-      <div className="container mx-auto px-4">
-        {/* সেকশনের শিরোনাম */}
-        <div className="mb-12 text-center">
-          <div className="mb-4 inline-block rounded-full border border-red-200 bg-white dark:bg-gray-900 dark:border-red-900 px-6 py-2 text-sm font-medium text-red-500 dark:text-red-400 shadow-sm">
-            {language ? 'টিম মেম্বার' : 'Team Members'}
-          </div>
 
-          <h2 className="text-3xl font-extrabold text-gray-800 dark:text-white md:text-4xl">
-            {language
-              ? 'আপনাদের সঠিক সেবা নিশ্চিত করার পিছনের হিরো যারা!!'
-              : 'The Heroes Behind Ensuring Your Perfect Service!!'}
-          </h2>
+  return (
+    <section className="relative w-full py-24 md:py-32 bg-white dark:bg-black border-t border-slate-200 dark:border-slate-800">
+      <div className="container mx-auto px-4">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="max-w-3xl">
+            <h2 className="text-sm font-bold tracking-[0.2em] text-blue-600 dark:text-blue-500 uppercase mb-4">
+              {language ? 'আমাদের টিম' : 'Our Team'}
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
+              {language ? (
+                <>সেরা কাজের পেছনে <br /> <span className="text-slate-400">সেরা মানুষগুলো</span></>
+              ) : (
+                <>The People Behind <br /> <span className="text-slate-400">Great Work</span></>
+              )}
+            </h3>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white border-b border-slate-300 dark:border-slate-700 pb-1 cursor-pointer hover:text-blue-600 transition-colors">
+            {language ? 'আমাদের সাথে যোগ দিন' : 'Join Our Team'}
+            <ArrowUpRight className="w-4 h-4" />
+          </div>
         </div>
 
-        {/* টিম মেম্বারদের কার্ড (3D Grid) */}
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* TEAM GRID / SLIDER */}
+        {/* Mobile: Horizontal Snap Scroll | Desktop: 4 Column Grid */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-8 -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:pb-0 md:mx-0 md:px-0 scrollbar-hide">
+          
           {teamMembers.map((member, index) => (
-            <div key={index} className="perspective-1000">
-              <TeamCard3D member={member} />
+            <div 
+              key={index} 
+              className="group relative flex-shrink-0 w-[80vw] md:w-auto snap-center"
+            >
+              {/* Image Card */}
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900">
+                <Image
+                  src={member.imgSrc}
+                  alt={member.name}
+                  fill
+                  className="object-cover transition-all duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                />
+                
+                {/* Gradient Overlay (Always visible for text readability) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+
+                {/* Info Box (Bottom) */}
+                <div className="absolute bottom-0 left-0 w-full p-6">
+                  <div className="transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+                    <h4 className="text-xl font-bold text-white mb-1">
+                      {member.name}
+                    </h4>
+                    <p className="text-sm font-medium text-slate-300 uppercase tracking-wider mb-4">
+                      {member.role}
+                    </p>
+
+                    {/* Social Links (Hidden initially, slide up on hover) */}
+                    <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 translate-y-4 group-hover:translate-y-0">
+                      <a href={member.linkedin} className="text-white hover:text-blue-400 transition-colors">
+                        <Linkedin className="w-5 h-5" />
+                      </a>
+                      <a href={member.twitter} className="text-white hover:text-blue-400 transition-colors">
+                        <Twitter className="w-5 h-5" />
+                      </a>
+                      <a href="#" className="text-white hover:text-blue-400 transition-colors">
+                        <Mail className="w-5 h-5" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Right Decoration */}
+                <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                   <ArrowUpRight className="w-4 h-4 text-white" />
+                </div>
+              </div>
             </div>
           ))}
+
         </div>
+
+        {/* Mobile Only: CTA Button */}
+        <div className="mt-8 md:hidden text-center">
+             <button className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider border-b border-blue-600 dark:border-blue-400 pb-1">
+                {language ? 'আমাদের সাথে যোগ দিন' : 'Join Our Team'}
+             </button>
+        </div>
+
       </div>
     </section>
   );
