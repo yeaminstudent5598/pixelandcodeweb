@@ -13,9 +13,19 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.ibb.co',
-        port: '',
-        pathname: '/**',
+        hostname: 'i.ibb.co', // সাধারণ ImgBB লিংক
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co.com', // ⚠️ আপনার বর্তমান এরর ফিক্স করার জন্য এটি যুক্ত করা হলো
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
       {
         protocol: 'https',
