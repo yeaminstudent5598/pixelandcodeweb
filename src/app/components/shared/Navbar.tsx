@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "next-themes";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,7 +20,6 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -30,7 +30,6 @@ import {
   LogIn,
   Menu,
   ChevronDown,
-  ChevronUp,
   Search,
   Home,
   Briefcase,
@@ -40,63 +39,44 @@ import {
   Sun,
   Moon,
   Laptop,
-  type LucideIcon, // 👈 Icon Type Import kora hoyeche
+  Globe,
+  LayoutGrid,
+  Sparkles,
+  type LucideIcon,
 } from "lucide-react";
 
-// Services data
-const serviceComponentsBN: { title: string; href: string; description: string }[] = [
-  {
-    title: "ওয়েব সার্ভিস",
-    href: "/web-service",
-    description: "আপনার ব্যবসার জন্য আধুনিক, রেসপন্সিভ এবং দ্রুতগতির ওয়েবসাইট।",
-  },
-  {
-    title: "ডিজিটাল মার্কেটিং",
-    href: "/digital-marketing",
-    description: "ফেসবুক, গুগল অ্যাডের মাধ্যমে আপনার ব্যবসাকে ছড়িয়ে দিন।",
-  },
-  {
-    "title": "Meta Marketing",
-    "href": "/meta-marketing",
-    "description": "Facebook Ads-এর মাধ্যমে আপনার ব্যবসার বিক্রয় এবং ব্র্যান্ড গ্রোথ বৃদ্ধি করুন।"
-  },
-  {
-    title: "গ্রাফিক্স ডিজাইন",
-    href: "/graphics-design",
-    description: "আপনার ব্র্যান্ডের জন্য আকর্ষণীয় লোগো, ব্যানার এবং পোস্টার ডিজাইন।",
-  },
-  {
-    title: "SEO",
-    href: "/seo",
-    description: "সার্চ ইঞ্জিনে আপনার ওয়েবসাইটকে প্রথম পাতায় নিয়ে আসুন।",
-  },
-  {
-    title: "ভিডিও এডিটিং",
-    href: "/video-editing",
-    description: "আপনার পণ্যের জন্য আকর্ষণীয় এবং প্রফেশনাল ভিডিও তৈরি করুন।",
-  },
-  {
-    title: "UI/UX ডিজাইন",
-    href: "/ui-ux-design",
-    description: "আপনার অ্যাপ ও ওয়েবসাইটের জন্য ইউজার-ফ্রেন্ডলি এবং আকর্ষণীয় ডিজাইন।",
-  },
+// ==========================================
+// 🛠️ ডেটা এবং কনফিগারেশন
+// ==========================================
+const serviceComponentsBN = [
+  { title: "ওয়েব সার্ভিস", href: "/web-service", description: "আধুনিক ও দ্রুতগতির ওয়েবসাইট।" },
+  { title: "ডিজিটাল মার্কেটিং", href: "/digital-marketing", description: "ব্যবসাকে অনলাইন জগতে ছড়িয়ে দিন।" },
+  { title: "Meta Marketing", href: "/meta-marketing", description: "Facebook Ads-এর মাধ্যমে সেলস বৃদ্ধি।" },
+  { title: "গ্রাফিক্স ডিজাইন", href: "/graphics-design", description: "আকর্ষণীয় লোগো ও ব্র্যান্ডিং।" },
+  { title: "SEO", href: "/seo", description: "গুগল র‍্যাঙ্কিং এ শীর্ষে থাকুন।" },
+  { title: "ভিডিও এডিটিং", href: "/video-editing", description: "প্রফেশনাল ভিডিও প্রোডাকশন।" },
+  { title: "UI/UX ডিজাইন", href: "/ui-ux-design", description: "ইউজার-ফ্রেন্ডলি অ্যাপ ডিজাইন।" },
 ];
 
-const serviceComponentsEN: { title: string; href: string; description: string }[] = [
-  { title: "Web Service", href: "/web-service", description: "Modern, responsive and fast websites for your business." },
-  { title: "Meta Marketing", href: "/meta-marketing", description: "Boost your business using Facebook Ads strategies."},
-  { title: "Digital Marketing", href: "/digital-marketing", description: "Grow your business through Facebook and Google Ads." },
-  { title: "Graphics Design", href: "/graphics-design", description: "Attractive logos, banners and posters for your brand." },
-  { title: "SEO", href: "/seo", description: "Bring your website to the first page of search engines." },
-  { title: "Video Editing", href: "/video-editing", description: "Create attractive and professional videos for your product." },
-  { title: "UI/UX Design", href: "/ui-ux-design", description: "User-friendly and engaging designs for your app and website." },
+const serviceComponentsEN = [
+  { title: "Web Service", href: "/web-service", description: "Modern & fast websites." },
+  { title: "Digital Marketing", href: "/digital-marketing", description: "Grow business online." },
+  { title: "Meta Marketing", href: "/meta-marketing", description: "Boost sales via FB Ads." },
+  { title: "Graphics Design", href: "/graphics-design", description: "Creative branding assets." },
+  { title: "SEO", href: "/seo", description: "Rank #1 on Google." },
+  { title: "Video Editing", href: "/video-editing", description: "Professional video edits." },
+  { title: "UI/UX Design", href: "/ui-ux-design", description: "User-friendly interfaces." },
 ];
 
-// ✅ Logo Component
+// ==========================================
+// 🎨 লোগো কম্পোনেন্ট (অপরিবর্তিত)
+// ==========================================
 function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2">
-      <svg
+    <Link href="/" className="flex items-center gap-2 group">
+      <div className="relative">
+        <div className="absolute inset-0 bg-blue-500 blur-xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity duration-500"></div>
+           <svg
         className="h-8 w-8 text-blue-600 dark:text-blue-500"
         id="Layer_1"
         data-name="Layer 1"
@@ -129,14 +109,17 @@ function Logo() {
           transform="translate(-555.32 -610.92)"
         />
       </svg>
-      <span className="hidden text-lg font-bold sm:inline-block">
+      </div>
+      <span className="hidden text-xl font-bold sm:inline-block tracking-tight text-slate-800 dark:text-white">
         Pixel & Code
       </span>
     </Link>
   );
 }
 
-// ✅ মোবাইল বটম নেভিগেশনের জন্য আইটেম কম্পোনেন্ট (SOLVED HERE)
+// ==========================================
+// 📱 মোবাইল বটম নেভিগেশন আইটেম (অ্যানিমেটেড)
+// ==========================================
 function BottomNavItem({
   href,
   label,
@@ -145,388 +128,213 @@ function BottomNavItem({
 }: {
   href: string;
   label: string;
-  icon: LucideIcon; // 👈 Fix: Use LucideIcon or React.ElementType<{ className?: string }>
+  icon: LucideIcon;
   active: boolean;
 }) {
   return (
-    <Link
-      href={href}
-      className={cn(
-        "flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors",
-        active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-      )}
-    >
-      {/* এখন আর এখানে কোনো Error দেবে না */}
-      <Icon className={cn("h-6 w-6", active && "fill-current")} />
-      <span>{label}</span>
+    <Link href={href} className="relative flex-1 group">
+      <div className="flex flex-col items-center justify-center py-2">
+        <div className={cn(
+          "relative p-2 rounded-xl transition-all duration-300",
+          active ? "bg-blue-500/10 dark:bg-blue-500/20" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+        )}>
+          <Icon className={cn(
+            "h-6 w-6 transition-all duration-300",
+            active ? "text-blue-600 dark:text-blue-400 scale-110" : "text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200"
+          )} />
+          
+          {/* Active Indicator Dot */}
+          {active && (
+            <motion.span
+              layoutId="bottomNavDot"
+              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full"
+            />
+          )}
+        </div>
+        <span className={cn(
+          "text-[10px] font-medium mt-1 transition-colors",
+          active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
+        )}>
+          {label}
+        </span>
+      </div>
     </Link>
   );
 }
 
-// Main Navbar Component
+// ==========================================
+// 🚀 মেইন ন্যাভবার
+// ==========================================
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage } = useLanguage();
-  
-  // ✅ Theme Hook & Mounted State for Hydration Fix
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const t = language
-    ? {
-        home: "হোম",
-        services: "সার্ভিসেস",
-        store: "স্টোর",
-        packages: "প্যাকেজ",
-        portfolio: "পোর্টফোলিও",
-        about: "আমাদের সম্পর্কে",
-        contact: "যোগাযোগ",
-        login: "লগ-ইন",
-        languageLabel: "Language",
-        themeLabel: "থিম",
-        light: "লাইট",
-        dark: "ডার্ক",
-        system: "সিস্টেম",
-      }
-    : {
-        home: "Home",
-        services: "Services",
-        store: "Store",
-        packages: "Packages",
-        portfolio: "Portfolio",
-        about: "About",
-        contact: "Contact",
-        login: "Login",
-        languageLabel: "Language",
-        themeLabel: "Theme",
-        light: "Light",
-        dark: "Dark",
-        system: "System",
-      };
+    ? { home: "হোম", services: "সার্ভিসেস", store: "স্টোর", packages: "প্যাকেজ", portfolio: "পোর্টফোলিও", about: "আমাদের সম্পর্কে", contact: "যোগাযোগ", login: "লগ-ইন" }
+    : { home: "Home", services: "Services", store: "Store", packages: "Packages", portfolio: "Portfolio", about: "About", contact: "Contact", login: "Login" };
+
   const serviceComponents = language ? serviceComponentsBN : serviceComponentsEN;
 
   return (
     <>
-      {/* --- টপ নেভিগেশন বার (ডেস্কটপ এবং মোবাইল) --- */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-background/80 dark:border-border shadow-sm backdrop-blur-md transition-colors duration-300">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      {/* 🖥️ ডেস্কটপ হেডার (Glassmorphism) */}
+      <header
+        className={cn(
+          "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b",
+          isScrolled
+            ? "bg-white/70 dark:bg-black/70 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-sm"
+            : "bg-transparent border-transparent"
+        )}
+      >
+        <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4 md:px-6">
           
-          {/* ✅ ফিক্সড লোগো (মোবাইল) */}
-          <div className="flex items-center gap-2 lg:hidden">
-             <Logo />
+          {/* লোগো */}
+          <Logo />
+
+          {/* ডেস্কটপ নেভিগেশন */}
+          <div className="hidden lg:flex items-center gap-1 bg-white/50 dark:bg-gray-900/50 p-1.5 rounded-full border border-gray-200/50 dark:border-gray-800/50 backdrop-blur-md shadow-sm">
+            <NavigationMenu>
+              <NavigationMenuList className="gap-1">
+                <NavItem href="/" active={pathname === "/"}>{t.home}</NavItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full h-9 px-4">
+                    {t.services}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white dark:bg-slate-950">
+                      {serviceComponents.map((component) => (
+                        <ListItem key={component.title} title={component.title} href={component.href}>
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavItem href="/store" active={pathname === "/store"}>{t.store}</NavItem>
+                <NavItem href="/packages" active={pathname === "/packages"}>{t.packages}</NavItem>
+                <NavItem href="/portfolio" active={pathname === "/portfolio"}>{t.portfolio}</NavItem>
+                <NavItem href="/about" active={pathname === "/about"}>{t.about}</NavItem>
+                <NavItem href="/contact" active={pathname === "/contact"}>{t.contact}</NavItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
-          {/* ডেস্কটপ লোগো */}
-          <div className="hidden lg:block">
-            <Logo />
-          </div>
-
-          {/* --- ডেস্কটপ মেনু --- */}
-          <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/">{t.home}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>{t.services}</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {serviceComponents.map((component) => (
-                      <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                      >
-                        {component.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/store"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/store" className="text-blue-600 dark:text-blue-400 font-semibold">
-                    {t.store}
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/packages"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/packages">{t.packages}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/portfolio"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/portfolio">{t.portfolio}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+          {/* ডান পাশের অ্যাকশন বাটন */}
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/about"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/about">{t.about}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  active={pathname === "/contact"}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href="/contact">{t.contact}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-
-          {/* --- ডান পাশের আইকন গ্রুপ --- */}
-          <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-4 lg:flex">
-              
-              {/* ✅ Desktop Theme Toggle Button */}
+              {/* ল্যাঙ্গুয়েজ এবং থিম টগল (Compact Pill Design) */}
               {mounted && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="rounded-full"
-                  title="Toggle Theme"
-                >
-                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-orange-500" />
-                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-blue-400" />
-                  <span className="sr-only">Toggle theme</span>
-                </Button>
+                <div className="flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="p-1.5 rounded-full hover:bg-white dark:hover:bg-gray-700 transition-all shadow-sm"
+                  >
+                    {theme === 'dark' ? <Moon className="w-4 h-4 text-blue-400"/> : <Sun className="w-4 h-4 text-orange-500"/>}
+                  </button>
+                  <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                  <button
+                    onClick={() => setLanguage(!language)}
+                    className="px-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors"
+                  >
+                    {language ? "BN" : "EN"}
+                  </button>
+                </div>
               )}
 
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium select-none">
-                  {language ? "BN" : "EN"}
-                </span>
-                <Switch
-                  checked={language}
-                  onCheckedChange={(checked) => setLanguage(Boolean(checked))}
-                  aria-label="Toggle language"
-                />
-              </div>
-              <Button
-                asChild
-                className="bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700"
-              >
+              {/* লগইন বাটন (Gradient) */}
+              <Button asChild className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 border-0">
                 <Link href="/login">
                   <LogIn className="mr-2 h-4 w-4" />
-                  <span>{t.login}</span>
+                  {t.login}
                 </Link>
               </Button>
             </div>
 
-            <Button variant="ghost" size="icon" className="lg:hidden">
-              <Search className="h-6 w-6" />
-              <span className="sr-only">Search</span>
-            </Button>
-
+            {/* মোবাইল হ্যামবার্গার */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="flex lg:hidden"
-                >
+                <Button variant="ghost" size="icon" className="lg:hidden hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
                   <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open navigation menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="p-0 bg-background">
-                <SheetHeader className="p-6">
-                  <SheetTitle className="sr-only">Menu</SheetTitle>
-                  <SheetDescription className="sr-only">
-                    Main navigation menu for the website.
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="flex flex-col gap-6 px-6 overflow-y-auto max-h-screen pb-20">
-                  <Logo />
-                  <nav className="flex flex-col gap-2">
-                    <SheetClose asChild>
-                      <Link
-                        href="/"
-                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                      >
-                        {t.home}
-                      </Link>
-                    </SheetClose>
-
-                    <div>
-                      <button
-                        onClick={() => setServicesOpen(!servicesOpen)}
-                        className="flex items-center justify-between w-full rounded-md px-3 py-2 text-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                      >
-                        {t.services}
-                        {servicesOpen ? (
-                          <ChevronUp className="h-5 w-5" />
-                        ) : (
-                          <ChevronDown className="h-5 w-5" />
-                        )}
-                      </button>
-                      {servicesOpen && (
-                        <div className="pl-4 pt-2 pb-1 border-l-2 border-gray-200 dark:border-gray-700 ml-3">
-                          {serviceComponents.map((item) => (
-                            <SheetClose asChild key={item.href}>
-                              <Link
-                                href={item.href}
-                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                              >
-                                {item.title}
-                              </Link>
-                            </SheetClose>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <SheetClose asChild>
-                      <Link
-                        href="/store"
-                        className="rounded-md px-3 py-2 text-lg font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
-                      >
-                        {t.store}
-                      </Link>
-                    </SheetClose>
-
-                    <SheetClose asChild>
-                      <Link
-                        href="/packages"
-                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                      >
-                        {t.packages}
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link
-                        href="/portfolio"
-                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                      >
-                        {t.portfolio}
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link
-                        href="/about"
-                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                      >
-                        {t.about}
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link
-                        href="/contact"
-                        className="rounded-md px-3 py-2 text-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                      >
-                        {t.contact}
-                      </Link>
-                    </SheetClose>
-
-                    <div className="mt-4 border-t dark:border-gray-700 pt-4">
-                      <SheetClose asChild>
-                        <Button
-                          asChild
-                          className="w-full bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700"
-                        >
-                          <Link href="/login">
-                            <LogIn className="mr-2 h-4 w-4" />
-                            <span>{t.login}</span>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px] p-0 border-r border-gray-200 dark:border-gray-800">
+                <div className="flex flex-col h-full bg-white dark:bg-slate-950">
+                  <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+                    <Logo />
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-4">
+                    <nav className="space-y-1">
+                      {/* মোবাইল মেনু আইটেম */}
+                      {[
+                        { href: "/", label: t.home, icon: Home },
+                        { href: "/portfolio", label: t.portfolio, icon: Briefcase },
+                        { href: "/packages", label: t.packages, icon: Package },
+                        { href: "/store", label: t.store, icon: ShoppingBag },
+                        { href: "/about", label: t.about, icon: LayoutGrid },
+                        { href: "/contact", label: t.contact, icon: Mail },
+                      ].map((item) => (
+                        <SheetClose asChild key={item.href}>
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
+                              pathname === item.href
+                                ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900"
+                            )}
+                          >
+                            <item.icon className="w-5 h-5" />
+                            {item.label}
                           </Link>
-                        </Button>
-                      </SheetClose>
-                    </div>
-
-                    {/* ✅ Mobile Settings Section (Language & Theme) */}
-                    <div className="mt-4 flex flex-col gap-3">
+                        </SheetClose>
+                      ))}
                       
-                      {/* Language */}
-                      <div className="flex items-center justify-between rounded-md border dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/50">
-                        <span className="text-sm font-medium flex items-center gap-2">
-                           {t.languageLabel}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs select-none font-bold">
-                            {language ? "BN" : "EN"}
-                          </span>
-                          <Switch
-                            checked={language}
-                            onCheckedChange={(checked) =>
-                              setLanguage(Boolean(checked))
-                            }
-                            aria-label="Toggle language"
-                          />
-                        </div>
+                      {/* সার্ভিসেস ড্রপডাউন (মোবাইল) */}
+                      <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
+                        <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{t.services}</p>
+                        {serviceComponents.map((item) => (
+                          <SheetClose asChild key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
+                            >
+                              <Sparkles className="w-4 h-4 text-orange-500" />
+                              {item.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
                       </div>
-
-                      {/* Theme */}
-                      {mounted && (
-                        <div className="flex items-center justify-between rounded-md border dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/50">
-                            <span className="text-sm font-medium">{t.themeLabel}</span>
-                            <div className="flex gap-1 bg-white dark:bg-black rounded-full border dark:border-gray-700 p-1">
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className={cn("h-7 w-7 rounded-full", theme === 'light' && "bg-gray-200 text-orange-500")}
-                                    onClick={() => setTheme('light')}
-                                >
-                                    <Sun className="h-4 w-4" />
-                                </Button>
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className={cn("h-7 w-7 rounded-full", theme === 'system' && "bg-gray-200 dark:bg-gray-700")}
-                                    onClick={() => setTheme('system')}
-                                >
-                                    <Laptop className="h-4 w-4" />
-                                </Button>
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className={cn("h-7 w-7 rounded-full", theme === 'dark' && "bg-gray-800 text-blue-400")}
-                                    onClick={() => setTheme('dark')}
-                                >
-                                    <Moon className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-                      )}
-
+                    </nav>
+                  </div>
+                  
+                  {/* মোবাইল ফুটার (সেটিংস) */}
+                  <div className="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Button variant="outline" size="icon" className="rounded-full h-9 w-9" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+                          {theme === 'dark' ? <Moon className="h-4 w-4"/> : <Sun className="h-4 w-4"/>}
+                        </Button>
+                        <Button variant="outline" size="sm" className="rounded-full h-9" onClick={() => setLanguage(!language)}>
+                          <Globe className="mr-2 h-3.5 w-3.5"/>
+                          {language ? "Bangla" : "English"}
+                        </Button>
+                      </div>
                     </div>
-                  </nav>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -534,63 +342,67 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* --- মোবাইল বটম নেভিগেশন বার --- */}
-      <nav className="fixed bottom-0 z-50 w-full border-t bg-white dark:bg-black dark:border-gray-800 shadow-[0_-2px_6px_rgba(0,0,0,0.06)] lg:hidden">
-        <div className="mx-auto flex h-16 max-w-md items-center justify-around px-4">
-          <BottomNavItem
-            href="/"
-            label={t.home}
-            icon={Home}
-            active={pathname === "/"}
-          />
-          <BottomNavItem
-            href="/portfolio"
-            label={t.portfolio}
-            icon={Briefcase}
-            active={pathname === "/portfolio"}
-          />
-          <BottomNavItem
-            href="/store"
-            label={t.store}
-            icon={ShoppingBag}
-            active={pathname === "/store"}
-          />
-          <BottomNavItem
-            href="/packages"
-            label={t.packages}
-            icon={Package}
-            active={pathname === "/packages"}
-          />
-          <BottomNavItem
-            href="/contact"
-            label={t.contact}
-            icon={Mail}
-            active={pathname === "/contact"}
-          />
-        </div>
-      </nav>
+      {/* 📱 মোবাইল ফ্লোটিং বটম ন্যাভবার (Floating Island Style) */}
+      <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md">
+        <nav className="bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50 p-2">
+          <div className="flex justify-around items-center">
+            <BottomNavItem href="/" label={t.home} icon={Home} active={pathname === "/"} />
+            <BottomNavItem href="/portfolio" label={t.portfolio} icon={Briefcase} active={pathname === "/portfolio"} />
+            
+            {/* মিডল বাটন (হাইলাইটেড) */}
+            <Link href="/contact" className="relative -top-6">
+              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full shadow-lg shadow-blue-500/30 text-white transform transition-transform active:scale-95">
+                <Mail className="w-6 h-6" />
+              </div>
+            </Link>
+
+            <BottomNavItem href="/packages" label={t.packages} icon={Package} active={pathname === "/packages"} />
+            <BottomNavItem href="/store" label={t.store} icon={ShoppingBag} active={pathname === "/store"} />
+          </div>
+        </nav>
+      </div>
     </>
   );
 }
 
-// Dropdown ListItem Component
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
+// ==========================================
+// 🧩 হেল্পার কম্পোনেন্ট (Navbar Item)
+// ==========================================
+function NavItem({ href, children, active }: { href: string; children: React.ReactNode; active?: boolean }) {
+  return (
+    <NavigationMenuItem>
+      <Link href={href} legacyBehavior passHref>
+        <NavigationMenuLink
+          className={cn(
+            navigationMenuTriggerStyle(),
+            "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full h-9 px-4 transition-all",
+            active && "bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400 font-semibold"
+          )}
+        >
+          {children}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
+  );
+}
+
+// 🧩 Dropdown List Item
+const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(({ className, title, children, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground dark:hover:bg-gray-800 dark:focus:bg-gray-800",
+            "block select-none space-y-1 rounded-xl p-3 leading-none no-underline outline-none transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/20 group",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <div className="text-sm font-semibold leading-none text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            {title}
+          </div>
+          <p className="line-clamp-2 text-xs leading-snug text-gray-500 dark:text-gray-400 mt-1">
             {children}
           </p>
         </a>
