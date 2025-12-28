@@ -9,6 +9,7 @@ import { StructuredData } from './components/StructuredData';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
+import { FloatingWhatsApp } from './components/shared/FloatingWhatsApp';
 
 // Hind Siliguri ফন্ট কনফিগার করা হয়েছে
 const hindSiliguri = Hind_Siliguri({
@@ -185,6 +186,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <FloatingWhatsApp />
           </LanguageProvider>
         </ThemeProvider>
         
