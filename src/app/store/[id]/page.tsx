@@ -1,132 +1,169 @@
-// src/app/store/[id]/page.tsx
+'use client';
+
+import React from 'react';
+import { useParams, notFound } from 'next/navigation';
 import { products } from '@/lib/storeData';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, ExternalLink, ArrowLeft } from 'lucide-react';
+import { 
+  CheckCircle2, ExternalLink, ArrowLeft, Layers, 
+  ShieldCheck, Zap, Star, MousePointer2 
+} from 'lucide-react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { BuyNowModal } from '../BuyNowModal';
+import { useLanguage } from '@/context/LanguageContext';
 
-interface Props {
-  params: Promise<{
-    id: string;
-  }>;
-}
+export default function ProductDetailsPage() {
+  const params = useParams();
+  const { language } = useLanguage(); 
 
-export default async function ProductDetailsPage(props: Props) {
-  const params = await props.params;
-  const product = products.find((p) => p.id === params.id);
+  // প্রোডাক্ট খুঁজে বের করা
+  const product = products.find((p) => p.id === params?.id);
 
   if (!product) {
     return notFound();
   }
 
-  return (
-    <main className="min-h-screen bg-white dark:bg-gray-950 py-12 md:py-20 transition-colors duration-300">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Back Button */}
-        <Link 
-          href="/store" 
-          className="mb-6 inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Store
-        </Link>
+  const title = language ? product.titleBn : product.titleEn;
+  const description = language ? product.shortDescriptionBn : product.shortDescriptionEn;
+  const features = (language ? product.featuresBn : product.featuresEn) || [];
+  const category = language ? product.categoryBn : product.categoryEn;
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-          {/* Left: Image Section - রেসপন্সিভ অ্যাসপেক্ট রেশিও */}
-          <div className="w-full">
-             <div className="relative aspect-video w-full overflow-hidden rounded-2xl border dark:border-gray-800 bg-gray-100 dark:bg-gray-900 shadow-sm">
-                {product.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img 
-                    src={product.image} 
-                    alt={product.title} 
-                    className="h-full w-full object-cover transition-transform hover:scale-105 duration-500"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-xl font-bold text-gray-300 dark:text-gray-700">No Image</span>
+  const discount = product.originalPrice 
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+    : 0;
+
+  return (
+    <main className="min-h-screen bg-[#FDFEFF] dark:bg-[#030712] py-12 md:py-16 transition-colors duration-300">
+      
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        
+        {/* Navigation & Badge */}
+        <div className="flex items-center justify-between mb-8">
+            <Link 
+              href="/store" 
+              className="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-bold text-slate-500 hover:text-blue-600 transition-all shadow-sm"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" /> {language ? 'ফিরে যান' : 'Back'}
+            </Link>
+            
+            <div className="flex items-center gap-2 text-blue-600 bg-blue-50 dark:bg-blue-900/10 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-900/30">
+                <Zap className="w-4 h-4 fill-current" />
+                <span className="text-[10px] font-black tracking-widest uppercase">Premium Solution</span>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          
+          {/* LEFT: VISUAL SHOWCASE (Laptop + App) */}
+          <div className="lg:col-span-7 space-y-10">
+            
+            {/* Dual Device Mockup */}
+            <div className="relative pt-6 pr-6 md:pr-12">
+                {/* Laptop Display */}
+                <div className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden z-10">
+                    <div className="h-7 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center px-4 gap-1.5">
+                        <div className="w-2 h-2 rounded-full bg-slate-300"></div>
+                        <div className="w-2 h-2 rounded-full bg-slate-300"></div>
+                        <div className="w-2 h-2 rounded-full bg-slate-300"></div>
+                    </div>
+                    <div className="relative aspect-video w-full">
+                        <Image src={product.image} alt="Desktop Preview" fill className="object-cover object-top" priority />
+                    </div>
+                </div>
+
+                {/* Mobile App Preview (Floating) */}
+                {product.appImage && (
+                  <div className="absolute -bottom-6 -right-2 md:-right-6 w-[120px] md:w-[180px] aspect-[9/19] bg-slate-900 rounded-[2rem] border-[4px] border-slate-900 shadow-2xl overflow-hidden z-20 ring-4 ring-white dark:ring-[#030712]">
+                      <Image src={product.appImage} alt="App Preview" fill className="object-cover" />
+                      {/* Notch Effect */}
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-3 bg-slate-900 rounded-b-lg z-30"></div>
                   </div>
                 )}
-             </div>
-          </div>
-
-          {/* Right: Details */}
-          <div className="flex flex-col">
-            <div className="mb-3 flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-xs font-bold text-blue-600 dark:text-blue-400">
-                {product.category}
-              </span>
-              {product.originalPrice && (
-                <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                  ৳{product.originalPrice.toLocaleString()}
-                </span>
-              )}
             </div>
 
-            {/* ফন্ট সাইজ রেসপন্সিভ করা হয়েছে */}
-            <h1 className="mb-3 text-2xl font-extrabold text-gray-900 dark:text-white sm:text-3xl lg:text-4xl">
-              {product.title}
-            </h1>
-            <p className="mb-5 text-2xl font-bold text-blue-600 dark:text-blue-400 sm:text-3xl">
-              ৳{product.price.toLocaleString()}
-            </p>
-
-            <p className="mb-6 text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-              {product.shortDescription} এই ওয়েবসাইটটি সম্পূর্ণ রেডিমেড এবং আপনার ব্যবসার জন্য প্রস্তুত। এটি ব্যবহার করে আপনি আজই আপনার অনলাইন ব্যবসা শুরু করতে পারেন।
-            </p>
-
-            {/* Tech Stack */}
-            <div className="mb-6">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Technology Used</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.techStack.map((tech) => (
-                  <span key={tech} className="rounded-md border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">
+            {/* Tech Stack List */}
+            <div className="flex flex-wrap gap-2">
+                {product.techStack.map(tech => (
+                  <span key={tech} className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-[11px] font-bold text-slate-600 dark:text-slate-400">
                     {tech}
                   </span>
                 ))}
+            </div>
+
+            {/* Scroll Preview */}
+            {product.fullImage && (
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+                <h3 className="text-sm font-bold flex items-center gap-2 mb-4">
+                   <Layers className="h-4 w-4 text-blue-600" /> {language ? 'সম্পূর্ণ ডিজাইন' : 'Full Page Layout'}
+                </h3>
+                <div className="relative h-[400px] overflow-y-auto rounded-lg border border-slate-100 dark:border-slate-800 custom-scrollbar">
+                   <Image src={product.fullImage} alt="Full Page" width={1000} height={4000} className="w-full h-auto" />
+                </div>
               </div>
-            </div>
-
-            {/* Features List */}
-            <div className="mb-8 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 p-5">
-              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Key Features</h3>
-              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {product.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Actions - ফিক্সড লেআউট */}
-            <div className="mt-auto flex flex-col gap-3 sm:flex-row">
-              
-              {/* Buy Now Modal - সমান জায়গা নিবে */}
-              <div className="flex-1">
-                <BuyNowModal productName={product.title} price={product.price} />
-              </div>
-
-              {/* Live Preview Button - সাইজ ঠিক করা হয়েছে */}
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="flex-1 rounded-full border-2 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 text-base font-semibold" 
-                asChild
-              >
-                <a href={product.livePreviewUrl} target="_blank" rel="noreferrer" className="flex items-center justify-center">
-                  <ExternalLink className="mr-2 h-4 w-4" /> Live Preview
-                </a>
-              </Button>
-            </div>
-            
-            <p className="mt-4 text-center text-xs text-gray-400 dark:text-gray-500">
-              Secure Payment • Instant Delivery • 24/7 Support
-            </p>
+            )}
           </div>
+
+          {/* RIGHT: PRICING & DETAILS */}
+          <div className="lg:col-span-5">
+              <div className="sticky top-24 space-y-6">
+                <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">
+                      {category}
+                    </span>
+                    <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mt-4 mb-4">
+                      {title}
+                    </h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-8">
+                      {description}
+                    </p>
+
+                    <div className="flex items-end gap-3 mb-8">
+                        <span className="text-4xl font-black">৳{product.price.toLocaleString()}</span>
+                        {product.originalPrice && (
+                          <span className="text-base text-slate-400 line-through font-medium mb-1">
+                            ৳{product.originalPrice.toLocaleString()}
+                          </span>
+                        )}
+                    </div>
+
+                    <div className="space-y-3">
+                        <BuyNowModal productName={title} price={product.price} />
+                        <Button asChild variant="outline" className="w-full h-12 rounded-xl border-2 font-bold">
+                           <a href={product.livePreviewUrl} target="_blank" rel="noreferrer">
+                              <ExternalLink className="mr-2 h-4 w-4" /> {language ? 'লাইভ ডেমো' : 'Live Demo'}
+                           </a>
+                        </Button>
+                    </div>
+
+                    {/* Features List */}
+                    <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                       {features.map((f, i) => (
+                         <div key={i} className="flex items-center gap-3 text-xs font-bold text-slate-600 dark:text-slate-300">
+                            <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" /> {f}
+                         </div>
+                       ))}
+                    </div>
+                </div>
+
+                {/* Secure Badge */}
+                <div className="flex items-center gap-3 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                    <ShieldCheck className="text-blue-600" />
+                    <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+                      {language ? '১০০% নিরাপদ ডেলিভারি ও সাপোর্ট' : '100% Secure Delivery & Support'}
+                    </span>
+                </div>
+              </div>
+          </div>
+
         </div>
       </div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
+      `}</style>
     </main>
   );
 }
