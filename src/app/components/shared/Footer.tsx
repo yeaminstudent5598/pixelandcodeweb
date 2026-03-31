@@ -15,10 +15,10 @@ import {
 import { useLanguage } from '@/context/LanguageContext';
 
 const socialLinks = [
-  { href: 'https://www.facebook.com/pixelandcode', icon: <Facebook className="w-5 h-5" />, label: 'Facebook' },
-  { href: 'https://twitter.com/pixelandcode', icon: <Twitter className="w-5 h-5" />, label: 'Twitter' },
-  { href: 'https://instagram.com/pixelandcode', icon: <Instagram className="w-5 h-5" />, label: 'Instagram' },
-  { href: 'https://linkedin.com/company/pixelandcode', icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn' },
+  { href: 'https://www.facebook.com/pixelandcode07', icon: <Facebook className="w-5 h-5" />, label: 'Facebook' },
+  // { href: 'https://twitter.com/pixelandcode', icon: <Twitter className="w-5 h-5" />, label: 'Twitter' },
+  // { href: 'https://instagram.com/pixelandcode', icon: <Instagram className="w-5 h-5" />, label: 'Instagram' },
+  { href: 'https://linkedin.com/company/pixel-and-code-agency', icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn' },
 ];
 
 export function Footer() {
