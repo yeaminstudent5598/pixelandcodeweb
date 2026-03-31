@@ -79,11 +79,12 @@ export function ProductCard({ product }: ProductCardProps) {
             {category}
           </span>
           <div className="flex flex-col items-end">
+             {/* Updated to Dollar Sign */}
              {product.originalPrice && (
-               <span className="text-xs text-slate-400 line-through">৳{product.originalPrice.toLocaleString()}</span>
+               <span className="text-xs text-slate-400 line-through">${product.originalPrice.toLocaleString()}</span>
              )}
              <span className="text-lg font-bold text-slate-900 dark:text-white">
-               ৳{product.price.toLocaleString()}
+               ${product.price.toLocaleString()}
              </span>
           </div>
         </div>
