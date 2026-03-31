@@ -1,7 +1,7 @@
 // src/app/store/page.tsx
 import { products } from '@/lib/storeData';
 import { ProductCard } from '@/app/components/store/ProductCard';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Globe } from 'lucide-react';
 
 export default function StorePage() {
   return (
@@ -14,16 +14,19 @@ export default function StorePage() {
 
          <div className="container mx-auto px-4 text-center relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-widest mb-6">
-              <ShoppingBag className="w-4 h-4" />
-              <span>প্রিমিয়াম ডিজিটাল প্রোডাক্টস</span>
+              <Globe className="w-4 h-4" />
+              <span>World-Class Digital Products • প্রিমিয়াম সলিউশন</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
               Pixel & Code <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Store</span>
             </h1>
             
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              আপনার প্রজেক্টের জন্য সেরা সলিউশনটি বেছে নিন। আমাদের তৈরি প্রতিটি টেমপ্লেট এবং স্ক্রিপ্ট প্রোডাকশন-রেডি এবং হাই-পারফর্মেন্স।
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed mb-2 font-medium">
+              Discover production-ready, high-performance web and app solutions tailored for your business.
+            </p>
+            <p className="text-md text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              আপনার প্রজেক্টের জন্য সেরা সলিউশনটি বেছে নিন। আমাদের তৈরি প্রতিটি টেমপ্লেট এবং স্ক্রিপ্ট ১০০% প্রোডাকশন-রেডি।
             </p>
          </div>
       </section>
@@ -34,6 +37,7 @@ export default function StorePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
               <div key={product.id} className="h-full">
+                {/* Make sure your ProductCard component renders the price with a '$' sign! */}
                 <ProductCard product={product} />
               </div>
             ))}
