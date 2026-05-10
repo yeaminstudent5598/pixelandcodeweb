@@ -82,7 +82,7 @@ export const products: Product[] = [
     fullImage: 'https://i.ibb.co.com/9kv5dMfQ/www-guptodhandigital-com-4.png',
     appImage: 'https://i.ibb.co.com/6cdrV73V/Whats-App-Image-2025-12-28-at-1-26-58-PM.jpg',
     techStack: ['Next.js', 'MongoDB', 'Mongoose', 'SSLCommerz', 'Flutter', 'Tailwind CSS'],
-    livePreviewUrl: 'https://guptodhandigital.com',
+    livePreviewUrl: 'https://guptodhan.com',
     isPopular: true,
   },
   {
