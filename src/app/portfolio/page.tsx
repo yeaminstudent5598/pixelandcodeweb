@@ -29,7 +29,7 @@ const portfolioItems = [
     descBn: "বিশাল পরিসরের মাল্টি-ভেন্ডর ই-কমার্স প্ল্যাটফর্ম।",
     descEn: "Large scale multi-vendor e-commerce platform.",
     imgSrc: "https://i.ibb.co.com/PG8vqsBb/www-guptodhandigital-com-3.png",
-    link: "https://guptodhandigital.com",
+    link: "https://guptodhan.com",
   },
   {
     id: 3,
