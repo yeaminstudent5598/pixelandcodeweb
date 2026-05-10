@@ -14,15 +14,15 @@ const faqDataBn = [
   },
   {
     question: 'আপনারা কি HTPOOL এর অথোরাইজড এড একাউন্ট সেল করেন?',
-    answer: 'হ্যাঁ, আমরা HTPOOL এর একজন অথোরাইজড পার্টনার। আমাদের থেকে আপনি সম্পূর্ণ ভেরিফাইড এবং নিরাপদ এড অ্যাকাউন্ট কিনতে পারবেন যা কখনো ডিজেবল হওয়ার ভয় নেই।',
+    answer: 'হ্যাঁ, আমরা HTPOOL এর একজন অথোরাইজড পার্টনার। আমাদের থেকে আপনি সম্পূর্ণ ভেরিফাইড এবং নিরাপদ এড অ্যাকাউন্ট কিনতে পারবেন যা কখনো ডিজেবল হওয়ার ভয় নেই।',
   },
   {
     question: 'আপনাদের সাথে সরাসরি অফিসে এসে কথা বলতে চাচ্ছি।',
-    answer: 'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। তবে আসার আগে ফোন দিয়ে অ্যাপয়েন্টমেন্ট নিলে আপনার জন্য সুবিধা হবে।',
+    answer: 'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। তবে আসার আগে ফোন দিয়ে অ্যাপয়েন্টমেন্ট নিলে আপনার জন্য সুবিধা হবে।',
   },
   {
     question: 'আপনাদের ডলার রেট কত? মিনিমাম কত ডলারের কাজ করানো যাবে?',
-    answer: 'ডলারের রেট আন্তর্জাতিক বাজারের উপর নির্ভর করে পরিবর্তনশীল। বর্তমান রেট এবং মিনিমাম বাজেট সম্পর্কে জানতে অনুগ্রহ করে আমাদের হোয়াটসঅ্যাপে বা সরাসরি কল করে জেনে নিন।',
+    answer: 'ডলারের রেট আন্তর্জাতিক বাজারের উপর নির্ভর করে পরিবর্তনশীল। বর্তমান রেট এবং মিনিমাম বাজেট সম্পর্কে জানতে অনুগ্রহ করে আমাদের হোয়াটসঅ্যাপে বা সরাসরি কল করে জেনে নিন।',
   },
 ];
 
@@ -47,7 +47,7 @@ const faqDataEn = [
 
 export function FaqSection() {
   const { language } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState<number | null>(0); // ডিফল্টভাবে প্রথমটি খোলা থাকবে
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -56,47 +56,59 @@ export function FaqSection() {
   const faqs = language ? faqDataBn : faqDataEn;
 
   return (
-    <section className="relative w-full py-24 md:py-32 bg-slate-50 dark:bg-black overflow-hidden">
+    <section 
+      className="relative w-full py-24 md:py-32 overflow-hidden z-0"
+      style={{ 
+        backgroundColor: '#060606',
+        backgroundImage: `linear-gradient(rgba(249,115,22,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,.03) 1px, transparent 1px)`,
+        backgroundSize: '56px 56px',
+        borderTop: '1px solid rgba(255,255,255,.05)'
+      }}
+    >
       
-      {/* Background Shapes */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* ==========================================
+          BACKGROUND 3D AMBIENCE
+      ========================================== */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="container mx-auto px-4 relative z-10 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           
           {/* ==========================================
               LEFT COLUMN: IMAGE & FLOATING CARD
           ========================================== */}
           <div className="relative order-2 lg:order-1">
             {/* Main Image */}
-            <div className="relative h-[500px] w-full rounded-[2.5rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl">
+            <div className="relative h-[500px] w-full rounded-[2.5rem] overflow-hidden border border-white/[0.05] shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+              {/* Inner Glow to match 3D Vibe */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 to-transparent mix-blend-overlay z-10 pointer-events-none"></div>
               <Image
-                src="/question.avif" // আপনার দেওয়া ইমেজ
+                src="/question.avif" // আপনার দেওয়া ইমেজ
                 alt="FAQ Support"
                 fill
                 className="object-cover"
               />
               {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#060606] via-[#060606]/40 to-transparent z-10"></div>
             </div>
 
             {/* Floating Contact Card */}
-            <div className="absolute -bottom-10 -right-4 md:-right-10 bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 animate-bounce duration-[3000ms] max-w-[260px]">
+            <div className="absolute -bottom-10 -right-4 md:-right-10 bg-[#111111]/90 backdrop-blur-xl p-6 rounded-3xl shadow-[0_20px_40px_-15px_rgba(249,115,22,0.3)] border border-[#333333] animate-bounce duration-[3000ms] max-w-[260px] z-20">
               <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
                   <MessageCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <p className="text-xs font-bold text-[#9ca3af] uppercase tracking-wider" style={{ color: '#9ca3af' }}>
                     {language ? 'আরও প্রশ্ন?' : 'More Questions?'}
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                  <p className="text-sm font-bold text-[#ffffff]" style={{ color: '#ffffff' }}>
                     {language ? 'চ্যাট করুন' : 'Chat With Us'}
                   </p>
                 </div>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs font-medium text-[#9ca3af] leading-relaxed" style={{ color: '#9ca3af' }}>
                 {language 
                   ? 'আমাদের সাপোর্ট টিম সর্বদা আপনার জন্য প্রস্তুত।' 
                   : 'Our support team is always ready for you.'}
@@ -104,9 +116,9 @@ export function FaqSection() {
             </div>
             
             {/* Decoration Dots */}
-            <div className="absolute -top-10 -left-10 grid grid-cols-3 gap-2 opacity-20">
+            <div className="absolute -top-8 -left-8 grid grid-cols-3 gap-2 opacity-30 z-0">
                {[...Array(9)].map((_, i) => (
-                 <div key={i} className="w-3 h-3 rounded-full bg-blue-600"></div>
+                 <div key={i} className="w-3 h-3 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"></div>
                ))}
             </div>
           </div>
@@ -115,40 +127,56 @@ export function FaqSection() {
               RIGHT COLUMN: ACCORDION
           ========================================== */}
           <div className="order-1 lg:order-2">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold text-xs uppercase tracking-widest mb-6 border border-blue-200 dark:border-blue-800">
-              <HelpCircle className="w-3.5 h-3.5" />
-              {language ? 'প্রশ্ন ও উত্তর' : 'FAQ'}
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 font-bold text-xs uppercase tracking-widest mb-6 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+                <HelpCircle className="w-3.5 h-3.5" />
+                {language ? 'প্রশ্ন ও উত্তর' : 'FAQ'}
+              </div>
 
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight mb-8">
-              {language ? (
-                <>সচরাচর জিজ্ঞাসিত <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">প্রশ্নের উত্তর</span></>
-              ) : (
-                <>Frequently Asked <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Questions</span></>
-              )}
-            </h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-8" style={{ color: '#ffffff' }}>
+                {language ? (
+                  <>সচরাচর জিজ্ঞাসিত <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 drop-shadow-md">প্রশ্নের উত্তর</span></>
+                ) : (
+                  <>Frequently Asked <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 drop-shadow-md">Questions</span></>
+                )}
+              </h2>
+            </motion.div>
 
             <div className="flex flex-col gap-4">
               {faqs.map((faq, index) => (
-                <div 
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
                   key={index}
                   className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                     activeIndex === index 
-                      ? 'bg-white dark:bg-slate-900 border-blue-500 dark:border-blue-500 shadow-lg' 
-                      : 'bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-700'
+                      ? 'bg-[#111111] border-orange-500/50 shadow-[0_0_20px_rgba(249,115,22,0.15)]' 
+                      : 'bg-[#111111]/50 border-[#222222] hover:border-[#444444] hover:bg-[#111111]'
                   }`}
                 >
                   <button
                     onClick={() => toggleAccordion(index)}
-                    className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                    className="w-full flex items-center justify-between p-6 text-left focus:outline-none group"
                   >
-                    <span className={`text-lg font-bold transition-colors ${
-                      activeIndex === index ? 'text-blue-600 dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'
-                    }`}>
+                    <span 
+                      className={`text-lg font-bold transition-colors duration-300 ${
+                        activeIndex === index ? 'text-orange-400' : 'text-[#d1d5db] group-hover:text-white'
+                      }`}
+                      style={{ color: activeIndex === index ? '#fb923c' : '#d1d5db' }}
+                    >
                       {faq.question}
                     </span>
                     <span className={`flex-shrink-0 ml-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-                       activeIndex === index ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                       activeIndex === index 
+                        ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white rotate-180 shadow-[0_0_10px_rgba(249,115,22,0.4)]' 
+                        : 'bg-[#222222] text-[#9ca3af] group-hover:bg-[#333333] group-hover:text-white'
                     }`}>
                       {activeIndex === index ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </span>
@@ -162,13 +190,16 @@ export function FaqSection() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                       >
-                        <div className="px-6 pb-6 pt-0 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-dashed border-slate-200 dark:border-slate-800 mt-2 pt-4">
+                        <div 
+                          className="px-6 pb-6 pt-0 font-medium leading-relaxed border-t border-dashed mt-2 pt-4 border-[#333333] text-[#9ca3af]"
+                          style={{ color: '#9ca3af' }}
+                        >
                           {faq.answer}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
