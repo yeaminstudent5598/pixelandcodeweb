@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Hero } from "./components/shared/Hero";
 import { AboutSection } from "./components/AboutSection";
 import { TechStackSection } from './components/shared/TechStackSection';
+import { ClientsSection } from './components/shared/ClientsSection';
 
 // ==========================================
 // 🎯 SEO METADATA - HOME PAGE
@@ -255,6 +256,7 @@ export default function HomePage() {
       {/* ✅ Single Hero — HeroSection removed to avoid duplicate */}
       <Hero />
       <AboutSection />
+      <ClientsSection />
 
       {/* Below the fold — lazy loaded */}
       <PortfolioSection />
