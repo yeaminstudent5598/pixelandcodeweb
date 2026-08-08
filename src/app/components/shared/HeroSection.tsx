@@ -1,530 +1,271 @@
-// src/app/components/shared/HeroSection.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { ArrowRight, Zap, Globe, Code2, Terminal, Cpu, Layers } from "lucide-react";
+import { ArrowRight, Globe, Code2, CheckCircle2, TrendingUp, Sparkles, PhoneCall } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { motion } from "framer-motion";
 
-/* ─────────────────────────────────────────────
-   Global Styles
-───────────────────────────────────────────── */
-const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-  .hs-root *, .hs-root *::before, .hs-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  .hs-display  { font-family: 'Syne', sans-serif !important; }
-  .hs-body     { font-family: 'DM Sans', sans-serif; }
-  .hs-mono     { font-family: 'JetBrains Mono', monospace !important; }
-
-  @keyframes hs-fadeUp   { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes hs-gradX    { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-  @keyframes hs-cubeY    { from{transform:rotateX(-22deg) rotateY(0deg)} to{transform:rotateX(-22deg) rotateY(360deg)} }
-  @keyframes hs-pulse    { 0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,.5)} 50%{box-shadow:0 0 0 10px rgba(249,115,22,0)} }
-  @keyframes hs-glow     { 0%,100%{opacity:.5} 50%{opacity:1} }
-  @keyframes hs-floatA   { 0%,100%{transform:translateY(0) translateX(0)} 50%{transform:translateY(-14px) translateX(3px)} }
-  @keyframes hs-floatB   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  @keyframes hs-floatC   { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(2deg)} }
-  @keyframes hs-blink    { 0%,100%{opacity:1} 50%{opacity:0} }
-  @keyframes hs-scan     { 0%{top:-20%} 100%{top:120%} }
-  @keyframes hs-typeText {
-    0%  { width:0 }
-    60% { width:100% }
-    80% { width:100% }
-    100%{ width:0 }
-  }
-  @keyframes hs-orbitBadge {
-    from { transform: rotate(var(--start)) translateX(var(--r)) rotate(calc(-1 * var(--start))); }
-    to   { transform: rotate(calc(var(--start) + 360deg)) translateX(var(--r)) rotate(calc(-1 * (var(--start) + 360deg))); }
-  }
-  @keyframes hs-ringPulse {
-    0%,100%  { opacity:.25; transform:scale(1)  rotate(0deg); }
-    50%      { opacity:.5;  transform:scale(1.04) rotate(180deg); }
-  }
-
-  .hs-text-grad {
-    background: linear-gradient(135deg, #f97316 0%, #ef4444 40%, #f59e0b 100%);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: hs-gradX 5s ease infinite;
-  }
-  .hs-grid {
-    background-image:
-      linear-gradient(rgba(249,115,22,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(249,115,22,.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  /* Cube face */
-  .hs-face {
-    position: absolute;
-    width: 170px; height: 170px;
-    border: 1px solid rgba(249,115,22,.3);
-    background: rgba(249,115,22,.02);
-  }
-  .hs-face::before, .hs-face::after {
-    content: '';
-    position: absolute;
-    background: rgba(249,115,22,.4);
-  }
-  /* cross-hair lines on each face */
-  .hs-face::before { top:50%; left:0; right:0; height:1px; transform:translateY(-50%); opacity:.2; }
-  .hs-face::after  { top:0; bottom:0; left:50%; width:1px; transform:translateX(-50%); opacity:.2; }
-
-  /* Hover / interaction */
-  .hs-cta-primary  { transition: transform .2s, box-shadow .3s; }
-  .hs-cta-primary:hover  { transform:translateY(-2px); box-shadow:0 0 52px rgba(249,115,22,.5) !important; }
-  .hs-cta-secondary { transition: border-color .2s, color .2s, transform .2s; }
-  .hs-cta-secondary:hover { border-color:rgba(249,115,22,.45) !important; color:#fff !important; transform:translateY(-2px); }
-  .hs-stat { transition: border-color .25s, transform .25s; }
-  .hs-stat:hover { border-color:rgba(249,115,22,.35) !important; transform:translateY(-4px); }
-  .hs-tech-badge { transition: border-color .2s, box-shadow .2s; }
-  .hs-tech-badge:hover { border-color:rgba(249,115,22,.4) !important; box-shadow:0 0 16px rgba(249,115,22,.15) !important; }
-`;
-
-/* ─────────────────────────────────────────────
-   CSS 3D Wireframe Cube
-───────────────────────────────────────────── */
-function WireframeCube() {
-  const S = 170;
-  const H = S / 2;
-  const faces = [
-    { id: "front",  style: { transform: `rotateY(0deg)   translateZ(${H}px)` } },
-    { id: "back",   style: { transform: `rotateY(180deg) translateZ(${H}px)` } },
-    { id: "left",   style: { transform: `rotateY(-90deg) translateZ(${H}px)` } },
-    { id: "right",  style: { transform: `rotateY(90deg)  translateZ(${H}px)` } },
-    { id: "top",    style: { transform: `rotateX(90deg)  translateZ(${H}px)` } },
-    { id: "bottom", style: { transform: `rotateX(-90deg) translateZ(${H}px)` } },
-  ];
-  const corners = [
-    { top: -3, left: -3 }, { top: -3, right: -3 },
-    { bottom: -3, left: -3 }, { bottom: -3, right: -3 },
-  ];
-
-  return (
-    <div style={{ perspective: 700, perspectiveOrigin: "50% 50%", width: S, height: S }}>
-      <div style={{
-        width: S, height: S, position: "relative",
-        transformStyle: "preserve-3d",
-        animation: "hs-cubeY 14s linear infinite",
-      }}>
-        {faces.map(face => (
-          <div key={face.id} className="hs-face" style={face.style}>
-            {corners.map((c, ci) => (
-              <div key={ci} style={{
-                position: "absolute", width: 5, height: 5, borderRadius: "50%",
-                background: "#f97316",
-                boxShadow: "0 0 8px rgba(249,115,22,.9)",
-                ...c,
-              }} />
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Orbiting tech badges (elliptical orbit = 3D feel)
-───────────────────────────────────────────── */
-const TECHS = [
-  { label: "Next.js",    color: "#ffffff", bg: "rgba(255,255,255,.06)", icon: "▲" },
-  { label: "React",      color: "#61dafb", bg: "rgba(97,218,251,.06)",  icon: "⚛" },
-  { label: "TypeScript", color: "#3b82f6", bg: "rgba(59,130,246,.06)",  icon: "TS" },
-  { label: "Node.js",    color: "#68a063", bg: "rgba(104,160,99,.06)",  icon: "⬡" },
-  { label: "AWS",        color: "#f97316", bg: "rgba(249,115,22,.06)",  icon: "☁" },
-  { label: "Python",     color: "#ffd43b", bg: "rgba(255,212,59,.06)",  icon: "🐍" },
-];
-
-function TechOrbit() {
-  const RX = 185; // horizontal radius
-  const RY = 80;  // vertical radius (squished = 3D perspective feel)
-
-  return (
-    <div style={{ position: "relative", width: 420, height: 420, display: "flex", alignItems: "center", justifyContent: "center" }}>
-
-      {/* Ambient glow behind cube */}
-      <div style={{
-        position: "absolute", width: 260, height: 260, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(249,115,22,.13) 0%, transparent 65%)",
-        filter: "blur(28px)", pointerEvents: "none",
-      }} />
-
-      {/* Decorative orbit rings */}
-      {[200, 240, 280].map((r, i) => (
-        <div key={i} style={{
-          position: "absolute",
-          width: r, height: r * 0.42,
-          borderRadius: "50%",
-          border: `1px solid rgba(249,115,22,${0.06 + i * 0.025})`,
-          pointerEvents: "none",
-          animation: `hs-ringPulse ${7 + i * 2}s ease-in-out infinite`,
-          animationDelay: `${i * 1.2}s`,
-        }} />
-      ))}
-
-      {/* Central 3D cube */}
-      <WireframeCube />
-
-      {/* Tech badges on elliptical orbit */}
-      {TECHS.map((tech, i) => {
-        const angle = (i / TECHS.length) * 2 * Math.PI;
-        const x = Math.cos(angle) * RX;
-        const y = Math.sin(angle) * RY;
-        const depth = Math.sin(angle); // -1 to 1 — fake z
-        const scale = 0.8 + depth * 0.2;
-        const zIndex = depth > 0 ? 20 : 5;
-        const floatAnim = ["hs-floatA", "hs-floatB", "hs-floatC"][i % 3];
-        const dur = 4 + (i * 0.7);
-
-        return (
-          <div
-            key={tech.label}
-            style={{
-              position: "absolute",
-              left: "50%", top: "50%",
-              transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%)) scale(${scale})`,
-              zIndex,
-              animation: `${floatAnim} ${dur}s ease-in-out infinite`,
-              animationDelay: `${i * 0.4}s`,
-            }}
-          >
-            <div
-              className="hs-tech-badge"
-              style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "7px 13px", borderRadius: 10,
-                background: "rgba(8,8,8,.92)",
-                backdropFilter: "blur(16px)",
-                border: `1px solid ${tech.color}28`,
-                whiteSpace: "nowrap",
-                cursor: "default",
-              }}
-            >
-              <span style={{ fontSize: 13, color: tech.color, lineHeight: 1 }}>{tech.icon}</span>
-              <span className="hs-mono" style={{ fontSize: 11, fontWeight: 500, color: "#e5e7eb" }}>
-                {tech.label}
-              </span>
-            </div>
-          </div>
-        );
-      })}
-
-      {/* Floating status badge — top right */}
-      <div style={{
-        position: "absolute", top: "6%", right: "2%", zIndex: 30,
-        background: "rgba(8,8,8,.92)", backdropFilter: "blur(16px)",
-        border: "1px solid rgba(255,255,255,.09)", borderRadius: 14,
-        padding: "10px 14px",
-        animation: "hs-floatC 5.5s ease-in-out infinite",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "rgba(34,197,94,.12)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Zap style={{ width: 15, height: 15, color: "#22c55e" }} />
-          </div>
-          <div>
-            <div style={{ color: "#fff", fontSize: 12, fontWeight: 600, lineHeight: 1.3 }}>Delivered on Time</div>
-            <div style={{ color: "#6b7280", fontSize: 11 }}>50+ Projects</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating status badge — bottom left */}
-      <div style={{
-        position: "absolute", bottom: "6%", left: "2%", zIndex: 30,
-        background: "rgba(8,8,8,.92)", backdropFilter: "blur(16px)",
-        border: "1px solid rgba(255,255,255,.09)", borderRadius: 14,
-        padding: "10px 14px",
-        animation: "hs-floatA 6s ease-in-out infinite 1s",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "rgba(59,130,246,.12)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <Globe style={{ width: 15, height: 15, color: "#60a5fa" }} />
-          </div>
-          <div>
-            <div style={{ color: "#fff", fontSize: 12, fontWeight: 600, lineHeight: 1.3 }}>30+ Happy Clients</div>
-            <div style={{ color: "#6b7280", fontSize: 11 }}>Bangladesh & beyond</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Live terminal snippet — bottom right */}
-      <div style={{
-        position: "absolute", bottom: "14%", right: "-2%", zIndex: 30,
-        background: "rgba(8,8,8,.95)", backdropFilter: "blur(16px)",
-        border: "1px solid rgba(249,115,22,.14)", borderRadius: 12,
-        padding: "10px 14px", minWidth: 168,
-        animation: "hs-floatB 7s ease-in-out infinite .5s",
-      }}>
-        {/* Terminal top dots */}
-        <div style={{ display: "flex", gap: 5, marginBottom: 8 }}>
-          {["#ef4444","#f59e0b","#22c55e"].map(c => (
-            <div key={c} style={{ width: 7, height: 7, borderRadius: "50%", background: c }} />
-          ))}
-        </div>
-        <div className="hs-mono" style={{ fontSize: 10, color: "#4b5563", marginBottom: 4 }}>$ npm run build</div>
-        <div className="hs-mono" style={{ fontSize: 10, color: "#22c55e" }}>✓ Compiled successfully</div>
-        <div className="hs-mono" style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
-          <span style={{ fontSize: 10, color: "#6b7280" }}>$ _</span>
-          <div style={{
-            width: 6, height: 11, background: "#f97316", borderRadius: 1,
-            animation: "hs-blink 1.2s ease-in-out infinite",
-          }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Main Hero Section
-───────────────────────────────────────────── */
 export function HeroSection() {
   const { language } = useLanguage();
 
+  // কর্পোরেট স্টাইলের স্ট্যাটাস
   const stats = language
     ? [
-        { num: "50+", label: "প্রজেক্ট", icon: <Code2 style={{ width: 14, height: 14 }} /> },
-        { num: "30+", label: "ক্লায়েন্ট", icon: <Globe style={{ width: 14, height: 14 }} /> },
-        { num: "100%", label: "সন্তুষ্টি",  icon: <Zap   style={{ width: 14, height: 14 }} /> },
+        { num: "৫০+", label: "সফল প্রজেক্ট", icon: <Code2 className="w-5 h-5 text-blue-500" /> },
+        { num: "৩০+", label: "গ্লোবাল ও লোকাল ক্লায়েন্ট", icon: <Globe className="w-5 h-5 text-indigo-500" /> },
+        { num: "১০০%", label: "ক্লায়েন্ট স্যাটিসফেকশন", icon: <CheckCircle2 className="w-5 h-5 text-teal-500" /> },
       ]
     : [
-        { num: "50+", label: "Projects",     icon: <Code2 style={{ width: 14, height: 14 }} /> },
-        { num: "30+", label: "Clients",      icon: <Globe style={{ width: 14, height: 14 }} /> },
-        { num: "100%", label: "Satisfaction", icon: <Zap  style={{ width: 14, height: 14 }} /> },
+        { num: "50+", label: "Projects Delivered", icon: <Code2 className="w-5 h-5 text-blue-500" /> },
+        { num: "30+", label: "Global & Local Clients", icon: <Globe className="w-5 h-5 text-indigo-500" /> },
+        { num: "100%", label: "Client Satisfaction", icon: <CheckCircle2 className="w-5 h-5 text-teal-500" /> },
       ];
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
+      {/* 🎨 CSS Keyframes for Button Gradient Border Animation */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes btnGradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-btn-gradient {
+            background-size: 200% 200%;
+            animation: btnGradientMove 4s ease infinite;
+          }
+        `
+      }} />
 
-      <section
-        className="hs-root hs-body hs-grid"
-        style={{
-          position: "relative",
-          width: "100%",
-          minHeight: "100vh",
-          background: "#050505",
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-          paddingTop: 80,
-        }}
-      >
-        {/* ── Ambient orbs ── */}
-        <div style={{
-          position: "absolute", top: "10%", left: "2%",
-          width: 520, height: 520, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(249,115,22,.1) 0%, transparent 65%)",
-          filter: "blur(70px)", pointerEvents: "none",
-        }} />
-        <div style={{
-          position: "absolute", bottom: "5%", right: "3%",
-          width: 380, height: 380, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(59,130,246,.07) 0%, transparent 65%)",
-          filter: "blur(60px)", pointerEvents: "none",
-        }} />
-        {/* Top-right corner glow */}
-        <div style={{
-          position: "absolute", top: 0, right: 0,
-          width: 300, height: 300,
-          background: "radial-gradient(circle at top right, rgba(249,115,22,.07) 0%, transparent 65%)",
-          pointerEvents: "none",
-        }} />
+      <section className="relative w-full min-h-[100vh] flex items-center justify-center bg-white dark:bg-slate-950 overflow-hidden pt-20 pb-16 lg:pt-28 font-sans">
+        
+        {/* 🎨 Subtle Background Mesh/Gradients */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-100/60 dark:bg-blue-900/20 blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[40%] rounded-full bg-indigo-100/60 dark:bg-indigo-900/20 blur-[120px]" />
+          
+          {/* Subtle Grid Pattern for Technical Feel */}
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        </div>
 
-        {/* ── Content grid ── */}
-        <div style={{
-          width: "100%", maxWidth: 1280,
-          margin: "0 auto",
-          padding: "60px 32px 80px",
-          position: "relative", zIndex: 10,
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 48,
-          alignItems: "center",
-        }}>
-
-          {/* ════ LEFT — Copy ════ */}
-          <div style={{ animation: "hs-fadeUp .9s ease forwards" }}>
-
-            {/* Agency badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "7px 16px", borderRadius: 9999,
-              border: "1px solid rgba(249,115,22,.28)",
-              background: "rgba(249,115,22,.06)",
-              color: "#fb923c", fontSize: 11, fontWeight: 700,
-              letterSpacing: ".09em", textTransform: "uppercase",
-              marginBottom: 28, backdropFilter: "blur(8px)",
-            }}>
-              <span style={{
-                width: 6, height: 6, borderRadius: "50%", background: "#f97316",
-                boxShadow: "0 0 8px rgba(249,115,22,.9)",
-                animation: "hs-pulse 2s ease-in-out infinite",
-              }} />
-              {language ? "বাংলাদেশের ক্রিয়েটিভ এজেন্সি" : "Creative Software Agency · BD"}
-            </div>
-
-            {/* Headline */}
-            <h1
-              className="hs-display"
-              style={{
-                fontSize: "clamp(44px, 5.5vw, 82px)",
-                fontWeight: 900,
-                lineHeight: 0.93,
-                letterSpacing: "-0.03em",
-                color: "#ffffff",
-                marginBottom: 28,
-              }}
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            
+            {/* ════ LEFT COLUMN (Text Content) ════ */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="max-w-2xl"
             >
-              {language ? (
-                <>
-                  <span style={{ display: "block" }}>আমরা তৈরি করি</span>
-                  <span className="hs-text-grad" style={{ display: "block" }}>ডিজিটাল</span>
-                  <span style={{ display: "block" }}>অভিজ্ঞতা</span>
-                </>
-              ) : (
-                <>
-                  <span style={{ display: "block" }}>We Build</span>
-                  <span className="hs-text-grad" style={{ display: "block" }}>Digital</span>
-                  <span style={{ display: "block" }}>Experiences</span>
-                </>
-              )}
-            </h1>
-
-            {/* Sub-description */}
-            <p style={{
-              color: "#6b7280",
-              fontSize: 17,
-              lineHeight: 1.78,
-              fontWeight: 300,
-              maxWidth: 470,
-              marginBottom: 40,
-            }}>
-              {language
-                ? "আধুনিক ওয়েবসাইট, অ্যাপ এবং ব্র্যান্ড আইডেন্টিটি তৈরিতে আমরা বিশেষজ্ঞ। Pixel & Code — যেখানে ডিজাইন ও প্রযুক্তি একসাথে কাজ করে।"
-                : "We craft modern websites, apps, and brand identities that drive real growth. Where pixel-perfect design meets production-grade code."}
-            </p>
-
-            {/* CTA buttons */}
-            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 52 }}>
-              <Link href="/contact" style={{ textDecoration: "none" }}>
-                <button
-                  className="hs-display hs-cta-primary"
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 9,
-                    padding: "15px 30px", borderRadius: 9999,
-                    background: "#ea580c",
-                    color: "#fff", fontWeight: 800, fontSize: 15,
-                    border: "none", cursor: "pointer",
-                    boxShadow: "0 0 32px rgba(234,88,12,.35)",
-                  }}
-                >
-                  {language ? "প্রজেক্ট শুরু করুন" : "Start a Project"}
-                  <ArrowRight style={{ width: 17, height: 17 }} />
-                </button>
-              </Link>
-
-              <Link href="/portfolio" style={{ textDecoration: "none" }}>
-                <button
-                  className="hs-cta-secondary"
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    padding: "15px 30px", borderRadius: 9999,
-                    border: "1px solid rgba(255,255,255,.11)",
-                    background: "rgba(255,255,255,.04)",
-                    color: "#d1d5db", fontWeight: 500, fontSize: 15,
-                    cursor: "pointer", backdropFilter: "blur(8px)",
-                  }}
-                >
-                  <Layers style={{ width: 15, height: 15 }} />
-                  {language ? "আমাদের কাজ দেখুন" : "View Portfolio"}
-                </button>
-              </Link>
-            </div>
-
-            {/* Stats row */}
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {stats.map((s, i) => (
-                <div
-                  key={i}
-                  className="hs-stat"
-                  style={{
-                    padding: "14px 20px", borderRadius: 14,
-                    background: "rgba(255,255,255,.025)",
-                    border: "1px solid rgba(255,255,255,.07)",
-                    minWidth: 90, textAlign: "center",
-                    backdropFilter: "blur(8px)",
-                    cursor: "default",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "center", color: "#f97316", marginBottom: 4 }}>
-                    {s.icon}
-                  </div>
-                  <div className="hs-display" style={{ fontSize: 26, fontWeight: 900, color: "#fff", lineHeight: 1 }}>
-                    {s.num}
-                  </div>
-                  <div style={{ fontSize: 11, color: "#6b7280", marginTop: 4 }}>{s.label}</div>
-                </div>
-              ))}
-
-              {/* Divider + domain pill */}
-              <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "14px 18px", borderRadius: 14,
-                background: "rgba(249,115,22,.05)",
-                border: "1px solid rgba(249,115,22,.15)",
-                backdropFilter: "blur(8px)",
-                cursor: "default",
-              }}>
-                <div style={{
-                  width: 7, height: 7, borderRadius: "50%", background: "#22c55e",
-                  animation: "hs-pulse 2s ease-in-out infinite",
-                  flexShrink: 0,
-                }} />
-                <span className="hs-mono" style={{ fontSize: 11, color: "#9ca3af" }}>
-                  pixelandcode.agency
+              {/* Top Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold mb-6 shadow-sm">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
+                {language ? "ট্রাস্টেড ডিজিটাল সলিউশন পার্টনার" : "Trusted Digital Solution Partner"}
               </div>
-            </div>
+
+              {/* Main Headline with Gradient */}
+              <h1 className="text-[40px] md:text-[52px] lg:text-[60px] leading-[1.15] font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
+                {language ? (
+                  <>
+                    <span className="block">তৈরি করুন</span>
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 pb-1">
+                      উদ্ভাবনী ও স্কেলেবল
+                    </span>
+                    <span className="block">ডিজিটাল সলিউশন</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="block">Build Scalable &</span>
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 pb-1">
+                      Innovative Digital
+                    </span>
+                    <span className="block">Solutions</span>
+                  </>
+                )}
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed font-medium max-w-[540px]">
+                {language
+                  ? "স্টার্টআপ থেকে শুরু করে এন্টারপ্রাইজ— আমরা একটি রেজাল্ট-ওরিয়েন্টেড এজেন্সি, যারা ওয়েব ডেভেলপমেন্ট, ব্র্যান্ডিং এবং মার্কেটিং সলিউশনের মাধ্যমে আপনার ব্যবসাকে লোকাল এবং গ্লোবাল স্কেলে এগিয়ে নিতে সাহায্য করি।"
+                  : "From startups to enterprises, we are a results-driven agency delivering tailored web development, modern branding, and digital marketing solutions designed to accelerate your business growth."}
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-4 mb-12">
+                <Link href="/contact">
+                  <ButtonPrimary>
+                    {language ? "প্রজেক্ট নিয়ে কথা বলুন" : "Start a Project"}
+                    <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+                  </ButtonPrimary>
+                </Link>
+                
+                <Link href="/contact">
+                  <ButtonSecondary>
+                    <PhoneCall className="w-5 h-5 mr-2 opacity-70 group-hover:opacity-100 transition-opacity" />
+                    {language ? "ফ্রি কনসালটেশন বুক করুন" : "Book Free Consultation"}
+                  </ButtonSecondary>
+                </Link>
+              </div>
+
+              {/* Trust Stats Line */}
+              <div className="grid grid-cols-3 gap-4 md:gap-8 pt-8 border-t border-slate-200 dark:border-slate-800/80">
+                {stats.map((stat, idx) => (
+                  <div key={idx} className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
+                        {stat.num}
+                      </span>
+                    </div>
+                    <span className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+
+            {/* ════ RIGHT COLUMN (Clean UI Composition) ════ */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              className="relative hidden lg:flex items-center justify-center w-full h-[600px]"
+            >
+              {/* Main Floating Mockup Window */}
+              <motion.div 
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                className="relative w-full max-w-[500px] bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_50px_-12px_rgba(37,99,235,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-slate-200/60 dark:border-slate-700/50 overflow-hidden z-20"
+              >
+                {/* Browser Header */}
+                <div className="h-12 bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800/80 flex items-center px-4 gap-2 backdrop-blur-sm">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                  </div>
+                  <div className="mx-auto px-4 py-1.5 bg-white dark:bg-slate-900 rounded-md shadow-sm border border-slate-200 dark:border-slate-700/50 text-[10px] text-slate-400 font-medium flex items-center gap-2">
+                    <Sparkles className="w-3 h-3 text-blue-500" />
+                    pixelandcode.agency
+                  </div>
+                </div>
+                
+                {/* Fake UI Content */}
+                <div className="p-6 space-y-6 bg-slate-50/30 dark:bg-transparent">
+                  <div className="flex justify-between items-center">
+                    <div className="space-y-2">
+                      <div className="w-24 h-4 bg-blue-100 dark:bg-blue-900/30 rounded-full"></div>
+                      <div className="w-32 h-6 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-tr from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 rounded-full flex items-center justify-center border border-blue-200 dark:border-blue-800/50">
+                      <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="h-28 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+                      <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <Code2 className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="w-12 h-3 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                        <div className="w-20 h-4 bg-slate-300 dark:bg-slate-600 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="h-28 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 flex flex-col justify-between shadow-sm">
+                      <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                        <Globe className="w-4 h-4 text-indigo-500" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="w-12 h-3 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                        <div className="w-20 h-4 bg-slate-300 dark:bg-slate-600 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-2">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="w-full h-14 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-700/50 shadow-sm flex items-center px-4 gap-4">
+                        <div className="w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-full"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="w-1/2 h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                          <div className="w-1/3 h-2 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating Element 1: Growth Badge */}
+              <motion.div
+                animate={{ y: [0, 12, 0] }}
+                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+                className="absolute -right-6 top-40 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 z-30 flex items-center gap-4"
+              >
+                <div className="w-12 h-12 bg-green-50 dark:bg-green-900/30 rounded-full flex items-center justify-center border border-green-100 dark:border-green-800/50">
+                  <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <div className="text-sm font-extrabold text-slate-900 dark:text-white">+ 214%</div>
+                  <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Business Scaled</div>
+                </div>
+              </motion.div>
+
+              {/* Floating Element 2: Tech Badge */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 0.5 }}
+                className="absolute -left-10 bottom-32 bg-white dark:bg-slate-800 py-3 px-5 rounded-full shadow-xl border border-slate-100 dark:border-slate-700 z-30 flex items-center gap-3"
+              >
+                <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                  <Code2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">End-to-End Solutions</span>
+              </motion.div>
+
+            </motion.div>
+
           </div>
-
-          {/* ════ RIGHT — 3D Visual ════ */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
-            animation: "hs-fadeUp 1s ease .18s both",
-          }}>
-            <TechOrbit />
-          </div>
-
-        </div>{/* /grid */}
-
-        {/* Bottom fade gradient */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 130,
-          background: "linear-gradient(to top, #050505, transparent)",
-          pointerEvents: "none",
-        }} />
-
-        {/* Scanline overlay for depth */}
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px)",
-          zIndex: 1,
-        }} />
-
+        </div>
       </section>
     </>
+  );
+}
+
+// ==========================================
+// 🧩 Helper Components for Buttons
+// ==========================================
+
+// 🚀 Primary Button: Animated Gradient Border
+function ButtonPrimary({ children }: { children: React.ReactNode }) {
+  return (
+    <button className="relative group inline-flex items-center justify-center p-[2px] rounded-full font-bold transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 focus:outline-none">
+      {/* Animated Gradient Border Layer */}
+      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 animate-btn-gradient rounded-full"></span>
+      
+      {/* Inner Clean Background (White/Slate) */}
+      <span className="relative flex items-center justify-center px-7 py-3.5 w-full h-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-full transition-all duration-300 group-hover:bg-blue-50 dark:group-hover:bg-slate-800">
+        {children}
+      </span>
+    </button>
+  );
+}
+
+// 🎯 Secondary Button: Clean Solid Border 
+function ButtonSecondary({ children }: { children: React.ReactNode }) {
+  return (
+    <button className="group relative inline-flex items-center justify-center px-7 py-3.5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-200 transition-all duration-300 bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-full hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 hover:-translate-y-1 focus:outline-none shadow-sm">
+      {children}
+    </button>
   );
 }

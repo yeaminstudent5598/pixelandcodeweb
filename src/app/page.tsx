@@ -1,17 +1,17 @@
-// File Path: D:\Pixel & Code WEB\pixelandcodeweb\src\app\page.tsx
+// File Path: D:\yeamin student\PixelandCode Web\pixelandcode\src\app\page.tsx
 
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { HeroSection } from "./components/shared/HeroSection";
 import { Hero } from "./components/shared/Hero";
 import { AboutSection } from "./components/AboutSection";
 import { TechStackSection } from './components/shared/TechStackSection';
-import { ClientsSection } from './components/shared/ClientsSection';
 
 // ==========================================
 // 🎯 SEO METADATA - HOME PAGE
 // ==========================================
 export const metadata: Metadata = {
-  title: 'Pixel & Code - Your All-in-one Digital Edge',
+  title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ টাইটেল আপডেট করা হয়েছে
   description: 'Leading digital agency in Bangladesh offering professional web design, web development, graphic design, video editing, and digital marketing services. Transform your business with our expert solutions in Shariatpur and across Bangladesh.',
   keywords: [
     // English Keywords
@@ -45,6 +45,7 @@ export const metadata: Metadata = {
     'landing page design',
     'best digital agency shariatpur',
     'web design company shariatpur',
+    
     // Bangla Keywords
     'পিক্সেল এন্ড কোড',
     'ওয়েব ডিজাইন বাংলাদেশ',
@@ -65,13 +66,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'Pixel & Code', url: 'https://pixelandcode.agency' }],
   creator: 'Pixel & Code',
   publisher: 'Pixel & Code',
-
+  
   openGraph: {
     type: 'website',
     locale: 'bn_BD',
     alternateLocale: ['en_US'],
     url: 'https://pixelandcode.agency',
-    title: 'Pixel & Code - Your All-in-one Digital Edge',
+    title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেট করা হয়েছে
     description: 'Complete digital solutions: Web Design, Web Development, Graphics Design, Video Editing & Digital Marketing. Your trusted partner for business growth in Bangladesh.',
     siteName: 'Pixel & Code',
     images: [
@@ -84,16 +85,16 @@ export const metadata: Metadata = {
       },
     ],
   },
-
+  
   twitter: {
     card: 'summary_large_image',
     site: '@pixelandcode',
     creator: '@pixelandcode',
-    title: 'Pixel & Code - Your All-in-one Digital Edge',
+    title: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেট করা হয়েছে
     description: 'Professional web design, graphic design, video editing & digital marketing services',
     images: ['https://pixelandcode.agency/og-home.jpg'],
   },
-
+  
   alternates: {
     canonical: 'https://pixelandcode.agency',
     languages: {
@@ -101,7 +102,7 @@ export const metadata: Metadata = {
       'en-US': 'https://pixelandcode.agency/en',
     },
   },
-
+  
   robots: {
     index: true,
     follow: true,
@@ -113,7 +114,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-
+  
   category: 'Technology',
   classification: 'Business',
 };
@@ -123,47 +124,65 @@ export const metadata: Metadata = {
 // ==========================================
 const PortfolioSection = dynamic(
   () => import('./components/shared/PortfolioSection').then(mod => ({ default: mod.PortfolioSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const FeaturedServicesSection = dynamic(
   () => import('./components/shared/FeaturedServicesSection').then(mod => ({ default: mod.FeaturedServicesSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const PricingSection = dynamic(
   () => import('./components/shared/PricingSection').then(mod => ({ default: mod.PricingSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const TechnologySection = dynamic(
   () => import('./components/shared/TechnologySection').then(mod => ({ default: mod.TechnologySection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const WhyChooseUsSection = dynamic(
   () => import('./components/shared/WhyChooseUsSection').then(mod => ({ default: mod.WhyChooseUsSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const AchievementsSection = dynamic(
   () => import('./components/shared/AchievementsSection').then(mod => ({ default: mod.AchievementsSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const TeamSection = dynamic(
   () => import('./components/shared/TeamSection').then(mod => ({ default: mod.TeamSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const TestimonialsSection = dynamic(
   () => import('./components/shared/TestimonialsSection').then(mod => ({ default: mod.TestimonialsSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 const FaqSection = dynamic(
   () => import('./components/shared/FaqSection').then(mod => ({ default: mod.FaqSection })),
-  { loading: () => <div className="h-96 animate-pulse bg-gray-900" /> }
+  {
+    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+  }
 );
 
 // ==========================================
@@ -196,7 +215,10 @@ const organizationSchema = {
     "https://www.linkedin.com/company/pixelandcode",
     "https://twitter.com/pixelandcode"
   ],
-  "areaServed": { "@type": "Country", "name": "Bangladesh" }
+  "areaServed": {
+    "@type": "Country",
+    "name": "Bangladesh"
+  }
 };
 
 const websiteSchema = {
@@ -220,15 +242,46 @@ const serviceSchema = {
     "name": "Pixel & Code",
     "url": "https://pixelandcode.agency"
   },
-  "areaServed": { "@type": "Country", "name": "Bangladesh" },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Bangladesh"
+  },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Digital Services",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Design & Development", "description": "Custom website design and development services" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Graphic Design", "description": "Professional graphic design including logo, branding" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Video Editing", "description": "Professional video editing for social media and corporates" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital Marketing", "description": "Facebook ads, Instagram marketing, social media management" } },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Web Design & Development",
+          "description": "Custom website design and development services including e-commerce, corporate websites, and web applications"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Graphic Design",
+          "description": "Professional graphic design services including logo design, branding, social media graphics, and print materials"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Video Editing",
+          "description": "Professional video editing services for social media, commercials, YouTube content, and corporate videos"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Digital Marketing",
+          "description": "Complete digital marketing solutions including Facebook ads, Instagram marketing, and social media management"
+        }
+      }
     ]
   }
 };
@@ -237,7 +290,12 @@ const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pixelandcode.agency" }
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://pixelandcode.agency"
+    }
   ]
 };
 
@@ -247,28 +305,40 @@ const breadcrumbSchema = {
 export default function HomePage() {
   return (
     <>
-      {/* ✅ Structured Data */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-
-      {/* ✅ Single Hero — HeroSection removed to avoid duplicate */}
-      <Hero />
-      <AboutSection />
-      <ClientsSection />
-
-      {/* Below the fold — lazy loaded */}
-      <PortfolioSection />
-      <TechStackSection />
-      <FeaturedServicesSection />
-      <PricingSection />
-      <TechnologySection />
-      <WhyChooseUsSection />
-      <AchievementsSection />
-      <TeamSection />
-      <TestimonialsSection />
-      <FaqSection />
+      {/* ✅ Structured Data Scripts */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      
+      {/* Above the fold - immediately loaded */}
+      <HeroSection/>
+      {/* <Hero /> */}
+      <AboutSection/>
+      
+      {/* Below the fold - lazy loaded for better performance */}
+      <PortfolioSection/>
+      <TechStackSection/>
+      {/* <FeaturedServicesSection/> */}
+      {/* <PricingSection/> */}
+      {/* <TechnologySection/> */}
+      <WhyChooseUsSection/>
+      {/* <AchievementsSection/> */}
+      <TeamSection/>
+      {/* <TestimonialsSection/> */}
+      {/* <FaqSection/> */}
     </>
   );
 }
