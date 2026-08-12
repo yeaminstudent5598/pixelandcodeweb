@@ -6,6 +6,7 @@ import { HeroSection } from "./components/shared/HeroSection";
 import { Hero } from "./components/shared/Hero";
 import { AboutSection } from "./components/AboutSection";
 import { TechStackSection } from './components/shared/TechStackSection';
+import Services from './components/shared/ServicesSection';
 
 // ==========================================
 // 🎯 SEO METADATA - HOME PAGE
@@ -325,6 +326,7 @@ export default function HomePage() {
       
       {/* Above the fold - immediately loaded */}
       <HeroSection/>
+      <Services/>
       {/* <Hero /> */}
       <AboutSection/>
       
