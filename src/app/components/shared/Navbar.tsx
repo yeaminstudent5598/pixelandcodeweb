@@ -1,40 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "next-themes";
-import { motion, Variants, AnimatePresence } from "framer-motion";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-  SheetTitle,
-  SheetDescription,
-} from "@/components/ui/sheet";
+import { motion, AnimatePresence } from "framer-motion";
+
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+
 import {
   Menu,
-  Home,
   Briefcase,
   Package,
   ShoppingBag,
   Mail,
   Sun,
   Moon,
-  Globe,
-  LayoutGrid,
   Sparkles,
   Code2,
   Megaphone,
@@ -44,56 +29,57 @@ import {
   Film,
   Smartphone,
   ArrowRight,
-  Bot,
-  Cpu,
-  Zap,
+  ChevronDown,
+  CheckCircle2,
+  TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 
-// ==========================================
-// 🛠️ Data & Configuration
-// ==========================================
+// =====================================================
+// SERVICES DATA
+// =====================================================
+
 const serviceComponentsBN = [
   {
     title: "ওয়েব সার্ভিস",
     href: "/web-service",
-    description: "আধুনিক ও দ্রুতগতির ওয়েবসাইট।",
+    description: "আধুনিক, দ্রুত ও স্কেলেবল ওয়েবসাইট তৈরি করুন।",
     icon: Code2,
   },
   {
     title: "ডিজিটাল মার্কেটিং",
     href: "/digital-marketing",
-    description: "ব্যবসাকে অনলাইন জগতে ছড়িয়ে দিন।",
+    description: "সঠিক ডিজিটাল স্ট্র্যাটেজির মাধ্যমে ব্যবসা বাড়ান।",
     icon: Megaphone,
   },
   {
     title: "Meta Marketing",
     href: "/meta-marketing",
-    description: "Facebook Ads-এর মাধ্যমে সেলস বৃদ্ধি।",
+    description: "Facebook ও Instagram marketing দিয়ে sales বৃদ্ধি করুন।",
     icon: Share2,
   },
   {
     title: "গ্রাফিক্স ডিজাইন",
     href: "/graphics-design",
-    description: "আকর্ষণীয় লোগো ও ব্র্যান্ডিং।",
+    description: "আপনার ব্র্যান্ডের জন্য premium visual identity।",
     icon: Palette,
   },
   {
     title: "SEO",
     href: "/seo",
-    description: "গুগল র‍্যাঙ্কিং এ শীর্ষে থাকুন।",
+    description: "Google search-এ আপনার business-এর visibility বাড়ান।",
     icon: Search,
   },
   {
     title: "ভিডিও এডিটিং",
     href: "/video-editing",
-    description: "প্রফেশনাল ভিডিও প্রোডাকশন।",
+    description: "Professional এবং engaging video content তৈরি করুন।",
     icon: Film,
   },
   {
     title: "UI/UX ডিজাইন",
     href: "/ui-ux-design",
-    description: "ইউজার-ফ্রেন্ডলি অ্যাপ ডিজাইন।",
+    description: "ব্যবহারকারীর জন্য সহজ ও modern interface design।",
     icon: Smartphone,
   },
 ];
@@ -102,59 +88,62 @@ const serviceComponentsEN = [
   {
     title: "Web Service",
     href: "/web-service",
-    description: "Modern & fast websites.",
+    description: "Modern, fast and scalable websites.",
     icon: Code2,
   },
   {
     title: "Digital Marketing",
     href: "/digital-marketing",
-    description: "Grow business online.",
+    description: "Grow your business with smart digital strategies.",
     icon: Megaphone,
   },
   {
     title: "Meta Marketing",
     href: "/meta-marketing",
-    description: "Boost sales via FB Ads.",
+    description: "Increase sales through Facebook & Instagram.",
     icon: Share2,
   },
   {
     title: "Graphics Design",
     href: "/graphics-design",
-    description: "Creative branding assets.",
+    description: "Premium visual identity for your brand.",
     icon: Palette,
   },
   {
     title: "SEO",
     href: "/seo",
-    description: "Rank #1 on Google.",
+    description: "Improve visibility and rankings on Google.",
     icon: Search,
   },
   {
     title: "Video Editing",
     href: "/video-editing",
-    description: "Professional video edits.",
+    description: "Professional and engaging video content.",
     icon: Film,
   },
   {
     title: "UI/UX Design",
     href: "/ui-ux-design",
-    description: "User-friendly interfaces.",
+    description: "Simple, modern and user-focused interfaces.",
     icon: Smartphone,
   },
 ];
 
-// ==========================================
-// 🎨 Logo Component
-// ==========================================
+// =====================================================
+// LOGO
+// =====================================================
+
 function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 group">
+    <Link
+      href="/"
+      className="flex items-center gap-2.5 group shrink-0"
+    >
       <div className="relative flex items-center justify-center">
-        <div className="absolute inset-0 bg-cyan-500 blur-xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 rounded-full bg-cyan-500 blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
+
         <svg
-          className="h-8 w-8 text-cyan-600 dark:text-cyan-400 relative z-10"
-          id="Layer_1"
-          data-name="Layer 1"
+          className="relative z-10 h-8 w-8 text-cyan-600 dark:text-cyan-400"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 2047.88 1852.16"
         >
@@ -185,16 +174,18 @@ function Logo() {
           />
         </svg>
       </div>
-      <span className="hidden text-xl font-extrabold sm:inline-block tracking-tight text-slate-800 dark:text-white">
+
+      <span className="hidden sm:inline-block text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">
         Pixel & Code
       </span>
     </Link>
   );
 }
 
-// ==========================================
-// 🔗 Navigation Item Component
-// ==========================================
+// =====================================================
+// NAV ITEM
+// =====================================================
+
 function NavItem({
   href,
   active,
@@ -205,35 +196,90 @@ function NavItem({
   children: React.ReactNode;
 }) {
   return (
-    <NavigationMenuItem>
-      <NavigationMenuLink asChild>
-        <Link
-          href={href}
-          className={cn(
-            "relative px-4 py-2 text-sm font-bold transition-all duration-300 rounded-full",
-            active
-              ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/30"
-              : "text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-900/50"
-          )}
-        >
-          {children}
-          {active && (
-            <motion.div
-              layoutId="activeNavIndicator"
-              className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-500 rounded-full"
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
-          )}
-        </Link>
-      </NavigationMenuLink>
-    </NavigationMenuItem>
+    <Link
+      href={href}
+      className={cn(
+        "relative px-4 py-2 text-sm font-bold rounded-full transition-all duration-300 cursor-pointer",
+        active
+          ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50/70 dark:bg-cyan-950/30"
+          : "text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-900/50"
+      )}
+    >
+      {children}
+
+      {active && (
+        <motion.span
+          layoutId="activeNavIndicator"
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-500 rounded-full"
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+        />
+      )}
+    </Link>
   );
 }
 
-// ==========================================
-// 📱 Mobile Bottom Navigation Item
-// ==========================================
-function BottomNavItem({
+// =====================================================
+// SERVICE CARD
+// =====================================================
+
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: {
+    title: string;
+    href: string;
+    description: string;
+    icon: LucideIcon;
+  };
+  index: number;
+}) {
+  const Icon = service.icon;
+
+  return (
+    <Link href={service.href} className="group cursor-pointer  block">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.22,
+          delay: index * 0.03,
+        }}
+        className="relative cursor-pointer  h-full overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 p-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300 dark:hover:border-cyan-800 hover:bg-cyan-50/40 dark:hover:bg-cyan-950/20 hover:shadow-[0_8px_25px_rgba(14,165,233,0.12)]"
+      >
+        <div className="relative  flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-all duration-300 group-hover:bg-cyan-500 group-hover:border-cyan-500">
+            <Icon className="h-4.5 w-4.5 text-cyan-600 dark:text-cyan-400 transition-colors duration-300 group-hover:text-white" />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-1.5">
+              <h3 className="text-sm font-extrabold text-slate-800 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                {service.title}
+              </h3>
+
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-300 dark:text-slate-600 group-hover:text-cyan-500 group-hover:translate-x-0.5 transition-all duration-300" />
+            </div>
+
+            <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">
+              {service.description}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </Link>
+  );
+}
+
+// =====================================================
+// MOBILE NAV ITEM
+// =====================================================
+
+function MobileNavItem({
   href,
   label,
   icon: Icon,
@@ -245,467 +291,443 @@ function BottomNavItem({
   active: boolean;
 }) {
   return (
-    <Link href={href} className="relative flex-1 group">
-      <div className="flex flex-col items-center justify-center py-2">
-        <div
-          className={cn(
-            "relative p-2 rounded-xl transition-colors duration-300 bg-transparent hover:bg-transparent",
-            active
-              ? "text-cyan-600 dark:text-cyan-400"
-              : "text-slate-500 dark:text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400",
-          )}
-        >
-          <Icon
-            className={cn(
-              "h-5 w-5 transition-all duration-300",
-              active
-                ? "text-cyan-600 dark:text-cyan-400 scale-110"
-                : "text-slate-500 dark:text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400",
-            )}
-          />
-          {active && (
-            <motion.span
-              layoutId="bottomNavDot"
-              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-600 dark:bg-cyan-400 rounded-full"
-            />
-          )}
-        </div>
-        <span
-          className={cn(
-            "text-[10px] font-semibold mt-1 transition-colors",
-            active
-              ? "text-cyan-600 dark:text-cyan-400"
-              : "text-slate-500 dark:text-slate-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-400",
-          )}
-        >
-          {label}
-        </span>
-      </div>
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all",
+        active
+          ? "bg-cyan-50 text-cyan-600 dark:bg-cyan-950/30 dark:text-cyan-400"
+          : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
+      )}
+    >
+      <Icon className="w-5 h-5" />
+      <span>{label}</span>
+
+      {active && (
+        <CheckCircle2 className="ml-auto h-4 w-4" />
+      )}
     </Link>
   );
 }
 
-// ==========================================
-// 🚀 Main Navbar
-// ==========================================
+// =====================================================
+// MAIN NAVBAR
+// =====================================================
+
 export function Navbar() {
   const pathname = usePathname();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { language, setLanguage } = useLanguage();
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const t = language
-    ? {
-        home: "হোম",
-        services: "সার্ভিসেস",
-        store: "স্টোর",
-        packages: "প্যাকেজ",
-        portfolio: "পোর্টফোলিও",
-        about: "সম্পর্কে",
-        contact: "যোগাযোগ",
-        requestDemo: "ডেমো রিকোয়েস্ট",
-      }
-    : {
-        home: "Home",
-        services: "Services",
-        store: "Companies",
-        packages: "Packages",
-        portfolio: "Portfolio",
-        about: "About",
-        contact: "Contact",
-        requestDemo: "Request For Demo",
-      };
+  const { language, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
 
   const serviceComponents = language
     ? serviceComponentsBN
     : serviceComponentsEN;
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0, y: -10, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.25,
-        ease: "easeOut" as const,
-        staggerChildren: 0.04,
-      },
-    },
-  };
+  const t = language
+    ? {
+        services: "সার্ভিসেস",
+        store: "কোম্পানিস",
+        packages: "প্যাকেজ",
+        portfolio: "পোর্টফোলিও",
+        contact: "যোগাযোগ",
+        requestDemo: "ডেমো রিকোয়েস্ট",
+        allServices: "সব সার্ভিস দেখুন",
+        bannerBadge: "ডিজিটাল সলিউশন",
+        bannerTitle: "আপনার ব্যবসাকে নিয়ে যান পরবর্তী ধাপে",
+        bannerDesc: "আধুনিক ডিজাইন এবং নিখুঁত কোডিংয়ের সাথে আপনার ব্র্যান্ডকে অনন্য করে তুলুন।",
+        exploreBtn: "প্রজেক্ট আলোচনা করুন",
+      }
+    : {
+        services: "Services",
+        store: "Companies",
+        packages: "Packages",
+        portfolio: "Portfolio",
+        contact: "Contact",
+        requestDemo: "Request For Demo",
+        allServices: "View All Services",
+        bannerBadge: "Digital Ecosystem",
+        bannerTitle: "Scale Your Business to New Heights",
+        bannerDesc: "Empowering your brand with cutting-edge code & high-converting design.",
+        exploreBtn: "Let's Talk Strategy",
+      };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 10 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3, ease: "easeOut" as const },
-    },
-  };
+  useEffect(() => {
+    setMounted(true);
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    setServicesOpen(false);
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <>
-      {/* 🖥️ Desktop Header - Full Screen Background */}
       <header
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b",
+          "fixed top-0 inset-x-0 z-[100] transition-all duration-300 border-b",
           isScrolled
-            ? "bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-md border-slate-200/80 dark:border-slate-800/80 shadow-sm"
-            : "bg-white/50 dark:bg-transparent border-transparent",
+            ? "bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-xl border-slate-200/80 dark:border-slate-800/80 shadow-[0_8px_30px_rgba(15,23,42,0.06)]"
+            : "bg-white/70 dark:bg-slate-950/40 backdrop-blur-sm border-transparent"
         )}
       >
-        {/* Content Container - Max-w-7xl width restriction */}
-        <div className="max-w-7xl w-full mx-auto flex h-16 md:h-20 items-center justify-between px-4 md:px-6">
-          {/* Logo */}
+        <div className="relative max-w-[90%] w-full mx-auto flex h-16 md:h-20 items-center justify-between px-4 md:px-6">
+
           <Logo />
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center">
-            <NavigationMenu>
-              <NavigationMenuList className="gap-2.5 items-center">
-                <NavigationMenuItem>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/"
-                        className={cn(
-                          "relative bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 bg-[length:200%_auto] bg-[position:0%_0] hover:bg-[position:100%_0] text-white font-bold px-4 py-1.5 text-sm  border border-transparent transition-all duration-500 shadow-md shadow-cyan-500/25 flex items-center gap-1.5 focus:bg-transparent data-[state=open]:shadow-lg data-[state=open]:shadow-cyan-500/40",
-                          pathname === "/" && "shadow-lg shadow-cyan-500/40",
-                        )}
-                      >
-                      <div className="flex gap-1.5 rounded-full">
-                          <motion.div
-                          whileHover={{ rotate: [0, -12, 12, 0] }}
-                          transition={{ duration: 0.4 }}
-                        >
-                          <Home className="w-4 h-4 text-white" /> 
-                        </motion.div>
-                        
-                        <span>{t.home}</span>
-                      </div>
+          <nav className="hidden lg:flex items-center">
+            <div className="flex items-center gap-1.5">
 
+              {/* SERVICES MEGA MENU HOVER */}
+              <div
+                className="relative "
+                onMouseEnter={() => setServicesOpen(true)}
+                onMouseLeave={() => setServicesOpen(false)}
+              >
+                <button
+                  type="button"
+                  aria-expanded={servicesOpen}
+                  className={cn(
+                    "relative flex cursor-pointer items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full transition-all duration-300 outline-none",
+                    servicesOpen
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50/80 dark:bg-cyan-950/30"
+                      : "text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-900/50"
+                  )}
+                >
+                  <span>{t.services}</span>
 
-                      </Link>
-                    </NavigationMenuLink>
-                  </motion.div>
-                </NavigationMenuItem>
+                  <ChevronDown
+                    className={cn(
+                      "w-3.5 h-3.5 transition-transform duration-300",
+                      servicesOpen && "rotate-180"
+                    )}
+                  />
 
-                <NavigationMenuItem>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    <NavigationMenuTrigger
-                      className={cn(
-                        "relative bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 bg-[length:200%_auto] bg-[position:0%_0] hover:bg-[position:100%_0] text-white font-bold px-4 py-1.5 text-sm rounded-full border border-transparent transition-all duration-500 shadow-md shadow-cyan-500/25 flex items-center gap-1.5 focus:bg-transparent data-[state=open]:shadow-lg data-[state=open]:shadow-cyan-500/40",
-                      )}
-                    >
-                      <motion.div
-                        animate={{ rotate: [0, 15, -15, 0] }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 3,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <Sparkles className="w-4 h-4 text-white" />
-                      </motion.div>
-                      <span>{t.services}</span>
-                    </NavigationMenuTrigger>
-                  </motion.div>
+                  {servicesOpen && (
+                    <motion.span
+                      layoutId="servicesIndicator"
+                      className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-cyan-500"
+                    />
+                  )}
+                </button>
 
-                  {/* Mega Menu */}
-                  <NavigationMenuContent className="p-0 bg-transparent border-none shadow-none">
+                {/* MEGA MENU DROPDOWN (10-COLUMN GRID SYSTEM) */}
+                <AnimatePresence>
+                  {servicesOpen && (
                     <motion.div
-                      variants={containerVariants}
-                      initial="hidden"
-                      animate="show"
-                      className="flex w-[92vw] max-w-sm min-w-0 flex-col p-4 sm:max-w-xl md:max-w-2xl lg:w-[860px] lg:max-w-[860px] lg:flex-row gap-4 bg-gradient-to-br from-slate-50 via-cyan-50/20 to-slate-50 dark:from-slate-950 dark:via-slate-900/90 dark:to-slate-950 rounded-[1.75rem] border border-slate-200/80 dark:border-slate-800/80 shadow-2xl shadow-slate-400/20 dark:shadow-black/70 mt-3 overflow-hidden backdrop-blur-xl"
+                      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                      className="absolute left-0 top-full pt-3 z-50 pointer-events-auto"
                     >
-                      <ul className="grid flex-1 min-w-0 grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 p-3">
-                        {serviceComponents.map((component) => (
-                          <motion.li
-                            key={component.title}
-                            variants={itemVariants}
-                            className="min-w-0"
-                          >
-                            <NavigationMenuLink asChild>
+                      <div
+                        style={{ width: "960px", maxWidth: "95vw" }}
+                        className="relative overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-[#0b0f17]/95 backdrop-blur-2xl shadow-[0_25px_80px_rgba(15,23,42,0.18)]"
+                      >
+                        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+                        <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
+                        <div className="pointer-events-none absolute -right-20 -bottom-20 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl" />
+
+                        {/* GRID COLS 10 SYSTEM */}
+                        <div className="relative p-6 grid grid-cols-10 gap-6 text-left">
+
+                          {/* LEFT SIDE: 4 PARTS OUT OF 10 */}
+                          <div className="col-span-4 relative flex flex-col justify-end overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-900 group/banner p-6 min-h-[460px]">
+
+                            <Image
+                              src="/services/service-hover.png"
+                              alt="Services Showcase"
+                              fill
+                              priority
+                              sizes="400px"
+                              className="object-cover object-top transition-transform duration-700 ease-out group-hover/banner:scale-105 opacity-90"
+                            />
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/45 to-transparent pointer-events-none" />
+                            <div className="absolute inset-0 bg-cyan-950/20 group-hover/banner:bg-transparent transition-colors duration-500 pointer-events-none" />
+
+                            <div className="relative z-10 space-y-3">
+                              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 backdrop-blur-md border border-cyan-400/30 text-[11px] font-bold text-cyan-300">
+                                <TrendingUp className="w-3 h-3 text-cyan-400" />
+                                <span>{t.bannerBadge}</span>
+                              </div>
+
+                              <h3 className="text-xl font-black leading-snug text-white drop-shadow-sm">
+                                {t.bannerTitle}
+                              </h3>
+
+                              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                                {t.bannerDesc}
+                              </p>
+
                               <Link
-                                href={component.href}
-                                className="group flex items-start gap-3 rounded-2xl p-3.5 outline-none transition-colors duration-300 bg-transparent hover:bg-transparent min-w-0"
+                                href="/contact"
+                                className="inline-flex items-center gap-2 pt-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors group/btn"
                               >
-                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800/80 text-slate-500 transition-colors duration-300 group-hover:text-cyan-500 dark:group-hover:text-cyan-400">
-                                  <component.icon className="h-5 w-5" />
+                                <span>{t.exploreBtn}</span>
+                                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1" />
+                              </Link>
+                            </div>
+                          </div>
+
+                          {/* RIGHT SIDE: 6 PARTS OUT OF 10 */}
+                          <div className="col-span-6 flex flex-col justify-between space-y-4">
+
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-3">
+                              <div className="flex items-center gap-2.5">
+                                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200/50 dark:border-cyan-800/50">
+                                  <Sparkles className="h-4 w-4 text-cyan-500" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                  <h4 className="text-sm font-bold text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 truncate">
-                                    {component.title}
-                                  </h4>
-                                  <p className="mt-1 line-clamp-2 text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
-                                    {component.description}
+
+                                <div>
+                                  <p className="text-sm font-extrabold text-slate-900 dark:text-white">
+                                    {language
+                                      ? "আমাদের ডিজিটাল সার্ভিস"
+                                      : "Our Digital Services"}
+                                  </p>
+
+                                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                                    {language
+                                      ? "আপনার ব্যবসার জন্য সম্পূর্ণ ডিজিটাল সলিউশন"
+                                      : "Complete digital solutions for your business"}
                                   </p>
                                 </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </motion.li>
-                        ))}
-                      </ul>
-
-                      {/* 🤖 Cyberpunk AI Side Showcase Panel */}
-                      <motion.div
-                        variants={itemVariants}
-                        className="hidden lg:flex flex-col w-[340px] shrink-0 relative overflow-hidden rounded-2xl p-6 bg-slate-950 text-white border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] group"
-                      >
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(6,182,212,0.25),transparent_60%)]" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.2),transparent_60%)]" />
-                        <div className="absolute -right-12 -top-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-                        <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:16px_16px]" />
-
-                        <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
-                          <div>
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
-                                <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
-                                <span>AI Innovation Hub</span>
                               </div>
-                              <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono bg-emerald-950/50 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                                Active
+
+                              <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                                Pixel & Code
                               </div>
                             </div>
 
-                            <h3 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200 leading-snug">
-                              Next-Gen AI & Web Automation
-                            </h3>
-                            <p className="mt-2 text-xs text-slate-300/80 leading-relaxed font-medium">
-                              Power up your web platform with custom AI agents,
-                              automated workflows, and high-converting smart
-                              tools.
-                            </p>
-
-                            <div className="mt-5 space-y-2">
-                              {[
-                                {
-                                  icon: Cpu,
-                                  text: "Custom AI Agent Integration",
-                                },
-                                {
-                                  icon: Zap,
-                                  text: "Automated Workflow Engines",
-                                },
-                                {
-                                  icon: Bot,
-                                  text: "Intelligent UI Interactions",
-                                },
-                              ].map((feature, idx) => (
-                                <div
-                                  key={idx}
-                                  className="flex items-center gap-2.5 text-xs text-slate-200 bg-white/5 border border-white/10 rounded-xl p-2.5 backdrop-blur-sm group/item hover:border-cyan-500/50 hover:bg-white/10 transition-all duration-300"
-                                >
-                                  <div className="p-1 rounded-lg bg-cyan-500/20 text-cyan-300 group-hover/item:bg-cyan-500 group-hover/item:text-slate-950 transition-colors">
-                                    <feature.icon className="w-3.5 h-3.5" />
-                                  </div>
-                                  <span className="font-semibold text-[11px] text-slate-200">
-                                    {feature.text}
-                                  </span>
-                                </div>
+                            {/* SPLIT INTO 2 COLUMNS FOR CONTENT */}
+                            <div className="grid grid-cols-2 gap-3 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
+                              {serviceComponents.map((service, index) => (
+                                <ServiceCard
+                                  key={service.href}
+                                  service={service}
+                                  index={index}
+                                />
                               ))}
                             </div>
-                          </div>
 
-                          <div className="pt-2">
-                            <Link
-                              href="/ai-services"
-                              className="relative group/btn flex items-center justify-between w-full px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-400 to-blue-500 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_28px_rgba(6,182,212,0.6)] transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
-                            >
-                              <span className="relative z-10 flex items-center gap-2 font-extrabold text-slate-950">
-                                Explore AI Features
-                              </span>
-                              <ArrowRight className="w-4 h-4 text-slate-950 transition-transform group-hover/btn:translate-x-1 relative z-10" />
-                              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
-                            </Link>
+                            {/* FOOTER BAR */}
+                            <div className="flex items-center justify-between rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+
+                                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                                  {language
+                                    ? "আপনার প্রজেক্ট নিয়ে কথা বলতে প্রস্তুত"
+                                    : "Ready to discuss your project?"}
+                                </span>
+                              </div>
+
+                              <Link
+                                href="/portfolio"
+                                className="group flex items-center gap-1.5 text-xs font-extrabold text-cyan-600 dark:text-cyan-400 hover:text-cyan-500"
+                              >
+                                {t.allServices}
+                                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                              </Link>
+                            </div>
+
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     </motion.div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                  )}
+                </AnimatePresence>
+              </div>
 
-                {/* 🌟 Standard Nav Links */}
-                <NavItem href="/store" active={pathname === "/store"}>
-                  {t.store}
-                </NavItem>
-                <NavItem href="/packages" active={pathname === "/packages"}>
-                  {t.packages}
-                </NavItem>
-                <NavItem href="/portfolio" active={pathname === "/portfolio"}>
-                  {t.portfolio}
-                </NavItem>
-                <NavItem href="/about" active={pathname === "/about"}>
-                  {t.about}
-                </NavItem>
-                <NavItem href="/contact" active={pathname === "/contact"}>
-                  {t.contact}
-                </NavItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+              <NavItem href="/store" active={pathname === "/store"}>
+                {t.store}
+              </NavItem>
 
-          {/* Right Action Buttons */}
+              <NavItem href="/packages" active={pathname === "/packages"}>
+                {t.packages}
+              </NavItem>
+
+              <NavItem href="/portfolio" active={pathname === "/portfolio"}>
+                {t.portfolio}
+              </NavItem>
+
+              <NavItem href="/contact" active={pathname === "/contact"}>
+                {t.contact}
+              </NavItem>
+            </div>
+          </nav>
+
+          {/* RIGHT BUTTONS & CONTROLS */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-4">
               {mounted && (
-                <div className="flex items-center p-1 bg-slate-100/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full border border-slate-200/80 dark:border-slate-800 shadow-inner transition-all duration-300 hover:border-cyan-500/40">
+                <div className="flex items-center p-1 bg-slate-100/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full border border-slate-200/80 dark:border-slate-800 shadow-inner">
                   <motion.button
                     whileTap={{ scale: 0.85 }}
                     whileHover={{ scale: 1.05 }}
-                    onClick={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                    className="relative p-2 rounded-full text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm flex items-center justify-center overflow-hidden"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="relative p-2 rounded-full text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 transition-all flex items-center justify-center"
                     aria-label="Toggle Theme"
                   >
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.div
                         key={theme}
-                        initial={{ y: -16, opacity: 0, rotate: -90 }}
+                        initial={{ y: -12, opacity: 0, rotate: -90 }}
                         animate={{ y: 0, opacity: 1, rotate: 0 }}
-                        exit={{ y: 16, opacity: 0, rotate: 90 }}
-                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        exit={{ y: 12, opacity: 0, rotate: 90 }}
+                        transition={{ duration: 0.2 }}
                       >
                         {theme === "dark" ? (
-                          <Moon className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+                          <Moon className="w-4 h-4 text-cyan-400" />
                         ) : (
-                          <Sun className="w-4 h-4 text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+                          <Sun className="w-4 h-4 text-amber-500" />
                         )}
                       </motion.div>
                     </AnimatePresence>
                   </motion.button>
 
-                  <div className="w-[1px] h-4 bg-slate-300/80 dark:bg-slate-700 mx-1" />
+                  <div className="w-px h-4 bg-slate-300 dark:bg-slate-700 mx-1" />
 
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setLanguage(!language)}
-                    className="relative px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm flex items-center justify-center overflow-hidden hover:bg-white dark:hover:bg-slate-800"
+                    className="px-3 py-1.5 rounded-full text-xs font-extrabold tracking-wider text-slate-800 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 transition-all"
                   >
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.span
-                        key={language ? "BN" : "EN"}
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -10, opacity: 0 }}
-                        transition={{ duration: 0.18 }}
-                        className="block tracking-wider font-extrabold text-slate-800 dark:text-slate-200 hover:text-cyan-500 dark:hover:text-cyan-400"
-                      >
-                        {language ? "BN" : "EN"}
-                      </motion.span>
-                    </AnimatePresence>
+                    {language ? "BN" : "EN"}
                   </motion.button>
                 </div>
               )}
 
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="relative group"
-              >
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Link
                   href="/request-demo"
-                  className="relative flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-slate-950 text-white rounded-full border border-cyan-500/30 overflow-hidden backdrop-blur-xl group-hover:border-cyan-400/70 transition-all duration-300"
+                  className="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white to-sky-50 dark:from-slate-900 dark:to-slate-800 text-slate-800 dark:text-white rounded-full border border-sky-200/70 dark:border-slate-700 overflow-hidden hover:shadow-md hover:border-sky-300 transition-all duration-300"
                 >
-                  <span className="absolute top-0 right-0 w-12 h-full bg-white/20 skew-x-[-25deg] -translate-x-[300%] group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out" />
-                  <motion.div
-                    animate={{
-                      rotate: [0, 15, -15, 0],
-                      scale: [1, 1.15, 1.15, 1],
-                    }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 3,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Sparkles className="w-4 h-4 text-cyan-400" />
-                  </motion.div>
-
-                  <span className="text-sm font-bold tracking-wide text-white group-hover:text-cyan-200 transition-colors">
+                  <span className="absolute top-0 right-0 w-12 h-full bg-white/60 dark:bg-white/10 skew-x-[-25deg] -translate-x-[300%] group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out" />
+                  <Sparkles className="w-4 h-4 text-sky-500" />
+                  <span className="text-sm font-bold tracking-wide">
                     {t.requestDemo}
                   </span>
-
-                  <ArrowRight className="w-4 h-4 text-cyan-400 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 h-4 text-sky-500 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </motion.div>
             </div>
 
-            {/* Mobile Hamburger */}
+            {/* MOBILE MENU SHEET */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="lg:hidden text-slate-800 dark:text-slate-200 hover:bg-transparent rounded-full"
+                  className="lg:hidden text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full"
                   aria-label="Open menu"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
+
               <SheetContent
                 side="left"
-                className="w-[300px] sm:w-[400px] p-0 border-r border-slate-200 dark:border-slate-800"
+                className="w-[300px] sm:w-[380px] p-0 border-r border-slate-200 dark:border-slate-800"
               >
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <SheetDescription className="sr-only">
-                  Site navigation links, language and theme settings
-                </SheetDescription>
                 <div className="flex flex-col h-full bg-white dark:bg-slate-950">
                   <div className="p-6 border-b border-slate-100 dark:border-slate-800">
                     <Logo />
                   </div>
+
                   <div className="flex-1 overflow-y-auto p-4">
                     <nav className="space-y-1">
-                      {[
-                        { href: "/", label: t.home, icon: Home },
-                        {
-                          href: "/portfolio",
-                          label: t.portfolio,
-                          icon: Briefcase,
-                        },
-                        { href: "/packages", label: t.packages, icon: Package },
-                        { href: "/store", label: t.store, icon: ShoppingBag },
-                        { href: "/about", label: t.about, icon: LayoutGrid },
-                        { href: "/contact", label: t.contact, icon: Mail },
-                      ].map((item) => (
-                        <SheetClose asChild key={item.href}>
-                          <Link
-                            href={item.href}
-                            className={cn(
-                              "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors bg-transparent hover:bg-transparent",
-                              pathname === item.href
-                                ? "text-cyan-600 dark:text-cyan-400"
-                                : "text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400",
-                            )}
-                          >
-                            <item.icon className="w-5 h-5" />
-                            {item.label}
-                          </Link>
-                        </SheetClose>
-                      ))}
+                      <SheetClose asChild>
+                        <MobileNavItem
+                          href="/portfolio"
+                          label={t.portfolio}
+                          icon={Briefcase}
+                          active={pathname === "/portfolio"}
+                        />
+                      </SheetClose>
+
+                      <SheetClose asChild>
+                        <MobileNavItem
+                          href="/packages"
+                          label={t.packages}
+                          icon={Package}
+                          active={pathname === "/packages"}
+                        />
+                      </SheetClose>
+
+                      <SheetClose asChild>
+                        <MobileNavItem
+                          href="/store"
+                          label={t.store}
+                          icon={ShoppingBag}
+                          active={pathname === "/store"}
+                        />
+                      </SheetClose>
+
+                      <SheetClose asChild>
+                        <MobileNavItem
+                          href="/contact"
+                          label={t.contact}
+                          icon={Mail}
+                          active={pathname === "/contact"}
+                        />
+                      </SheetClose>
                     </nav>
+
+                    <div className="mt-6">
+                      <div className="px-4 mb-3">
+                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                          {t.services}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        {serviceComponents.map((service) => {
+                          const Icon = service.icon;
+                          return (
+                            <SheetClose asChild key={service.href}>
+                              <Link
+                                href={service.href}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-cyan-500 transition-colors"
+                              >
+                                <Icon className="w-4 h-4" />
+                                {service.title}
+                              </Link>
+                            </SheetClose>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 border-t border-slate-100 dark:border-slate-800">
+                    <SheetClose asChild>
+                      <Link
+                        href="/request-demo"
+                        className="flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-xl bg-cyan-500 text-white font-bold shadow-lg shadow-cyan-500/20 hover:bg-cyan-600 transition-colors"
+                      >
+                        <Sparkles className="w-4 h-4" />
+                        {t.requestDemo}
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </SheetClose>
                   </div>
                 </div>
               </SheetContent>
