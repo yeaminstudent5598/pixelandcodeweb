@@ -6,6 +6,10 @@ import { HeroSection } from "./components/shared/HeroSection";
 import { Hero } from "./components/shared/Hero";
 import { AboutSection } from "./components/AboutSection";
 import { TechStackSection } from './components/shared/TechStackSection';
+import Services from './components/shared/ServicesSection';
+import AboutHeroContent from './components/shared/HeroSectionTwo';
+import ClientMarquee from './components/shared/TrustedClient';
+
 
 // ==========================================
 // 🎯 SEO METADATA - HOME PAGE
@@ -325,11 +329,14 @@ export default function HomePage() {
       
       {/* Above the fold - immediately loaded */}
       <HeroSection/>
+      <Services/>
+      <ClientMarquee/>
+      
       {/* <Hero /> */}
       <AboutSection/>
       
       {/* Below the fold - lazy loaded for better performance */}
-      <PortfolioSection/>
+      {/* <PortfolioSection/> */}
       <TechStackSection/>
       {/* <FeaturedServicesSection/> */}
       {/* <PricingSection/> */}

@@ -173,7 +173,7 @@ export function TeamSection() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/60 font-sans"
+      className="relative w-full mx-auto overflow-hidden bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/60 font-sans"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -187,7 +187,7 @@ export function TeamSection() {
 
       {/* ═══ SPLIT GRID ═══ */}
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[min(88vh,760px)] py-20 lg:py-0">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center max-w-6xl mx-auto min-h-[min(88vh,760px)] py-20 lg:py-0">
 
           {/* ── LEFT PANEL (Text & Controls) ── */}
           <div className="flex flex-col justify-center relative lg:pr-12">

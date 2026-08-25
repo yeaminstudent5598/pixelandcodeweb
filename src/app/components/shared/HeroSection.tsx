@@ -1,270 +1,950 @@
 "use client";
 
-import React from "react";
+import React, { useId, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Globe, Code2, CheckCircle2, TrendingUp, Sparkles, PhoneCall } from "lucide-react";
+import {
+  ArrowRight,
+  Code2,
+  Globe,
+  CheckCircle2,
+  TrendingUp,
+  PhoneCall,
+  Sparkles,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
+
+const HERO_IMAGE = "/images/banner1.png";
+
+// --------------------------------------------------
+// Per-word animation variants
+// --------------------------------------------------
+
+const wordVariants = {
+  hidden: {
+    opacity: 0,
+    x: -30,
+    y: -25,
+    filter: "blur(4px)",
+  },
+  show: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+// --------------------------------------------------
+// Helper Component for Word Animation
+//
+// IMPORTANT: callers must pass `key={text}` (see usages below).
+// Without it, React reuses the same component instance across a
+// language toggle, the per-word children get replaced (because their
+// keys change), and the new word spans — lacking their own
+// initial/animate — can be left stuck in the "hidden" state.
+// Giving the whole component a fresh key forces a clean remount, and
+// the explicit initial/animate here guarantees it always animates in.
+// --------------------------------------------------
+
+function AnimatedWords({
+  text,
+  className = "",
+  isGradient = false,
+  delay = 0,
+}: {
+  text: string;
+  className?: string;
+  isGradient?: boolean;
+  delay?: number;
+}) {
+  const words = text.split(" ");
+
+  return (
+    <motion.span
+      initial="hidden"
+      animate="show"
+      variants={{
+        hidden: {},
+        show: {
+          transition: {
+            staggerChildren: 0.1,
+            delayChildren: delay,
+          },
+        },
+      }}
+      className={`inline-flex flex-wrap ${className}`}
+    >
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          variants={wordVariants}
+          className={`inline-block mr-[0.22em] ${
+            isGradient
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"
+              : ""
+          }`}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+}
 
 export function HeroSection() {
   const { language } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
+  const uid = useId();
 
-  // কর্পোরেট স্টাইলের স্ট্যাটাস
+  // --------------------------------------------------
+  // Stats
+  // --------------------------------------------------
+
   const stats = language
     ? [
-        { num: "৫০+", label: "সফল প্রজেক্ট", icon: <Code2 className="w-5 h-5 text-blue-500" /> },
-        { num: "৩০+", label: "গ্লোবাল ও লোকাল ক্লায়েন্ট", icon: <Globe className="w-5 h-5 text-indigo-500" /> },
-        { num: "১০০%", label: "ক্লায়েন্ট স্যাটিসফেকশন", icon: <CheckCircle2 className="w-5 h-5 text-teal-500" /> },
+        {
+          num: "৫০+",
+          label: "সফল প্রজেক্ট",
+          icon: Code2,
+        },
+        {
+          num: "৩০+",
+          label: "ক্লায়েন্ট",
+          icon: Globe,
+        },
+        {
+          num: "১০০%",
+          label: "সন্তুষ্টি",
+          icon: CheckCircle2,
+        },
       ]
     : [
-        { num: "50+", label: "Projects Delivered", icon: <Code2 className="w-5 h-5 text-blue-500" /> },
-        { num: "30+", label: "Global & Local Clients", icon: <Globe className="w-5 h-5 text-indigo-500" /> },
-        { num: "100%", label: "Client Satisfaction", icon: <CheckCircle2 className="w-5 h-5 text-teal-500" /> },
+        {
+          num: "50+",
+          label: "Projects Delivered",
+          icon: Code2,
+        },
+        {
+          num: "30+",
+          label: "Happy Clients",
+          icon: Globe,
+        },
+        {
+          num: "100%",
+          label: "Client Satisfaction",
+          icon: CheckCircle2,
+        },
       ];
+
+  // --------------------------------------------------
+  // General Animation variants
+  // --------------------------------------------------
+
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      y: 28,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.65,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  // --------------------------------------------------
+  // 3D image interaction
+  // --------------------------------------------------
+
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [5, -5]),
+    {
+      stiffness: 120,
+      damping: 22,
+    }
+  );
+
+  const rotateY = useSpring(
+    useTransform(mouseX, [-0.5, 0.5], [-7, 7]),
+    {
+      stiffness: 120,
+      damping: 22,
+    }
+  );
+
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (shouldReduceMotion || !stageRef.current) return;
+
+    const rect = stageRef.current.getBoundingClientRect();
+
+    mouseX.set(
+      (e.clientX - rect.left) / rect.width - 0.5
+    );
+
+    mouseY.set(
+      (e.clientY - rect.top) / rect.height - 0.5
+    );
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const imageAlt = language
+    ? "Pixel & Code ডিজিটাল সলিউশন"
+    : "Pixel & Code digital solution";
 
   return (
     <>
-      {/* 🎨 CSS Keyframes for Button Gradient Border Animation */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          @keyframes btnGradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-          .animate-btn-gradient {
-            background-size: 200% 200%;
-            animation: btnGradientMove 4s ease infinite;
-          }
-        `
-      }} />
+      {/* --------------------------------------------------
+          Button animation
+      -------------------------------------------------- */}
 
-      <section className="relative w-full min-h-[100vh] flex items-center justify-center bg-white dark:bg-slate-950 overflow-hidden pt-20 pb-16 lg:pt-28 font-sans">
-        
-        {/* 🎨 Subtle Background Mesh/Gradients */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-100/60 dark:bg-blue-900/20 blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[40%] rounded-full bg-indigo-100/60 dark:bg-indigo-900/20 blur-[120px]" />
-          
-          {/* Subtle Grid Pattern for Technical Feel */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] mix-blend-overlay"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes btnGradientMove {
+              0% {
+                background-position: 0% 50%;
+              }
+              50% {
+                background-position: 100% 50%;
+              }
+              100% {
+                background-position: 0% 50%;
+              }
+            }
+
+            .animate-btn-gradient {
+              background-size: 200% 200%;
+              animation: btnGradientMove 4s ease infinite;
+            }
+          `,
+        }}
+      />
+
+      {/* ==================================================
+          HERO
+      ================================================== */}
+
+      <section className="relative min-h-screen overflow-hidden bg-white dark:bg-slate-950 pt-24 pb-16 lg:pt-28 lg:pb-20">
+
+        {/* --------------------------------------------------
+            Background
+        -------------------------------------------------- */}
+
+        <div className="absolute  inset-0 pointer-events-none overflow-hidden">
+
+          {/* Blue glow */}
+          <div className="absolute -top-[18%] -left-[12%] h-[520px] w-[520px] rounded-full bg-blue-100/60 dark:bg-blue-900/20 blur-[130px]" />
+
+          {/* Indigo glow */}
+          <div className="absolute -bottom-[20%] -right-[10%] h-[520px] w-[520px] rounded-full bg-indigo-100/60 dark:bg-indigo-900/20 blur-[130px]" />
+
+          {/* Center glow */}
+          <div className="absolute top-[35%] left-[45%] h-[300px] w-[300px] rounded-full bg-cyan-100/30 dark:bg-cyan-900/10 blur-[120px]" />
+
+          {/* Grid */}
+          <div
+            className="
+              absolute inset-0
+              opacity-[0.45]
+              dark:opacity-[0.12]
+              bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]
+              bg-[size:32px_32px]
+            "
+          />
+
+          {/* Soft white overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/40 dark:from-transparent dark:to-slate-950/30" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 md:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-            
-            {/* ════ LEFT COLUMN (Text Content) ════ */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-2xl"
-            >
-              {/* Top Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold mb-6 shadow-sm">
-                <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                {language ? "ট্রাস্টেড ডিজিটাল সলিউশন পার্টনার" : "Trusted Digital Solution Partner"}
-              </div>
+        {/* --------------------------------------------------
+            Main container
+        -------------------------------------------------- */}
 
-              {/* Main Headline with Gradient */}
-              <h1 className="text-[40px] md:text-[52px] lg:text-[60px] leading-[1.15] font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
+        <div className="relative z-10 mx-auto w-full max-w-[90%] px-4 sm:px-6 lg:px-8">
+
+          <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-4">
+
+            {/* =================================================
+                LEFT CONTENT
+            ================================================= */}
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              className="relative z-20 max-w-2xl"
+            >
+
+              {/* Small eyebrow */}
+              <motion.div
+                variants={itemVariants}
+                className="mb-7 flex items-center gap-3"
+              >
+                <span className="h-px w-10 bg-blue-600" />
+
+                <span className="text-xs font-bold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">
+                  {language ? (
+                    <AnimatedWords
+                      key="eyebrow-bn"
+                      text="ডিজিটাল এক্সপেরিয়েন্স"
+                    />
+                  ) : (
+                    <AnimatedWords
+                      key="eyebrow-en"
+                      text="Digital Experience"
+                    />
+                  )}
+                </span>
+              </motion.div>
+
+              {/* Main bold heading with Word-by-Word animation */}
+              <motion.h1
+                variants={itemVariants}
+                className="
+                  text-[42px]
+                  leading-[1.08]
+                  font-black
+                  tracking-[-0.035em]
+                  text-slate-950
+                  dark:text-white
+                  sm:text-[52px]
+                  md:text-[62px]
+                  lg:text-[64px]
+                  xl:text-[70px]
+                "
+              >
                 {language ? (
                   <>
-                    <span className="block">তৈরি করুন</span>
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 pb-1">
-                      উদ্ভাবনী ও স্কেলেবল
+                    <AnimatedWords
+                      key="h1-bn-line1"
+                      text="আপনার ব্যবসাকে"
+                      delay={0}
+                    />
+                    <span className="block">
+                      <AnimatedWords
+                        key="h1-bn-line2"
+                        text="ডিজিটালভাবে"
+                        isGradient
+                        delay={0.3}
+                      />
                     </span>
-                    <span className="block">ডিজিটাল সলিউশন</span>
+                    <AnimatedWords
+                      key="h1-bn-line3"
+                      text="এগিয়ে নিয়ে যান।"
+                      delay={0.55}
+                    />
                   </>
                 ) : (
                   <>
-                    <span className="block">Build Scalable &</span>
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 pb-1">
-                      Innovative Digital
+                    <AnimatedWords
+                      key="h1-en-line1"
+                      text="Turn your ideas"
+                      delay={0}
+                    />
+                    <span className="block">
+                      <AnimatedWords
+                        key="h1-en-line2"
+                        text="into digital"
+                        isGradient
+                        delay={0.3}
+                      />
                     </span>
-                    <span className="block">Solutions</span>
+                    <AnimatedWords
+                      key="h1-en-line3"
+                      text="experiences."
+                      delay={0.55}
+                    />
                   </>
                 )}
-              </h1>
+              </motion.h1>
 
-              {/* Subtitle */}
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed font-medium max-w-[540px]">
+              {/* Description */}
+              <motion.p
+                variants={itemVariants}
+                className="
+                  mt-7
+                  max-w-[580px]
+                  text-base
+                  leading-7
+                  font-medium
+                  text-slate-600
+                  dark:text-slate-400
+                  sm:text-lg
+                  sm:leading-8
+                "
+              >
                 {language
-                  ? "স্টার্টআপ থেকে শুরু করে এন্টারপ্রাইজ— আমরা একটি রেজাল্ট-ওরিয়েন্টেড এজেন্সি, যারা ওয়েব ডেভেলপমেন্ট, ব্র্যান্ডিং এবং মার্কেটিং সলিউশনের মাধ্যমে আপনার ব্যবসাকে লোকাল এবং গ্লোবাল স্কেলে এগিয়ে নিতে সাহায্য করি।"
-                  : "From startups to enterprises, we are a results-driven agency delivering tailored web development, modern branding, and digital marketing solutions designed to accelerate your business growth."}
-              </p>
+                  ? "আমরা আধুনিক ও ফলাফলভিত্তিক ওয়েব ডেভেলপমেন্ট, ব্র্যান্ডিং এবং ডিজিটাল মার্কেটিং সলিউশনের মাধ্যমে ব্যবসাকে একটি শক্তিশালী ডিজিটাল উপস্থিতি তৈরি করতে সাহায্য করি।"
+                  : "We build modern, purposeful digital experiences through web development, branding, and digital marketing — helping businesses build a stronger presence online."}
+              </motion.p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mb-12">
+              {/* Buttons */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-9 flex flex-wrap items-center gap-4"
+              >
                 <Link href="/contact">
                   <ButtonPrimary>
-                    {language ? "প্রজেক্ট নিয়ে কথা বলুন" : "Start a Project"}
-                    <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+                    {language
+                      ? "প্রজেক্ট নিয়ে কথা বলুন"
+                      : "Start a Project"}
+
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </ButtonPrimary>
                 </Link>
-                
+
                 <Link href="/contact">
                   <ButtonSecondary>
-                    <PhoneCall className="w-5 h-5 mr-2 opacity-70 group-hover:opacity-100 transition-opacity" />
-                    {language ? "ফ্রি কনসালটেশন বুক করুন" : "Book Free Consultation"}
+                    <PhoneCall className="mr-2 h-5 w-5 opacity-70 transition-opacity group-hover:opacity-100" />
+
+                    {language
+                      ? "ফ্রি কনসালটেশন"
+                      : "Free Consultation"}
                   </ButtonSecondary>
                 </Link>
-              </div>
+              </motion.div>
 
-              {/* Trust Stats Line */}
-              <div className="grid grid-cols-3 gap-4 md:gap-8 pt-8 border-t border-slate-200 dark:border-slate-800/80">
-                {stats.map((stat, idx) => (
-                  <div key={idx} className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
-                        {stat.num}
+              {/* --------------------------------------------------
+                  Stats
+              -------------------------------------------------- */}
+
+              <motion.div
+                variants={itemVariants}
+                className="
+                  mt-11
+                  grid
+                  max-w-[580px]
+                  grid-cols-3
+                  border-t
+                  border-slate-200
+                  pt-7
+                  dark:border-slate-800
+                "
+              >
+                {stats.map((stat, index) => {
+                  const Icon = stat.icon;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`
+                        flex flex-col gap-2
+                        ${
+                          index !== 0
+                            ? "border-l border-slate-200 pl-4 dark:border-slate-800 sm:pl-7"
+                            : ""
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+
+                        <span className="text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">
+                          <AnimatedWords key={stat.num} text={stat.num} />
+                        </span>
+                      </div>
+
+                      <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 sm:text-xs">
+                        {stat.label}
                       </span>
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400">
-                      {stat.label}
+                  );
+                })}
+              </motion.div>
+            </motion.div>
+
+            {/* =================================================
+                RIGHT VISUAL
+            ================================================= */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: 35,
+                scale: 0.94,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+              }}
+              transition={{
+                duration: 0.9,
+                delay: 0.2,
+                ease: "easeOut",
+              }}
+              className="
+                relative
+                flex
+                min-h-[500px]
+                items-center
+                justify-center
+                lg:min-h-[680px]
+              "
+            >
+
+              <div
+                ref={stageRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{
+                  perspective: 1400,
+                }}
+                className="
+                  relative
+                  flex
+                  w-full
+                  items-center
+                  justify-center
+                "
+              >
+
+                {/* Large ambient glow */}
+
+                <motion.div
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: [1, 1.08, 1],
+                          opacity: [0.45, 0.7, 0.45],
+                        }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: 8,
+                    ease: "easeInOut",
+                  }}
+                  className="
+                    absolute
+                    h-[380px]
+                    w-[380px]
+                    rounded-full
+                    bg-gradient-to-tr
+                    from-blue-200/60
+                    via-indigo-200/40
+                    to-cyan-100/30
+                    blur-[70px]
+                    sm:h-[480px]
+                    sm:w-[480px]
+                    lg:h-[560px]
+                    lg:w-[560px]
+                  "
+                />
+
+                {/* Decorative ring */}
+
+                <motion.div
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          rotate: 360,
+                        }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: 35,
+                    ease: "linear",
+                  }}
+                  className="
+                    absolute
+                    h-[350px]
+                    w-[350px]
+                    rounded-full
+                    border
+                    border-blue-200/50
+                    dark:border-blue-800/30
+                    sm:h-[450px]
+                    sm:w-[450px]
+                    lg:h-[570px]
+                    lg:w-[570px]
+                  "
+                />
+
+                {/* Image */}
+
+                <motion.div
+                  style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="
+                    relative
+                    z-20
+                    w-[112%]
+                    max-w-[720px]
+                    sm:w-[108%]
+                    lg:w-[118%]
+                  "
+                >
+                  <img
+                    src={HERO_IMAGE}
+                    alt={imageAlt}
+                    draggable={false}
+                    className="
+                      pointer-events-none
+                      h-auto
+                      w-full
+                      select-none
+                      drop-shadow-[0_35px_70px_rgba(37,99,235,0.25)]
+                    "
+                  />
+                </motion.div>
+
+                {/* --------------------------------------------------
+                    Floating Growth Card
+                -------------------------------------------------- */}
+
+                <motion.div
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: [0, -12, 0],
+                        }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: 5,
+                    ease: "easeInOut",
+                  }}
+                  className="
+                    absolute
+                    right-0
+                    top-[8%]
+                    z-30
+                    w-[155px]
+                    rounded-2xl
+                    border
+                    border-slate-200/80
+                    bg-white/95
+                    p-4
+                    shadow-[0_20px_50px_rgba(15,23,42,0.12)]
+                    backdrop-blur-xl
+                    dark:border-slate-700
+                    dark:bg-slate-900/95
+                    sm:right-2
+                    sm:w-[175px]
+                    lg:-right-3
+                  "
+                >
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {language ? "গ্রোথ" : "Growth"}
                     </span>
+
+                    <TrendingUp className="h-4 w-4 text-emerald-500" />
                   </div>
-                ))}
+
+                  <div className="mb-2 text-2xl font-black text-slate-900 dark:text-white">
+                    <AnimatedWords
+                      key={language ? "+২১৪%" : "+214%"}
+                      text={language ? "+২১৪%" : "+214%"}
+                    />
+                  </div>
+
+                  <svg
+                    viewBox="0 0 140 52"
+                    className="h-11 w-full"
+                    fill="none"
+                  >
+                    <defs>
+                      <linearGradient
+                        id={`heroGraph-${uid}`}
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="0"
+                      >
+                        <stop offset="0%" stopColor="#2563eb" />
+                        <stop offset="100%" stopColor="#06b6d4" />
+                      </linearGradient>
+                    </defs>
+
+                    <motion.path
+                      d="M4 46 L26 38 L48 41 L70 26 L92 30 L114 14 L136 6"
+                      stroke={`url(#heroGraph-${uid})`}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      initial={{ pathLength: 0 }}
+                      animate={
+                        shouldReduceMotion
+                          ? { pathLength: 1 }
+                          : { pathLength: [0, 1] }
+                      }
+                      transition={{
+                        repeat: Infinity,
+                        duration: 2,
+                        ease: "easeInOut",
+                        repeatDelay: 1,
+                      }}
+                    />
+                  </svg>
+                </motion.div>
+
+                {/* --------------------------------------------------
+                    Floating Solution Badge
+                -------------------------------------------------- */}
+
+                <motion.div
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: [0, 10, 0],
+                        }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: 6,
+                    ease: "easeInOut",
+                  }}
+                  className="
+                    absolute
+                    bottom-[8%]
+                    left-0
+                    z-30
+                    flex
+                    items-center
+                    gap-3
+                    rounded-full
+                    border
+                    border-slate-200
+                    bg-white/95
+                    px-4
+                    py-3
+                    shadow-[0_20px_50px_rgba(15,23,42,0.12)]
+                    backdrop-blur-xl
+                    dark:border-slate-700
+                    dark:bg-slate-900/95
+                    sm:left-2
+                    sm:px-5
+                  "
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/30">
+                    <Code2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-200 sm:text-sm">
+                    {language
+                      ? "স্মার্ট ডিজিটাল সলিউশন"
+                      : "Smart Digital Solutions"}
+                  </span>
+                </motion.div>
+
+                {/* --------------------------------------------------
+                    Small top-left decorative badge
+                -------------------------------------------------- */}
+
+                <motion.div
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: [0, -7, 0],
+                        }
+                  }
+                  transition={{
+                    repeat: Infinity,
+                    duration: 4.5,
+                    ease: "easeInOut",
+                    delay: 0.5,
+                  }}
+                  className="
+                    absolute
+                    left-[5%]
+                    top-[18%]
+                    z-30
+                    hidden
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-blue-100
+                    bg-white/90
+                    px-4
+                    py-2
+                    shadow-lg
+                    backdrop-blur-md
+                    dark:border-blue-900
+                    dark:bg-slate-900/90
+                    sm:flex
+                  "
+                >
+                  <Sparkles className="h-4 w-4 text-blue-500" />
+
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    {language ? "ক্রিয়েটিভ" : "Creative"}
+                  </span>
+                </motion.div>
+
+                {/* Bottom shadow */}
+
+                <div className="absolute bottom-[5%] left-1/2 z-10 h-7 w-[65%] -translate-x-1/2 rounded-full bg-blue-500/20 blur-2xl" />
               </div>
             </motion.div>
-
-
-            {/* ════ RIGHT COLUMN (Clean UI Composition) ════ */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="relative hidden lg:flex items-center justify-center w-full h-[600px]"
-            >
-              {/* Main Floating Mockup Window */}
-              <motion.div 
-                animate={{ y: [0, -8, 0] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                className="relative w-full max-w-[500px] bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_50px_-12px_rgba(37,99,235,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-slate-200/60 dark:border-slate-700/50 overflow-hidden z-20"
-              >
-                {/* Browser Header */}
-                <div className="h-12 bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800/80 flex items-center px-4 gap-2 backdrop-blur-sm">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
-                  </div>
-                  <div className="mx-auto px-4 py-1.5 bg-white dark:bg-slate-900 rounded-md shadow-sm border border-slate-200 dark:border-slate-700/50 text-[10px] text-slate-400 font-medium flex items-center gap-2">
-                    <Sparkles className="w-3 h-3 text-blue-500" />
-                    pixelandcode.agency
-                  </div>
-                </div>
-                
-                {/* Fake UI Content */}
-                <div className="p-6 space-y-6 bg-slate-50/30 dark:bg-transparent">
-                  <div className="flex justify-between items-center">
-                    <div className="space-y-2">
-                      <div className="w-24 h-4 bg-blue-100 dark:bg-blue-900/30 rounded-full"></div>
-                      <div className="w-32 h-6 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
-                    </div>
-                    <div className="w-10 h-10 bg-gradient-to-tr from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 rounded-full flex items-center justify-center border border-blue-200 dark:border-blue-800/50">
-                      <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="h-28 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 flex flex-col justify-between shadow-sm">
-                      <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                        <Code2 className="w-4 h-4 text-blue-500" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <div className="w-12 h-3 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
-                        <div className="w-20 h-4 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                      </div>
-                    </div>
-                    <div className="h-28 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 flex flex-col justify-between shadow-sm">
-                      <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
-                        <Globe className="w-4 h-4 text-indigo-500" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <div className="w-12 h-3 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
-                        <div className="w-20 h-4 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 pt-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="w-full h-14 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-700/50 shadow-sm flex items-center px-4 gap-4">
-                        <div className="w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-full"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="w-1/2 h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
-                          <div className="w-1/3 h-2 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating Element 1: Growth Badge */}
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                className="absolute -right-6 top-40 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 z-30 flex items-center gap-4"
-              >
-                <div className="w-12 h-12 bg-green-50 dark:bg-green-900/30 rounded-full flex items-center justify-center border border-green-100 dark:border-green-800/50">
-                  <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <div className="text-sm font-extrabold text-slate-900 dark:text-white">+ 214%</div>
-                  <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Business Scaled</div>
-                </div>
-              </motion.div>
-
-              {/* Floating Element 2: Tech Badge */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 0.5 }}
-                className="absolute -left-10 bottom-32 bg-white dark:bg-slate-800 py-3 px-5 rounded-full shadow-xl border border-slate-100 dark:border-slate-700 z-30 flex items-center gap-3"
-              >
-                <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                  <Code2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">End-to-End Solutions</span>
-              </motion.div>
-
-            </motion.div>
-
           </div>
         </div>
+
+        {/* --------------------------------------------------
+            Bottom decorative line
+        -------------------------------------------------- */}
+
+        <div className="absolute bottom-0 left-0 right-0 mx-auto h-px max-w-[90%] bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-800" />
       </section>
     </>
   );
 }
 
-// ==========================================
-// 🧩 Helper Components for Buttons
-// ==========================================
+// ==========================================================
+// PRIMARY BUTTON
+// ==========================================================
 
-// 🚀 Primary Button: Animated Gradient Border
-function ButtonPrimary({ children }: { children: React.ReactNode }) {
+function ButtonPrimary({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <button className="relative group inline-flex items-center justify-center p-[2px] rounded-full font-bold transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 focus:outline-none">
-      {/* Animated Gradient Border Layer */}
-      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 animate-btn-gradient rounded-full"></span>
-      
-      {/* Inner Clean Background (White/Slate) */}
-      <span className="relative flex items-center justify-center px-7 py-3.5 w-full h-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-full transition-all duration-300 group-hover:bg-blue-50 dark:group-hover:bg-slate-800">
+    <button
+      className="
+        relative
+        group
+        inline-flex
+        items-center
+        justify-center
+        rounded-full
+        p-[2px]
+        font-bold
+        shadow-lg
+        shadow-blue-500/20
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:shadow-blue-500/40
+        focus:outline-none
+      "
+    >
+      <span
+        className="
+          absolute
+          inset-0
+          h-full
+          w-full
+          rounded-full
+          bg-gradient-to-r
+          from-blue-600
+          via-indigo-500
+          to-blue-600
+          animate-btn-gradient
+        "
+      />
+
+      <span
+        className="
+          relative
+          flex
+          h-full
+          w-full
+          items-center
+          justify-center
+          rounded-full
+          bg-white
+          px-7
+          py-3.5
+          text-slate-900
+          transition-all
+          duration-300
+          group-hover:bg-blue-50
+          dark:bg-slate-900
+          dark:text-white
+          dark:group-hover:bg-slate-800
+        "
+      >
         {children}
       </span>
     </button>
   );
 }
 
-// 🎯 Secondary Button: Clean Solid Border 
-function ButtonSecondary({ children }: { children: React.ReactNode }) {
+// ==========================================================
+// SECONDARY BUTTON
+// ==========================================================
+
+function ButtonSecondary({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <button className="group relative inline-flex items-center justify-center px-7 py-3.5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-200 transition-all duration-300 bg-transparent border-2 border-slate-200 dark:border-slate-800 rounded-full hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 hover:-translate-y-1 focus:outline-none shadow-sm">
+    <button
+      className="
+        group
+        relative
+        inline-flex
+        items-center
+        justify-center
+        rounded-full
+        border-2
+        border-slate-200
+        bg-transparent
+        px-7
+        py-3.5
+        text-sm
+        font-bold
+        text-slate-700
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:border-slate-300
+        hover:bg-slate-50
+        focus:outline-none
+        dark:border-slate-800
+        dark:text-slate-200
+        dark:hover:border-slate-700
+        dark:hover:bg-slate-900
+        md:text-base
+      "
+    >
       {children}
     </button>
   );
