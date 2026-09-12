@@ -1,0 +1,410 @@
+.headerArea {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: #1a1a1a;
+}
+
+.headerBtmArea {
+  position: relative;
+  border-bottom: 1px solid #373737;
+  height: 124px;
+}
+
+/* orange top strip, matches html::before in the original template */
+.headerArea::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 4px;
+  background-color: #ff4e00;
+}
+
+.container {
+  max-width: 1728px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  height: 100%;
+}
+
+.mainMenuWrap {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* ---------- Logo ---------- */
+.siteLogo {
+  flex-basis: 20%;
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.siteLogo::before,
+.siteLogo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #373737;
+}
+.siteLogo::before {
+  left: 0;
+}
+.siteLogo::after {
+  right: -1px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* ---------- Main menu ---------- */
+.mainMenuArea {
+  flex-basis: 76%;
+  margin-left: 8.33%;
+  position: relative;
+  z-index: 99;
+}
+
+.mainMenuArea::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #373737;
+}
+
+.mainmenu ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menuItem {
+  position: relative;
+  width: 11.1%;
+  height: 100%;
+}
+
+.menuItem a {
+  font-size: 14px;
+  font-weight: 400;
+  color: #8c8b99;
+  text-transform: lowercase;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 124px;
+  transition: color 0.2s ease;
+}
+
+.menuItem a:hover,
+.activeLink {
+  color: #ff4e00 !important;
+}
+
+.angBtn {
+  font-size: 11px;
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+.menuItem:hover .angBtn {
+  transform: rotate(180deg);
+}
+
+/* subtle background flash on hover — matches .overly-main_icon */
+.hoverIcon {
+  position: absolute;
+  content: "";
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, rgba(255, 78, 0, 0.08), transparent);
+  transition: all 0.3s ease-out;
+  pointer-events: none;
+}
+
+.menuItem:hover .hoverIcon,
+.headerLogReg:hover .hoverIcon {
+  bottom: 0;
+  height: 100%;
+  transition: all 0.3s ease-in;
+}
+
+/* ---------- Mega menu dropdown ---------- */
+.subMenuMega {
+  position: absolute;
+  top: 100%;
+  left: -100%;
+  opacity: 0;
+  width: 1000px;
+  max-width: 90vw;
+  padding: 25px 0 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translate(0, -20px);
+  pointer-events: none;
+}
+
+.menuItem:hover .subMenuMega {
+  opacity: 1;
+  transform: translate(0, 0);
+  pointer-events: auto;
+}
+
+.subMenuWrapper {
+  display: flex;
+  min-height: 385px;
+  border: 1px solid #ff4e00;
+  background-color: #212121;
+}
+
+.subMenuWrapperLeft {
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  padding: 22px;
+  background-color: #1a1a1a;
+  text-align: center;
+}
+
+.subMenuWrapperLeft h4 {
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+}
+
+.leftBox {
+  margin-top: 20px;
+}
+
+.leftBoxIcon {
+  width: 44px;
+  margin: 0 auto;
+}
+
+.leftBox h4 a {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+  margin-top: 12px;
+}
+
+.leftBox p {
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: #666;
+  margin: 6px 0 0;
+}
+
+.subMenuWrapperRight {
+  width: 100%;
+  padding: 30px 45px;
+}
+
+.subMenuTitle {
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+  text-align: left;
+  margin: 0 0 12px;
+}
+
+.subNavRight ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subNavRight li {
+  width: 50%;
+  margin-bottom: 18px;
+}
+
+.subNavRight a {
+  display: flex;
+  align-items: center;
+  color: #8c8b99;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.subNavRight a:hover {
+  color: #ff4e00;
+}
+
+.bullet {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4e00;
+  margin-right: 10px;
+}
+
+.subNavBottom {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid #373737;
+  padding-top: 20px;
+}
+
+.navBottomLeft {
+  width: 30%;
+}
+
+.navBottomLeft ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.navBottomLeft li {
+  margin-bottom: 8px;
+}
+
+.navBottomLeft a {
+  color: #8c8b99;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.navBottomLeft a:hover {
+  color: #ff4e00;
+}
+
+.navBottomRight {
+  display: flex;
+  min-width: 280px;
+}
+
+.subMenuThumbnail {
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.subMenuThumbnail img {
+  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
+}
+
+.videoBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ff4e00;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoDesc {
+  align-self: flex-end;
+  margin-left: 16px;
+}
+
+.videoDesc p {
+  font-size: 12px;
+  font-style: italic;
+  color: #666;
+  max-width: 120px;
+}
+
+/* ---------- Get an estimate button ---------- */
+.headerLogReg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 19%;
+  height: 100%;
+  border: 1px solid #ff4e00;
+  border-top: none;
+  border-right: none;
+}
+
+.estimateLink {
+  color: #ff4e00;
+  font-weight: 500;
+  font-size: 15px;
+  z-index: 1;
+}
+
+/* ---------- Mobile menu icon (hidden on desktop) ---------- */
+.headerIcon {
+  display: none;
+}
+
+.headerIcon button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ---------- Bottom accent line under whole navbar ---------- */
+.separatorDense {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 78, 0, 0.4);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .mainMenuArea {
+    display: none;
+  }
+  .headerIcon {
+    display: block;
+    flex-basis: auto;
+    margin-left: auto;
+  }
+  .headerLogReg {
+    display: none;
+  }
+  .headerBtmArea {
+    height: 80px;
+  }
+  .menuItem a,
+  .siteLogo {
+    height: 80px;
+  }
+}

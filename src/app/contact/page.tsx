@@ -14,7 +14,11 @@ const contactInfo = [
   {
     icon: <Phone className="h-8 w-8 text-white" />,
     title: "মোবাইল",
+<<<<<<< HEAD
+    lines: ["+8801641801705", "+8801641801705"],
+=======
     lines: ["+8801641801705", "+8801989415813"],
+>>>>>>> origin/development
     bgColor: "bg-orange-500",
   },
   {
@@ -44,7 +48,11 @@ const contactInfo = [
   {
     icon: <Smartphone className="h-8 w-8 text-white" />,
     title: "হোয়াটসঅ্যাপ",
+<<<<<<< HEAD
+    lines: ["+8801641801705"],
+=======
     lines: ["+8801989415813"],
+>>>>>>> origin/development
     bgColor: "bg-green-500",
   },
 ];
