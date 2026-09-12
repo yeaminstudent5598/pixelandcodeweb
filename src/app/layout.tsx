@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Hind_Siliguri } from 'next/font/google';
+import { Red_Hat_Display } from 'next/font/google';
 import './globals.css';
 import { Navbar } from './components/shared/Navbar';
 import { Footer } from './components/shared/Footer';
@@ -11,11 +11,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import { FloatingWhatsApp } from './components/shared/FloatingWhatsApp';
 
-// Hind Siliguri ফন্ট কনফিগার করা হয়েছে
-const hindSiliguri = Hind_Siliguri({
-  weight: ['400', '700'],
-  subsets: ['bengali'],
-  variable: '--font-hind-siliguri',
+// Red Hat Display — পুরো ওয়েবসাইটের একমাত্র ফন্ট
+const redHatDisplay = Red_Hat_Display({
+  weight: ['400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-red-hat-display',
   display: 'swap',
   preload: true,
 });
@@ -152,7 +152,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="bn" className={hindSiliguri.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={redHatDisplay.variable}
+      suppressHydrationWarning
+    >
       <head>
         <StructuredData />
         
@@ -172,7 +176,7 @@ export default function RootLayout({
       
       <body 
         className="antialiased bg-background text-foreground" 
-        style={{ fontFamily: 'var(--font-hind-siliguri), system-ui, sans-serif' }}
+        style={{ fontFamily: 'var(--font-red-hat-display), sans-serif' }}
       >
         <ThemeProvider
           attribute="class"

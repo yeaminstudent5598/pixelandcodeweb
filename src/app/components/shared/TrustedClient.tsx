@@ -2,7 +2,20 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Globe } from 'lucide-react';
+import {
+  Globe,
+  Zap,
+  Rocket,
+  Palette,
+  Cloud,
+  Server,
+  BarChart3,
+  ShieldCheck,
+  Gem,
+  Atom,
+  Sparkles as SparklesIcon,
+  type LucideIcon,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 /* ─── Accent color per client icon ───
@@ -21,11 +34,12 @@ type AccentColor =
 
 const ACCENTS: Record<
   AccentColor,
-  { iconBg: string; iconBorder: string; hoverBorder: string; hoverShadow: string; hoverText: string; tagHover: string }
+  { iconBg: string; iconBorder: string; iconText: string; hoverBorder: string; hoverShadow: string; hoverText: string; tagHover: string }
 > = {
   orange: {
     iconBg: 'bg-orange-50',
     iconBorder: 'border-orange-100',
+    iconText: 'text-orange-500',
     hoverBorder: 'group-hover:border-orange-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(249,115,22,0.25)]',
     hoverText: 'group-hover:text-orange-600',
@@ -34,6 +48,7 @@ const ACCENTS: Record<
   rose: {
     iconBg: 'bg-rose-50',
     iconBorder: 'border-rose-100',
+    iconText: 'text-rose-500',
     hoverBorder: 'group-hover:border-rose-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(244,63,94,0.25)]',
     hoverText: 'group-hover:text-rose-600',
@@ -42,6 +57,7 @@ const ACCENTS: Record<
   teal: {
     iconBg: 'bg-teal-50',
     iconBorder: 'border-teal-100',
+    iconText: 'text-teal-500',
     hoverBorder: 'group-hover:border-teal-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(20,184,166,0.25)]',
     hoverText: 'group-hover:text-teal-600',
@@ -50,6 +66,7 @@ const ACCENTS: Record<
   sky: {
     iconBg: 'bg-sky-50',
     iconBorder: 'border-sky-100',
+    iconText: 'text-sky-500',
     hoverBorder: 'group-hover:border-sky-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(14,165,233,0.25)]',
     hoverText: 'group-hover:text-sky-600',
@@ -58,6 +75,7 @@ const ACCENTS: Record<
   indigo: {
     iconBg: 'bg-indigo-50',
     iconBorder: 'border-indigo-100',
+    iconText: 'text-indigo-500',
     hoverBorder: 'group-hover:border-indigo-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]',
     hoverText: 'group-hover:text-indigo-600',
@@ -66,6 +84,7 @@ const ACCENTS: Record<
   purple: {
     iconBg: 'bg-purple-50',
     iconBorder: 'border-purple-100',
+    iconText: 'text-purple-500',
     hoverBorder: 'group-hover:border-purple-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]',
     hoverText: 'group-hover:text-purple-600',
@@ -74,6 +93,7 @@ const ACCENTS: Record<
   blue: {
     iconBg: 'bg-blue-50',
     iconBorder: 'border-blue-100',
+    iconText: 'text-blue-500',
     hoverBorder: 'group-hover:border-blue-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]',
     hoverText: 'group-hover:text-blue-600',
@@ -82,6 +102,7 @@ const ACCENTS: Record<
   cyan: {
     iconBg: 'bg-cyan-50',
     iconBorder: 'border-cyan-100',
+    iconText: 'text-cyan-500',
     hoverBorder: 'group-hover:border-cyan-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(6,182,212,0.25)]',
     hoverText: 'group-hover:text-cyan-600',
@@ -90,6 +111,7 @@ const ACCENTS: Record<
   violet: {
     iconBg: 'bg-violet-50',
     iconBorder: 'border-violet-100',
+    iconText: 'text-violet-500',
     hoverBorder: 'group-hover:border-violet-300',
     hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(139,92,246,0.25)]',
     hoverText: 'group-hover:text-violet-600',
@@ -97,7 +119,7 @@ const ACCENTS: Record<
   },
 };
 
-type MarqueeItem = { name: string; category: string; icon: string; tag: string; accent: AccentColor };
+type MarqueeItem = { name: string; category: string; icon: LucideIcon; tag: string; accent: AccentColor };
 
 /* ─── Marquee Data ─── */
 const MARQUEE_DATA: {
@@ -110,18 +132,18 @@ const MARQUEE_DATA: {
     subtitle:
       'আন্তর্জাতিক মানসম্পন্ন বিভিন্ন এন্টারপ্রাইজ ও টেকনোলজি স্টার্টআপের সাথে আমাদের সফল অংশীদারিত্ব',
     row1: [
-      { name: 'TechCorp', category: 'এন্টারপ্রাইজ সলিউশন', icon: '⚡', tag: 'ইউএসএ', accent: 'orange' },
-      { name: 'InnovateX', category: 'এআই রিসার্চ ল্যাব', icon: '🚀', tag: 'গ্লোবাল', accent: 'rose' },
-      { name: 'DevStudio', category: 'প্রোডাক্ট ইঞ্জিনিয়ারিং', icon: '🎨', tag: 'ইউকে', accent: 'teal' },
-      { name: 'NextGen', category: 'ক্লাউড সাস প্ল্যাটফর্ম', icon: '🌐', tag: 'জার্মানি', accent: 'sky' },
-      { name: 'CloudScale', category: 'ডেভঅপ্স ইনফ্রাস্ট্রাকচার', icon: '☁️', tag: 'কানাডা', accent: 'indigo' },
+      { name: 'TechCorp', category: 'এন্টারপ্রাইজ সলিউশন', icon: Zap, tag: 'ইউএসএ', accent: 'orange' },
+      { name: 'InnovateX', category: 'এআই রিসার্চ ল্যাব', icon: Rocket, tag: 'গ্লোবাল', accent: 'rose' },
+      { name: 'DevStudio', category: 'প্রোডাক্ট ইঞ্জিনিয়ারিং', icon: Palette, tag: 'ইউকে', accent: 'teal' },
+      { name: 'NextGen', category: 'ক্লাউড সাস প্ল্যাটফর্ম', icon: Globe, tag: 'জার্মানি', accent: 'sky' },
+      { name: 'CloudScale', category: 'ডেভঅপ্স ইনফ্রাস্ট্রাকচার', icon: Cloud, tag: 'কানাডা', accent: 'indigo' },
     ],
     row2: [
-      { name: 'DataPulse', category: 'বিগ ডাটা অ্যানালিটিক্স', icon: '📊', tag: 'সিঙ্গাপুর', accent: 'purple' },
-      { name: 'CyberShield', category: 'সাইবার সিকিউরিটি', icon: '🛡️', tag: 'জাপান', accent: 'blue' },
-      { name: 'Apex Digital', category: 'ফিনটেক ইঞ্জিন', icon: '💎', tag: 'ইউএই', accent: 'cyan' },
-      { name: 'QuantumLabs', category: 'কোয়ান্টাম কম্পিউটিং', icon: '⚛️', tag: 'সুইজারল্যান্ড', accent: 'violet' },
-      { name: 'FlowMotion', category: 'ইউআই/ইউএক্স প্রোটোটাইপিং', icon: '✨', tag: 'অস্ট্রেলিয়া', accent: 'orange' },
+      { name: 'DataPulse', category: 'বিগ ডাটা অ্যানালিটিক্স', icon: BarChart3, tag: 'সিঙ্গাপুর', accent: 'purple' },
+      { name: 'CyberShield', category: 'সাইবার সিকিউরিটি', icon: ShieldCheck, tag: 'জাপান', accent: 'blue' },
+      { name: 'Apex Digital', category: 'ফিনটেক ইঞ্জিন', icon: Gem, tag: 'ইউএই', accent: 'cyan' },
+      { name: 'QuantumLabs', category: 'কোয়ান্টাম কম্পিউটিং', icon: Atom, tag: 'সুইজারল্যান্ড', accent: 'violet' },
+      { name: 'FlowMotion', category: 'ইউআই/ইউএক্স প্রোটোটাইপিং', icon: SparklesIcon, tag: 'অস্ট্রেলিয়া', accent: 'orange' },
     ],
   },
   en: {
@@ -130,18 +152,18 @@ const MARQUEE_DATA: {
     subtitle:
       'Empowering next-generation enterprises, startups, and innovative tech teams worldwide',
     row1: [
-      { name: 'TechCorp', category: 'Enterprise Solutions', icon: '⚡', tag: 'USA', accent: 'orange' },
-      { name: 'InnovateX', category: 'AI Research Lab', icon: '🚀', tag: 'Global', accent: 'rose' },
-      { name: 'DevStudio', category: 'Product Engineering', icon: '🎨', tag: 'UK', accent: 'teal' },
-      { name: 'NextGen', category: 'Cloud SaaS Platform', icon: '🌐', tag: 'Germany', accent: 'sky' },
-      { name: 'CloudScale', category: 'DevOps Infra', icon: '☁️', tag: 'Canada', accent: 'indigo' },
+      { name: 'TechCorp', category: 'Enterprise Solutions', icon: Zap, tag: 'USA', accent: 'orange' },
+      { name: 'InnovateX', category: 'AI Research Lab', icon: Rocket, tag: 'Global', accent: 'rose' },
+      { name: 'DevStudio', category: 'Product Engineering', icon: Palette, tag: 'UK', accent: 'teal' },
+      { name: 'NextGen', category: 'Cloud SaaS Platform', icon: Globe, tag: 'Germany', accent: 'sky' },
+      { name: 'CloudScale', category: 'DevOps Infra', icon: Cloud, tag: 'Canada', accent: 'indigo' },
     ],
     row2: [
-      { name: 'DataPulse', category: 'Big Data Analytics', icon: '📊', tag: 'Singapore', accent: 'purple' },
-      { name: 'CyberShield', category: 'Cyber Security', icon: '🛡️', tag: 'Japan', accent: 'blue' },
-      { name: 'Apex Digital', category: 'Fintech Engine', icon: '💎', tag: 'UAE', accent: 'cyan' },
-      { name: 'QuantumLabs', category: 'Quantum Computing', icon: '⚛️', tag: 'Switzerland', accent: 'violet' },
-      { name: 'FlowMotion', category: 'UI/UX Prototyping', icon: '✨', tag: 'Australia', accent: 'orange' },
+      { name: 'DataPulse', category: 'Big Data Analytics', icon: BarChart3, tag: 'Singapore', accent: 'purple' },
+      { name: 'CyberShield', category: 'Cyber Security', icon: ShieldCheck, tag: 'Japan', accent: 'blue' },
+      { name: 'Apex Digital', category: 'Fintech Engine', icon: Gem, tag: 'UAE', accent: 'cyan' },
+      { name: 'QuantumLabs', category: 'Quantum Computing', icon: Atom, tag: 'Switzerland', accent: 'violet' },
+      { name: 'FlowMotion', category: 'UI/UX Prototyping', icon: SparklesIcon, tag: 'Australia', accent: 'orange' },
     ],
   },
 };
@@ -281,6 +303,7 @@ export default function TrustedClient() {
 /* ─── Marquee Card (light theme, per-client accent color) ─── */
 function MarqueeCard({ client }: { client: MarqueeItem }) {
   const c = ACCENTS[client.accent];
+  const Icon = client.icon;
 
   return (
     <div
@@ -288,9 +311,9 @@ function MarqueeCard({ client }: { client: MarqueeItem }) {
     >
       <div className="flex items-center gap-4">
         <div
-          className={`w-12 h-12 rounded-xl border flex items-center justify-center text-2xl group-hover:scale-110 transition-all duration-300 shrink-0 ${c.iconBg} ${c.iconBorder}`}
+          className={`w-12 h-12 rounded-xl border flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 ${c.iconBg} ${c.iconBorder}`}
         >
-          {client.icon}
+          <Icon className={`w-5 h-5 ${c.iconText}`} strokeWidth={2} />
         </div>
 
         <div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Code2,
   Smartphone,
@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-// সার্ভিস ডাটা অ্যারে (ইংরেজি এবং বাংলা উভয় ভাষা সহ)
+// সার্ভিস ডাটা অ্যারে (ইংরেজি এবং বাংলা উভয় ভাষা সহ)
 const servicesData = [
   {
     id: 1,
@@ -23,12 +23,11 @@ const servicesData = [
     },
     description: {
       en: "We build highly scalable, interactive, and high-performance web applications using cutting-edge frameworks like React and Next.js.",
-      bn: "আমরা রিয়্যাক্ট এবং নেক্সট ডট জেএসের মতো অত্যাধুনিক ফ্রেমওয়ার্ক ব্যবহার করে অত্যন্ত স্কেলেবল, ইন্টারেক্টিভ এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করি।",
+      bn: "আমরা রিয়্যাক্ট এবং নেক্সট ডট জেএসের মতো অত্যাধুনিক ফ্রেমওয়ার্ক ব্যবহার করে অত্যন্ত স্কেলেবল, ইন্টারেক্টিভ এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করি।",
     },
     image: "/services/web-development.png",
     icon: Code2,
-    iconColor: "text-cyan-400",
-    className: "md:col-span-2 md:row-span-2 p-8 md:p-12 justify-between",
+    iconColor: "text-cyan-600",
     isCta: false,
   },
   {
@@ -43,10 +42,8 @@ const servicesData = [
     },
     image: "/services/app-development.png",
     icon: Smartphone,
-    iconColor: "text-indigo-400",
-    className: "md:col-span-1 md:row-span-2 p-8 justify-between",
+    iconColor: "text-indigo-600",
     isCta: false,
-    animateIcon: true,
   },
   {
     id: 3,
@@ -60,8 +57,7 @@ const servicesData = [
     },
     image: "/services/graphic-design.png",
     icon: Video,
-    iconColor: "text-rose-400",
-    className: "md:col-span-2 md:row-span-1 p-8 flex-col sm:flex-row items-start sm:items-center gap-6",
+    iconColor: "text-rose-600",
     isCta: false,
   },
   {
@@ -71,13 +67,12 @@ const servicesData = [
       bn: "মেটা মার্কেটিং",
     },
     description: {
-      en: "Data-driven ad campaigns maximizing ROI.",
+      en: "Data-driven ad campaigns across Meta platforms, built and measured to maximize your ROI.",
       bn: "ডাটা-ড্রাইভেন অ্যাড ক্যাম্পেইনের মাধ্যমে আরওআই (ROI) সর্বোচ্চকরণ।",
     },
     image: "/services/meta-merktinf.png",
     icon: TrendingUp,
-    iconColor: "text-green-400",
-    className: "md:col-span-1 md:row-span-1 p-8 justify-end",
+    iconColor: "text-green-600",
     isCta: false,
   },
   {
@@ -87,26 +82,24 @@ const servicesData = [
       bn: "গ্রাফিক ডিজাইন",
     },
     description: {
-      en: "Creative branding, UI/UX, and visual identities.",
+      en: "Creative branding, UI/UX, and visual identities that make your business instantly recognizable.",
       bn: "ক্রিয়েটিভ ব্র্যান্ডিং, ইউআই/ইউএক্স এবং ভিজ্যুয়াল আইডেন্টিটি।",
     },
     image: "/services/graphic-design.png",
     icon: Palette,
-    iconColor: "text-fuchsia-400",
-    className: "md:col-span-1 md:row-span-1 p-8 justify-end",
+    iconColor: "text-fuchsia-600",
     isCta: false,
   },
   {
     id: 6,
     title: {
       en: "Need Something Else?",
-      bn: "অন্য কিছু প্রয়োজন?",
+      bn: "অন্য কিছু প্রয়োজন?",
     },
     description: {
       en: "We offer custom solutions tailored to your unique business requirements. Let's talk!",
-      bn: "আমরা আপনার নির্দিষ্ট ব্যবসায়িক প্রয়োজনীয়তা অনুযায়ী কাস্টম সলিউশন অফার করি। কথা বলুন আমাদের সাথে!",
+      bn: "আমরা আপনার নির্দিষ্ট ব্যবসায়িক প্রয়োজনীয়তা অনুযায়ী কাস্টম সলিউশন অফার করি। কথা বলুন আমাদের সাথে!",
     },
-    className: "md:col-span-2 md:row-span-1 p-8 justify-center items-center text-center cursor-pointer",
     isCta: true,
   },
 ];
@@ -114,41 +107,28 @@ const servicesData = [
 export default function Services() {
   const { language } = useLanguage();
 
-  // Framer Motion Variants for Staggered Animation
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 },
-    },
-  };
-
   return (
-    <section className=" py-24 md:py-32 relative overflow-hidden bg-slate-50 dark:bg-[#070b14] z-10">
-      {/* 🌌 Ambient Background Glows */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 dark:bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
+    <section
+      className="py-24 md:py-32 relative z-10"
+      style={{
+        background:
+          "linear-gradient(135deg, #F2F5FF 0%, #F8FAFF 50%, #EEFBF6 100%)",
+      }}
+    >
+      {/* 🌌 Ambient Background Glows — নিজের আলাদা overflow-hidden wrapper-এ,
+          যাতে sticky card container-এর ancestor chain-এ overflow-hidden না থাকে
+          (overflow-hidden থাকলে position: sticky কাজ করে না) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 dark:bg-blue-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-300/30 dark:bg-purple-600/10 rounded-full blur-[120px]" />
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04]" />
+      </div>
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04] pointer-events-none" />
-
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        
+      <div className="relative z-10 max-w-[90%] w-full mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-bold tracking-wide uppercase mb-6 border border-blue-200/50 dark:border-blue-800/50 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/60 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-bold tracking-wide uppercase mb-6 border border-blue-200/60 dark:border-blue-800/50 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
             {language ? "আমাদের দক্ষতা" : "Our Expertise"}
           </div>
@@ -168,140 +148,93 @@ export default function Services() {
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-medium">
             {language
-              ? "স্কেলেবিলিটি এবং ইমপ্যাক্টের জন্য ডিজাইন করা আমাদের আধুনিক ডিজিটাল সলিউশনের মাধ্যমে আপনার ব্র্যান্ডকে এগিয়ে নিন।"
+              ? "স্কেলেবিলিটি এবং ইমপ্যাক্টের জন্য ডিজাইন করা আমাদের আধুনিক ডিজিটাল সলিউশনের মাধ্যমে আপনার ব্র্যান্ডকে এগিয়ে নিন।"
               : "Elevate your brand with our comprehensive suite of digital solutions designed for scalability and impact."}
           </p>
         </div>
 
-        {/* 🍱 BENTO GRID (Dynamic Loop) */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[240px] max-w-8xl mx-auto"
-        >   
-          {servicesData.map((service) => {
+        {/* 📚 STICKY STACKING CARDS */}
+        <div className="w-full relative flex flex-col gap-6 pb-32">
+          {servicesData.map((service, index) => {
             const IconComponent = service.icon;
 
             return (
-              <motion.div
+              <div
                 key={service.id}
-                variants={cardVariants}
-                whileHover={service.isCta ? { scale: 1.02 } : undefined}
-                style={
+                className={`sticky flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-14 rounded-[2.5rem] p-8 md:p-12 lg:p-14 min-h-[420px] w-full border shadow-xl shadow-slate-200/60 ${
                   service.isCta
-                    ? { background: "linear-gradient(to right, #0f172a, #172554, #1e1b4b)" }
-                    : undefined
-                }
-                className={`group relative rounded-[2rem] overflow-hidden shadow-2xl border flex flex-col ${
-                  service.isCta
-                    ? "border-blue-500/30"
-                    : "bg-slate-900 dark:bg-[#070b14] border-slate-700/60"
-                } ${service.className}`}
+                    ? "border-blue-500/30 justify-center text-center"
+                    : "border-white/70"
+                }`}
+                style={{
+                  // সব কার্ডের top একই রাখা হয়েছে যাতে আগের কার্ডের কোনো
+                  // sliver/edge peek করে না দেখা যায় — নতুন কার্ড সরাসরি
+                  // আগেরটাকে সম্পূর্ণ cover করে ফেলবে
+                  top: "10vh",
+                  zIndex: index,
+                  // ⚠️ background সরাসরি inline style দিয়ে সেট করা — Tailwind-এর
+                  // multi-stop arbitrary gradient ক্লাস কখনো কখনো compile না হয়ে
+                  // card transparent রেখে দিচ্ছিল, ফলে নিচের কার্ডের টেক্সট উপরে
+                  // দেখা যাচ্ছিল (overlap bug)। inline style সবসময় guaranteed render হয়।
+                  background: service.isCta
+                    ? "linear-gradient(to right, #0f172a, #172554, #1e1b4b)"
+                    : "linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 55%, #EAFBF5 100%)",
+                }}
               >
-                {/* Background Image & Overlay with Opacity */}
-                {!service.isCta && service.image && (
-                  <>
-                    <div className="absolute inset-0 z-0 overflow-hidden">
-                      <Image
-                        src={service.image}
-                        alt={service.title.en}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 66vw"
-                        className="object-cover opacity-40 object-center transition-transform duration-700 group-hover:scale-110"
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/80 to-[#070b14]/40 z-10 pointer-events-none" />
-                  </>
-                )}
-
-                {/* CTA Card Specific Glow Border */}
-                {service.isCta && (
-                  <div className="absolute inset-0 rounded-[2rem] border-2 border-transparent group-hover:border-blue-400/50 transition-colors duration-500 pointer-events-none" />
-                )}
-
-                {/* Card Content Structure */}
                 {service.isCta ? (
-                  <>
-                    <Sparkles className="w-8 h-8 text-yellow-400 mb-3 animate-pulse relative z-10" />
-                    <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-2 drop-shadow-md relative z-10">
+                  // CTA কার্ড
+                  <div className="flex flex-col items-center justify-center max-w-md mx-auto py-8">
+                    <Sparkles className="w-9 h-9 text-yellow-400 mb-4 animate-pulse" />
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 flex items-center gap-2">
                       {language ? service.title.bn : service.title.en}
-                      <ArrowRight className="w-6 h-6 text-blue-400 group-hover:translate-x-2 transition-transform duration-300" />
                     </h3>
-                    <p className="text-slate-200 text-sm max-w-md relative z-10">
+                    <p className="text-slate-300 text-base mb-6">
                       {language ? service.description.bn : service.description.en}
                     </p>
-                  </>
+                    <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-400 transition-colors duration-300 cursor-pointer">
+                      {language ? "কথা বলুন" : "Let's Talk"}
+                      <ArrowRight className="w-5 h-5" />
+                    </span>
+                  </div>
                 ) : (
                   <>
-                    {/* Icon Container */}
-                    {IconComponent && (
+                    {/* কন্টেন্ট অংশ */}
+                    <div className="w-full lg:w-1/2 flex flex-col justify-center">
                       <motion.div
-                        animate={service.animateIcon ? { y: [0, -8, 0] } : undefined}
-                        transition={service.animateIcon ? { repeat: Infinity, duration: 3, ease: "easeInOut" } : undefined}
-                        whileHover={!service.animateIcon ? { rotate: [0, -10, 10, 0] } : undefined}
-                        className={`relative z-20 flex items-center justify-center border border-white/20 shadow-lg shadow-black/30 backdrop-blur-md ${
-                          service.id === 1
-                            ? "w-16 h-16 rounded-2xl bg-white/10 p-[2px]"
-                            : service.id === 3
-                            ? "w-14 h-14 shrink-0 rounded-2xl bg-white/10 group-hover:scale-110 transition-transform duration-300"
-                            : service.id === 2
-                            ? "w-14 h-14 rounded-2xl bg-white/10"
-                            : "w-10 h-10 mb-4 bg-transparent border-none shadow-none"
-                        }`}
+                        whileHover={{ rotate: [0, -10, 10, 0] }}
+                        className="w-14 h-14 rounded-2xl bg-white/80 dark:bg-white/10 border border-slate-900/10 dark:border-white/20 shadow-md flex items-center justify-center mb-6"
                       >
-                        {service.id === 1 ? (
-                          <div className="w-full h-full rounded-[14px] flex items-center justify-center">
-                            <IconComponent className={`w-8 h-8 ${service.iconColor}`} />
-                          </div>
-                        ) : (
-                          <IconComponent
-                            className={`${
-                              service.id >= 4 ? "w-10 h-10 drop-shadow-md group-hover:-translate-y-1 transition-transform duration-300" : "w-7 h-7"
-                            } ${service.iconColor}`}
-                          />
+                        {IconComponent && (
+                          <IconComponent className={`w-7 h-7 ${service.iconColor}`} />
                         )}
                       </motion.div>
-                    )}
 
-                    {/* Text Details */}
-                    <div className={`relative z-20 ${service.id === 1 || service.id === 2 ? "mt-8" : ""}`}>
-                      <h3
-                        className={`font-bold text-white mb-2 transition-colors duration-300 drop-shadow-md ${
-                          service.id === 1
-                            ? "text-3xl md:text-4xl font-extrabold group-hover:text-cyan-400 mb-4"
-                            : service.id === 2
-                            ? "text-2xl group-hover:text-indigo-400 mb-3"
-                            : service.id === 3
-                            ? "text-2xl group-hover:text-rose-400"
-                            : service.id === 4
-                            ? "text-xl group-hover:text-green-400"
-                            : "text-xl group-hover:text-fuchsia-400"
-                        }`}
-                      >
+                      <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                         {language ? service.title.bn : service.title.en}
                       </h3>
-                      <p
-                        className={`text-slate-200 drop-shadow ${
-                          service.id === 1
-                            ? "text-lg leading-relaxed max-w-lg"
-                            : service.id === 3
-                            ? "max-w-md"
-                            : service.id >= 4
-                            ? "text-sm text-slate-300"
-                            : ""
-                        }`}
-                      >
+                      <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg">
                         {language ? service.description.bn : service.description.en}
                       </p>
                     </div>
+
+                    {/* ইমেজ অংশ */}
+                    <div className="w-full lg:w-1/2 h-[240px] md:h-[300px] lg:h-[340px] relative rounded-[1.75rem] overflow-hidden border border-white/70 dark:border-slate-700/60 shadow-lg bg-white/40 dark:bg-black/20">
+                      {service.image && (
+                        <Image
+                          src={service.image}
+                          alt={service.title.en}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                        />
+                      )}
+                    </div>
                   </>
                 )}
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -9,6 +9,7 @@ import { TechStackSection } from './components/shared/TechStackSection';
 import Services from './components/shared/ServicesSection';
 import AboutHeroContent from './components/shared/HeroSectionTwo';
 import ClientMarquee from './components/shared/TrustedClient';
+import { FeaturedServicesSection } from './components/shared/FeaturedServicesSection';
 
 
 // ==========================================
@@ -133,12 +134,12 @@ const PortfolioSection = dynamic(
   }
 );
 
-const FeaturedServicesSection = dynamic(
-  () => import('./components/shared/FeaturedServicesSection').then(mod => ({ default: mod.FeaturedServicesSection })),
-  {
-    loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
-  }
-);
+// const FeaturedServicesSection = dynamic(
+//   () => import('./components/shared/FeaturedServicesSection').then(mod => ({ default: mod.FeaturedServicesSection })),
+//   {
+//     loading: () => <div className="h-96 animate-pulse bg-gray-100 dark:bg-gray-900" />,
+//   }
+// );
 
 const PricingSection = dynamic(
   () => import('./components/shared/PricingSection').then(mod => ({ default: mod.PricingSection })),
@@ -330,10 +331,11 @@ export default function HomePage() {
       {/* Above the fold - immediately loaded */}
       <HeroSection/>
       <Services/>
-      <ClientMarquee/>
+      {/* <ClientMarquee/> */}
       
       {/* <Hero /> */}
       <AboutSection/>
+      {/* <FeaturedServicesSection/> */}
       
       {/* Below the fold - lazy loaded for better performance */}
       {/* <PortfolioSection/> */}
