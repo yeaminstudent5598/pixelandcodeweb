@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+<<<<<<< HEAD
         hostname: 'i.ibb.co', // সাধারণ ImgBB লিংক
       },
       {
@@ -26,6 +27,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+=======
+        hostname: 'i.ibb.co',
+        port: '',
+        pathname: '/**',
+>>>>>>> origin/development
       },
       {
         protocol: 'https',

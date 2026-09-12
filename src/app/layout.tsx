@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
+<<<<<<< HEAD
 import { Red_Hat_Display } from 'next/font/google';
+=======
+import { Hind_Siliguri } from 'next/font/google';
+>>>>>>> origin/development
 import './globals.css';
 import { Navbar } from './components/shared/Navbar';
 import { Footer } from './components/shared/Footer';
@@ -9,6 +13,7 @@ import { StructuredData } from './components/StructuredData';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
+<<<<<<< HEAD
 import { FloatingWhatsApp } from './components/shared/FloatingWhatsApp';
 
 // Red Hat Display — পুরো ওয়েবসাইটের একমাত্র ফন্ট
@@ -16,6 +21,14 @@ const redHatDisplay = Red_Hat_Display({
   weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
   variable: '--font-red-hat-display',
+=======
+
+// Hind Siliguri ফন্ট কনফিগার করা হয়েছে
+const hindSiliguri = Hind_Siliguri({
+  weight: ['400', '700'],
+  subsets: ['bengali'],
+  variable: '--font-hind-siliguri',
+>>>>>>> origin/development
   display: 'swap',
   preload: true,
 });
@@ -23,7 +36,11 @@ const redHatDisplay = Red_Hat_Display({
 export const metadata: Metadata = {
   metadataBase: new URL('https://pixelandcode.agency'),
   title: {
+<<<<<<< HEAD
     default: 'Pixel & Code - Your All-in-one Digital Edge', // ✅ আপডেটেড টাইটেল
+=======
+    default: 'Pixel & Code - Professional Web Design & Digital Marketing Agency in Bangladesh',
+>>>>>>> origin/development
     template: '%s | Pixel & Code'
   },
   description: 'Leading digital agency in Bangladesh specializing in web design, graphic design, video editing, and meta marketing. Transform your business with our expert digital solutions.',
@@ -94,7 +111,11 @@ export const metadata: Metadata = {
     locale: 'bn_BD',
     alternateLocale: ['en_US'],
     url: 'https://pixelandcode.agency',
+<<<<<<< HEAD
     title: 'Pixel & Code - Your All-in-one Digital Edge',
+=======
+    title: 'Pixel & Code - Professional Digital Marketing Agency in Bangladesh',
+>>>>>>> origin/development
     description: 'Transform your business with expert web design, graphic design, video editing, and meta marketing services. Your trusted digital partner in Bangladesh.',
     siteName: 'Pixel & Code',
     images: [
@@ -152,11 +173,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
+<<<<<<< HEAD
     <html
       lang="en"
       className={redHatDisplay.variable}
       suppressHydrationWarning
     >
+=======
+    <html lang="bn" className={hindSiliguri.variable} suppressHydrationWarning>
+>>>>>>> origin/development
       <head>
         <StructuredData />
         
@@ -176,12 +201,21 @@ export default function RootLayout({
       
       <body 
         className="antialiased bg-background text-foreground" 
+<<<<<<< HEAD
         style={{ fontFamily: 'var(--font-red-hat-display), sans-serif' }}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem={false}
+=======
+        style={{ fontFamily: 'var(--font-hind-siliguri), system-ui, sans-serif' }}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+>>>>>>> origin/development
           disableTransitionOnChange
         >
           <LanguageProvider>
@@ -190,7 +224,10 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+<<<<<<< HEAD
             <FloatingWhatsApp />
+=======
+>>>>>>> origin/development
           </LanguageProvider>
         </ThemeProvider>
         
@@ -221,7 +258,11 @@ export default function RootLayout({
               "alternateName": "Pixel and Code",
               "url": "https://pixelandcode.agency",
               "logo": "https://pixelandcode.agency/logo-01.svg",
+<<<<<<< HEAD
               "description": "Your All-in-one Digital Edge",
+=======
+              "description": "Professional digital marketing agency in Bangladesh",
+>>>>>>> origin/development
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Shariatpur",

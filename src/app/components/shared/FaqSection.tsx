@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import Image from "next/image";
@@ -848,11 +849,123 @@ export function FaqSection() {
                   : "Can't find your answer? Feel free to contact us."}
               </span>
             </motion.div>
+=======
+// src/components/shared/FaqSection.tsx
+'use client';
+
+import Image from 'next/image';
+import React from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { useLanguage } from '@/context/LanguageContext';
+
+// প্রশ্ন এবং উত্তরগুলোর ডেটা
+const faqDataBn = [
+  {
+    question: 'আপনারা কি ফেসবুক Ads Campaign কি দিয়ে করে থাকেন ?',
+    answer:
+      'আমরা ফেসবুক Ads Campaign করার জন্য নিজস্ব ডুয়েল কারেন্সি কার্ড এবং এজেন্সি অ্যাকাউন্ট ব্যবহার করে থাকি, যা সম্পূর্ণ নিরাপদ এবং নির্ভরযোগ্য।',
+  },
+  {
+    question: 'আপনারা কি HTPOOL এর অথোরাইজড এড একাউন্ট সেল করেন ?',
+    answer:
+      'হ্যাঁ, আমরা HTPOOL এর একজন অথোরাইজড পার্টনার। আমাদের থেকে আপনি সম্পূর্ণ ভেরিফাইড এবং নিরাপদ এড অ্যাকাউন্ট কিনতে পারবেন।',
+  },
+  {
+    question: 'আপনাদের সাথে সরাসরি অফিসে এসে কথা বলতে চাচ্ছি।',
+    answer:
+      'অবশ্যই! আপনি আমাদের অফিসে এসে সরাসরি কথা বলতে পারেন। আমাদের অফিসের ঠিকানা আমাদের ওয়েবসাইটের কন্টাক্ট পেইজে দেওয়া আছে। আসার আগে ফোন দিয়ে আসলে আপনার জন্য সুবিধা হবে।',
+  },
+  {
+    question: 'আপনাদের ডলার রেট কত ? মিনিমাম কত ডলারের কাজ করানো যাবে ?',
+    answer:
+      'ডলারের রেট আন্তর্জাতিক বাজারের উপর নির্ভর করে পরিবর্তনশীল। বর্তমান রেট এবং মিনিমাম বাজেট সম্পর্কে জানতে অনুগ্রহ করে আমাদের সাথে সরাসরি যোগাযোগ করুন।',
+  },
+];
+
+const faqDataEn = [
+  {
+    question: 'Do you run Facebook Ads Campaigns?',
+    answer:
+      'We use our own dual currency card and agency account to run Facebook Ads Campaigns, which are completely safe and reliable.',
+  },
+  {
+    question: 'Do you sell authorized HTPOOL ad accounts?',
+    answer:
+      'Yes, we are an authorized partner of HTPOOL. You can buy fully verified and secure ad accounts from us.',
+  },
+  {
+    question: 'I want to talk directly at your office.',
+    answer:
+      'Absolutely! You can come to our office and talk to us directly. Our office address is provided on the contact page of our website. Calling ahead will be convenient for you.',
+  },
+  {
+    question:
+      'What is your dollar rate? What is the minimum dollar amount for work?',
+    answer:
+      'The dollar rate varies depending on the international market. Please contact us directly to know the current rate and minimum budget.',
+  },
+];
+
+export function FaqSection() {
+  const { language } = useLanguage();
+  return (
+    <section className="w-full bg-white dark:bg-gray-950 py-20 sm:py-28 transition-colors duration-300">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* বাম কলাম: ছবি */}
+          <div className="relative hidden h-full min-h-[500px] items-center justify-center lg:flex">
+            <Image
+              src="/Yeamin.png" // ❗️ আপনার নিজের ছবি দিন
+              alt="Profile of Uts De"
+              width={450}
+              height={600}
+              className="rounded-lg object-cover shadow-lg dark:shadow-gray-900/50"
+            />
+          </div>
+
+          {/* ডান কলাম: প্রশ্ন এবং উত্তর */}
+          <div className="flex flex-col">
+            <div className="mb-4 inline-block self-start rounded-full border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900 px-6 py-2 text-sm font-medium text-red-600 dark:text-red-400 shadow-sm">
+              {language ? 'প্রশ্ন ও উত্তর' : 'Questions & Answers'}
+            </div>
+
+            <h2 className="mb-8 text-3xl font-extrabold text-gray-800 dark:text-white md:text-4xl">
+              {language
+                ? 'সচরাচর জিজ্ঞাসিত প্রশ্নের উত্তর!'
+                : 'Answers to Frequently Asked Questions!'}
+            </h2>
+
+            <Accordion type="single" collapsible className="w-full">
+              {(language ? faqDataBn : faqDataEn).map((faq, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  className="border-b-gray-200 dark:border-b-gray-800"
+                >
+                  <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline text-gray-900 dark:text-gray-100">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-base text-gray-600 dark:text-gray-400">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+>>>>>>> origin/development
           </div>
         </div>
       </div>
     </section>
   );
+<<<<<<< HEAD
 }
 
 export default FaqSection;
+=======
+}
+>>>>>>> origin/development

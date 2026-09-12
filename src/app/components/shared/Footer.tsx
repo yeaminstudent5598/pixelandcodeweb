@@ -1,13 +1,24 @@
+<<<<<<< HEAD
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import {
   Facebook,
+=======
+// src/components/shared/Footer.tsx
+'use client';
+import Link from 'next/link';
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+>>>>>>> origin/development
   Linkedin,
   Mail,
   MapPin,
   Phone,
+<<<<<<< HEAD
   ArrowRight,
   Send,
   ArrowUpRight,
@@ -574,5 +585,175 @@ function FooterLink({
         <ArrowUpRight className="h-3 w-3 opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100" />
       </Link>
     </li>
+=======
+} from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
+
+const quickLinksBn = [
+  { href: '/', label: 'হোম' },
+  { href: '/services', label: 'সার্ভিসেস' },
+  { href: '/about', label: 'আমাদের সম্পর্কে' },
+  { href: '/contact', label: 'যোগাযোগ' },
+  { href: '/blog', label: 'ব্লগ' },
+];
+const quickLinksEn = [
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/about', label: 'About Us' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/blog', label: 'Blog' },
+];
+
+const legalLinks = [
+  { href: '/privacy-policy', label: 'Privacy Policy' },
+  { href: '/terms-of-service', label: 'Terms of Service' },
+];
+
+const socialLinks = [
+  { href: 'https://www.facebook.com/pixelandcode07', icon: <Facebook />, label: 'Facebook' },
+  { href: '#', icon: <Twitter />, label: 'Twitter' },
+  { href: '#', icon: <Instagram />, label: 'Instagram' },
+  { href: 'https://www.linkedin.com/company/pixel-code-07', icon: <Linkedin />, label: 'LinkedIn' },
+];
+
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+  const { language } = useLanguage();
+
+  return (
+    <footer className="border-t bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800 transition-colors duration-300">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+          {/* Column 1: Brand & About */}
+          <div className="flex flex-col">
+            <Link href="/" className="mb-4 flex items-center gap-2">
+              {/* ছবির মতো একটি SVG লোগো */}
+              <svg
+                className="h-8 w-8 text-blue-600 dark:text-blue-500"
+                id="Layer_1"
+                data-name="Layer 1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 2047.88 1852.16">
+                <path
+                  style={{ fill: 'currentColor' }} // Changed to currentColor to handle dark mode
+                  d="M926.1,1163.22q0,84.22,0,168.46c0,18.81.07,18.49-18.17,18.71-25.33.3-50.65,1.6-76,1.68-85.84.25-171.67-.12-257.5.48-12,.09-14.37-4.92-14.32-14.79.15-28.68.09-57.36.09-86,0-86.45.2-172.9-.27-259.35-.06-11.51,3.74-14.39,14.61-14.35q165.4.51,330.83.28c18.43,0,18.44,0,18.45-18.24q0-90.28,0-180.57,0-74.82,0-149.63c0-14.06,2.82-16.81,17-16.82q163.61-.13,327.21-.23c4,0,8.46.86,12-.49,12.54-4.74,14.28,3.33,14.3,12,.16,114.32,0,228.65.23,343,0,11.4-6.56,11.7-15.07,11.69q-168.46-.18-336.91-.06c-16.86,0-16.62,0-16.58,17C926.17,1051.73,926.09,1107.47,926.1,1163.22Z"
+                  transform="translate(-555.32 -610.92)"
+                />
+                <path
+                  style={{ fill: 'currentColor' }}
+                  d="M925.87,2094h-351c-18.78,0-19.51-.76-19.5-19.91,0-63.41-.25-126.83.11-190.24.25-43.7,1.38-87.38,2.08-131.07.06-4,.6-8.27-.39-12.07-2.61-10,3.59-12.24,10.94-12.59,10.47-.51,21-.06,31.49-.06,103,0,206,.17,309-.3,12-.06,15.94,2.87,15.88,15.42-.46,101.79-.23,203.58-.2,305.36,0,11.63.4,23.27-.08,34.88-.34,8.35,3.2,9.94,10.9,9.82,30.55-.47,61.12-.1,91.67-.29,33-.21,65.91-.93,98.87-1,27.72-.07,55.43.48,83.15.7,23.76.19,47.53.56,71.29.32,10.66-.1,16,2.53,13.55,14.76-1.29,6.47.73,13.53.73,20.33q.1,158.74,0,317.48c0,17.54,0,17.49-17.32,17.49q-167.22,0-334.44.06c-16.88,0-16.57-.07-16.84-16.88-.38-23.93-1.58-47.85-1.88-71.78q-.51-40.55,0-81.12c.37-30.64,1.55-61.27,1.84-91.91C926.13,2166.37,925.87,2131.34,925.87,2094Z"
+                  transform="translate(-555.32 -610.92)"
+                />
+                <path
+                  style={{ fill: 'currentColor' }}
+                  d="M1915.46,960.49c41.91,23.15,81.69,45.15,121.52,67,2.64,1.45,5.78,2,8.61,3.12,8.18,3.34,11,8.37,8.09,17.65-8,25.29-14.88,50.9-22.45,76.32-6.69,22.45-14,44.73-20.49,67.24-6.57,22.69-12.4,45.6-18.77,68.36-6,21.49-12.37,42.88-18.48,64.34-6.46,22.7-12.73,45.45-19.25,68.14-6.73,23.42-13.8,46.75-20.44,70.2-4,14.23-7.41,28.64-11.28,42.92-3,10.94-6.3,21.79-9.38,32.71-12.85,45.72-25.42,91.52-38.6,137.15-8.85,30.66-19,60.94-27.74,91.64-9,31.83-16.54,64.08-25.42,96-6.3,22.65-14.06,44.89-20.63,67.46s-12.42,45.45-18.73,68.15c-3.15,11.36-6.74,22.6-10,34-2.14,7.56-4.41,15.13-5.77,22.85-1.78,10.05-7.8,13.26-16.65,8.34-37.44-20.79-74.82-41.71-112.46-62.15-10.36-5.62-13-11.91-8.8-23.46,5.58-15.52,8.71-31.92,13.07-47.9,2.75-10,5.8-20,8.75-30,9.73-33,19.9-65.91,29.11-99.08,9-32.34,16.56-65.06,25.52-97.41,8.6-31,18.48-61.74,27.22-92.76,6.51-23.11,12-46.51,18.14-69.72,3.24-12.23,7-24.3,10.43-36.48,7.15-25.5,14-51.07,21.38-76.5,6.78-23.4,14.4-46.57,21-70,6.51-23,11.89-46.41,18.41-69.46,6.27-22.12,13.65-43.93,20-66,6.15-21.42,11.46-43.07,17.46-64.53,4.33-15.51,9.2-30.86,13.8-46.29,3.1-10.42,6.49-20.77,9.15-31.3,3.3-13.06,5.35-26.46,9.06-39.39C1898.61,1014.78,1907,988.19,1915.46,960.49Z"
+                  transform="translate(-555.32 -610.92)"
+                />
+              </svg>
+
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                Pixel & Code
+              </span>
+            </Link>
+            <p className="mb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              {language
+                ? 'আমরা আপনার ব্যবসাকে ডিজিটাল প্ল্যাটফর্মে সফলভাবে প্রতিষ্ঠিত করতে প্রয়োজনীয় সকল সেবা প্রদান করি।'
+                : 'We provide all the necessary services to successfully establish your business on digital platforms.'}
+            </p>
+
+            <div className="flex space-x-4">
+              {socialLinks.map(social => (
+                <Link
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="rounded-full bg-gray-200 dark:bg-gray-800 p-2 text-gray-600 dark:text-gray-300 transition-colors hover:bg-orange-500 hover:text-white dark:hover:bg-orange-500 dark:hover:text-white">
+                  {social.icon}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div>
+            <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
+              {language ? 'কুইক লিংকস' : 'Quick Links'}
+            </h3>
+
+            <ul className="space-y-3">
+              {(language ? quickLinksBn : quickLinksEn).map(link => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="transition-colors hover:text-orange-500 dark:hover:text-orange-400">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Legal */}
+          <div>
+            <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
+              {language ? 'লিগ্যাল' : 'Legal'}
+            </h3>
+
+            <ul className="space-y-3">
+              {legalLinks.map(link => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="transition-colors hover:text-orange-500 dark:hover:text-orange-400">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Info */}
+          <div>
+            <h3 className="mb-6 text-lg font-semibold text-gray-900 dark:text-white">
+              {language ? 'যোগাযোগ করুন' : 'Contact Us'}
+            </h3>
+
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-1 h-5 w-5 flex-shrink-0 text-orange-500" />
+                <span>
+                  Shariatpur Sadar, Shariatpur, <br />
+                  Bangladesh
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="h-5 w-5 flex-shrink-0 text-orange-500" />
+                <a
+                  href="mailto:info@pixelandcode.com"
+                  className="transition-colors hover:text-orange-500 dark:hover:text-orange-400">
+                  pixelandcode07@gmail.com
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="h-5 w-5 flex-shrink-0 text-orange-500" />
+                <a
+                  href="tel:+8801234567890"
+                  className="transition-colors hover:text-orange-500 dark:hover:text-orange-400">
+                  +8801989415813
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 py-6 transition-colors duration-300">
+        <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>&copy; {currentYear} Pixel & Code. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+>>>>>>> origin/development
   );
 }
