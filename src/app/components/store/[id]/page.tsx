@@ -41,7 +41,7 @@ export default function ProductDetailsPage({ params }: Props) {
           <div className="flex flex-col">
             <div className="mb-4 flex items-center gap-3">
               <span className="rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-xs font-bold text-blue-600 dark:text-blue-400">
-                {product.category}
+                {product.categoryEn}
               </span>
               {product.originalPrice && (
                 <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
@@ -51,14 +51,14 @@ export default function ProductDetailsPage({ params }: Props) {
             </div>
 
             <h1 className="mb-4 text-4xl font-extrabold text-gray-900 dark:text-white">
-              {product.title}
+              {product.titleEn}
             </h1>
             <p className="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
               ৳{product.price.toLocaleString()}
             </p>
 
             <p className="mb-8 text-lg text-gray-600 dark:text-gray-300">
-              {product.shortDescription} বিস্তারিত বিবরণ এখানে থাকবে। এই টেমপ্লেটটি ব্যবহার করে আপনি খুব সহজেই আপনার ব্যবসা অনলাইনে নিয়ে আসতে পারবেন। এটি সম্পূর্ণ রেসপন্সিভ এবং এসইও ফ্রেন্ডলি।
+              {product.shortDescriptionEn} বিস্তারিত বিবরণ এখানে থাকবে। এই টেমপ্লেটটি ব্যবহার করে আপনি খুব সহজেই আপনার ব্যবসা অনলাইনে নিয়ে আসতে পারবেন। এটি সম্পূর্ণ রেসপন্সিভ এবং এসইও ফ্রেন্ডলি।
             </p>
 
             {/* Tech Stack */}
