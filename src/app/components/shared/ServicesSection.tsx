@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-// সার্ভিস ডাটা অ্যারে (ইংরেজি এবং বাংলা উভয় ভাষা সহ)
+// সার্ভিস ডাটা অ্যারে
 const servicesData = [
   {
     id: 1,
@@ -27,7 +27,7 @@ const servicesData = [
     },
     image: "/services/web-development.png",
     icon: Code2,
-    iconColor: "text-cyan-600",
+    iconColor: "text-blue-600 dark:text-blue-400",
     isCta: false,
   },
   {
@@ -42,7 +42,7 @@ const servicesData = [
     },
     image: "/services/app-development.png",
     icon: Smartphone,
-    iconColor: "text-indigo-600",
+    iconColor: "text-indigo-600 dark:text-indigo-400",
     isCta: false,
   },
   {
@@ -57,7 +57,7 @@ const servicesData = [
     },
     image: "/services/graphic-design.png",
     icon: Video,
-    iconColor: "text-rose-600",
+    iconColor: "text-rose-600 dark:text-rose-400",
     isCta: false,
   },
   {
@@ -72,7 +72,7 @@ const servicesData = [
     },
     image: "/services/meta-merktinf.png",
     icon: TrendingUp,
-    iconColor: "text-green-600",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
     isCta: false,
   },
   {
@@ -87,7 +87,7 @@ const servicesData = [
     },
     image: "/services/graphic-design.png",
     icon: Palette,
-    iconColor: "text-fuchsia-600",
+    iconColor: "text-purple-600 dark:text-purple-400",
     isCta: false,
   },
   {
@@ -108,45 +108,36 @@ export default function Services() {
   const { language } = useLanguage();
 
   return (
-    <section
-      className="py-24 md:py-32 relative z-10"
-      style={{
-        background:
-          "linear-gradient(135deg, #F2F5FF 0%, #F8FAFF 50%, #EEFBF6 100%)",
-      }}
-    >
-      {/* 🌌 Ambient Background Glows — নিজের আলাদা overflow-hidden wrapper-এ,
-          যাতে sticky card container-এর ancestor chain-এ overflow-hidden না থাকে
-          (overflow-hidden থাকলে position: sticky কাজ করে না) */}
+    <section className="py-24 md:py-32 relative z-10 bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
+      {/* 🌌 Ambient Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-300/30 dark:bg-blue-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-300/30 dark:bg-purple-600/10 rounded-full blur-[120px]" />
-        {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 dark:bg-blue-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-[120px]" />
       </div>
 
+      {/* ⚠️ max-w-[90%] আবার ফিরিয়ে আনা হয়েছে ন্যাভবারের অ্যালাইনমেন্টের জন্য */}
       <div className="relative z-10 max-w-[90%] w-full mx-auto px-4 md:px-6">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/60 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-bold tracking-wide uppercase mb-6 border border-blue-200/60 dark:border-blue-800/50 backdrop-blur-md">
+        <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-bold tracking-wide uppercase mb-6 border border-blue-200 dark:border-blue-800/50">
             <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
             {language ? "আমাদের দক্ষতা" : "Our Expertise"}
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
             {language ? (
               <>
-                আমরা যে সমস্ত <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 dark:from-blue-400 dark:to-purple-400">সেবা প্রদান করি</span>
+                আমরা যে সমস্ত <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">সেবা প্রদান করি</span>
               </>
             ) : (
               <>
                 Services We{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-500 dark:from-blue-400 dark:to-purple-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
                   Deliver
                 </span>
               </>
             )}
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-medium">
+          <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg lg:text-xl font-medium">
             {language
               ? "স্কেলেবিলিটি এবং ইমপ্যাক্টের জন্য ডিজাইন করা আমাদের আধুনিক ডিজিটাল সলিউশনের মাধ্যমে আপনার ব্র্যান্ডকে এগিয়ে নিন।"
               : "Elevate your brand with our comprehensive suite of digital solutions designed for scalability and impact."}
@@ -154,78 +145,67 @@ export default function Services() {
         </div>
 
         {/* 📚 STICKY STACKING CARDS */}
-        <div className="w-full relative flex flex-col gap-6 pb-32">
+        <div className="w-full relative flex flex-col gap-6 md:gap-8 pb-32">
           {servicesData.map((service, index) => {
             const IconComponent = service.icon;
 
             return (
               <div
                 key={service.id}
-                className={`sticky flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-14 rounded-[2.5rem] p-8 md:p-12 lg:p-14 min-h-[420px] w-full border shadow-xl shadow-slate-200/60 ${
+                className={`sticky top-24 md:top-28 lg:top-32 flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-14 rounded-[2rem] md:rounded-[2.5rem] p-6 sm:p-10 md:p-12 lg:p-14 min-h-[400px] w-full border shadow-xl transition-all duration-500 overflow-hidden ${
                   service.isCta
-                    ? "border-blue-500/30 justify-center text-center"
-                    : "border-white/70"
+                    ? "border-slate-800 bg-slate-900 justify-center text-center shadow-blue-900/20"
+                    : "border-slate-200 dark:border-slate-800 shadow-slate-200/50 dark:shadow-black/50 bg-white dark:bg-slate-900"
                 }`}
                 style={{
-                  // সব কার্ডের top একই রাখা হয়েছে যাতে আগের কার্ডের কোনো
-                  // sliver/edge peek করে না দেখা যায় — নতুন কার্ড সরাসরি
-                  // আগেরটাকে সম্পূর্ণ cover করে ফেলবে
-                  top: "10vh",
-                  zIndex: index,
-                  // ⚠️ background সরাসরি inline style দিয়ে সেট করা — Tailwind-এর
-                  // multi-stop arbitrary gradient ক্লাস কখনো কখনো compile না হয়ে
-                  // card transparent রেখে দিচ্ছিল, ফলে নিচের কার্ডের টেক্সট উপরে
-                  // দেখা যাচ্ছিল (overlap bug)। inline style সবসময় guaranteed render হয়।
-                  background: service.isCta
-                    ? "linear-gradient(to right, #0f172a, #172554, #1e1b4b)"
-                    : "linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 55%, #EAFBF5 100%)",
+                  zIndex: index + 1,
                 }}
               >
                 {service.isCta ? (
-                  // CTA কার্ড
-                  <div className="flex flex-col items-center justify-center max-w-md mx-auto py-8">
-                    <Sparkles className="w-9 h-9 text-yellow-400 mb-4 animate-pulse" />
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 flex items-center gap-2">
+                  // CTA Card Content
+                  <div className="flex flex-col items-center justify-center max-w-xl mx-auto py-10 relative z-10">
+                    <Sparkles className="w-12 h-12 text-yellow-400 mb-6 animate-pulse" />
+                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                       {language ? service.title.bn : service.title.en}
                     </h3>
-                    <p className="text-slate-300 text-base mb-6">
+                    <p className="text-slate-300 text-lg mb-8">
                       {language ? service.description.bn : service.description.en}
                     </p>
-                    <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-400 transition-colors duration-300 cursor-pointer">
+                    <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:-translate-y-1">
                       {language ? "কথা বলুন" : "Let's Talk"}
                       <ArrowRight className="w-5 h-5" />
-                    </span>
+                    </button>
                   </div>
                 ) : (
                   <>
-                    {/* কন্টেন্ট অংশ */}
-                    <div className="w-full lg:w-1/2 flex flex-col justify-center">
+                    {/* Text Content */}
+                    <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left relative z-10">
                       <motion.div
                         whileHover={{ rotate: [0, -10, 10, 0] }}
-                        className="w-14 h-14 rounded-2xl bg-white/80 dark:bg-white/10 border border-slate-900/10 dark:border-white/20 shadow-md flex items-center justify-center mb-6"
+                        className="w-16 h-16 mx-auto lg:mx-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-center mb-6 lg:mb-8"
                       >
                         {IconComponent && (
-                          <IconComponent className={`w-7 h-7 ${service.iconColor}`} />
+                          <IconComponent className={`w-8 h-8 ${service.iconColor}`} />
                         )}
                       </motion.div>
 
-                      <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                         {language ? service.title.bn : service.title.en}
                       </h3>
-                      <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg">
+                      <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg mx-auto lg:mx-0">
                         {language ? service.description.bn : service.description.en}
                       </p>
                     </div>
 
-                    {/* ইমেজ অংশ */}
-                    <div className="w-full lg:w-1/2 h-[240px] md:h-[300px] lg:h-[340px] relative rounded-[1.75rem] overflow-hidden border border-white/70 dark:border-slate-700/60 shadow-lg bg-white/40 dark:bg-black/20">
+                    {/* Image Content */}
+                    <div className="w-full lg:w-1/2 h-[240px] sm:h-[300px] md:h-[360px] relative rounded-[1.5rem] md:rounded-[1.75rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-inner bg-slate-50 dark:bg-slate-800/50 group">
                       {service.image && (
                         <Image
                           src={service.image}
                           alt={service.title.en}
                           fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         />
                       )}
                     </div>
