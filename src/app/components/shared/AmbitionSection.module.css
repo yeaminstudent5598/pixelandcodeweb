@@ -4,11 +4,32 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 88px 24px 24px;
+  padding: 88px 24px 64px;
   color: #ffffff;
   background:
-    radial-gradient(60% 45% at 88% 72%, rgba(150, 122, 255, 0.55) 0%, rgba(150, 122, 255, 0) 70%),
-    linear-gradient(180deg, #150a3b 0%, #2a1263 30%, #5a35c2 62%, #7a56e0 100%);
+    /* 1. right-side bright lavender glow (cards theke bottom porjonto) */
+    radial-gradient(
+      70% 60% at 100% 65%,
+      rgba(142, 112, 250, 0.95) 0%,
+      rgba(130, 100, 240, 0.6) 35%,
+      rgba(130, 100, 240, 0) 75%
+    ),
+    /* 2. bottom-center soft purple lift */
+    radial-gradient(
+      60% 35% at 55% 100%,
+      rgba(110, 78, 225, 0.8) 0%,
+      rgba(110, 78, 225, 0) 70%
+    ),
+    /* 3. base: onek time dark thake, tarpor purple */
+    linear-gradient(
+      180deg,
+      #100829 0%,
+      #170b3d 25%,
+      #231060 45%,
+      #36198a 68%,
+      #4623a8 85%,
+      #5230bb 100%
+    );
 }
 
 .container {
