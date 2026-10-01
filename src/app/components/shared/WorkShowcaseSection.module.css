@@ -1,0 +1,207 @@
+/* File Path: D:\yeamin student\PixelandCode Web\pixelandcode\src\app\components\shared\WorkShowcaseSection.module.css */
+
+.section {
+  background: #ffffff;
+  color: #1d1b2a;
+  padding: 72px 24px 96px;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* ---------- Heading ---------- */
+.head { text-align: center; }
+
+.title {
+  max-width: 520px;
+  margin: 0 auto;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #1d1b2a;
+}
+
+@media (min-width: 640px) {
+  .title { font-size: 36px; }
+}
+
+.sub {
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4a4756;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  margin-top: 24px;
+  padding: 0 28px;
+  border-radius: 6px;
+  background: #673de6;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn:hover { background: #5a33d1; }
+.btn:focus-visible { outline: 2px solid #673de6; outline-offset: 3px; }
+
+/* ---------- Staggered grid ---------- */
+.grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 640px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* columns 2 and 4 sit slightly lower, like the reference */
+@media (min-width: 1024px) {
+  .col:nth-child(even) { margin-top: 12px; }
+}
+
+/* ---------- Cards ---------- */
+.card {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.short { height: 236px; }
+.tall { height: 330px; }
+.quoteH { height: 310px; }
+
+.img { object-fit: cover; }
+.imgTop { object-fit: cover; object-position: top left; }
+
+.tag {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 3;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(30, 30, 34, 0.78);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.inset {
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Portrait / video style card */
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(103, 61, 230, 0.35) 0%,
+    rgba(26, 10, 80, 0.35) 50%,
+    rgba(8, 4, 20, 0.88) 100%
+  );
+}
+
+.play {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 3;
+  display: flex;
+  color: #ffffff;
+}
+
+.label {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 3;
+  max-width: 120px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #ffffff;
+}
+
+/* Testimonial card */
+.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 20px;
+  background: #f4f4f5;
+}
+
+.quoteText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #2b2833;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #e3dcfb;
+  color: #4a2fb8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.name {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.3;
+  color: #2b2833;
+}
+
+.role {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #6b6877;
+}
