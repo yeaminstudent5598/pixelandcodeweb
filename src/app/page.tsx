@@ -10,6 +10,10 @@ import Services from './components/shared/ServicesSection';
 import AboutHeroContent from './components/shared/HeroSectionTwo';
 import ClientMarquee from './components/shared/TrustedClient';
 import { FeaturedServicesSection } from './components/shared/FeaturedServicesSection';
+import GrowthSection from './components/shared/GrowthSection';
+import PowerSection from './components/shared/PowerSection';
+import WorkShowcaseSection from './components/shared/WorkShowcaseSection';
+import AmbitionSection from './components/shared/AmbitionSection';
 
 
 // ==========================================
@@ -331,10 +335,14 @@ export default function HomePage() {
       {/* Above the fold - immediately loaded */}
       <HeroSection/>
       <Services/>
+      <GrowthSection/>
       {/* <ClientMarquee/> */}
       
       {/* <Hero /> */}
       <AboutSection/>
+      <PowerSection/>
+      <WorkShowcaseSection/>
+      <AmbitionSection/>
       {/* <FeaturedServicesSection/> */}
       
       {/* Below the fold - lazy loaded for better performance */}
