@@ -334,20 +334,21 @@ export default function HomePage() {
       
       {/* Above the fold - immediately loaded */}
       <HeroSection/>
+      <ClientMarquee/>
       <Services/>
       <GrowthSection/>
       {/* <ClientMarquee/> */}
       
       {/* <Hero /> */}
-      <AboutSection/>
-      <PowerSection/>
+      {/* <AboutSection/> */}
       <WorkShowcaseSection/>
-      <AmbitionSection/>
+      <PowerSection/>
       {/* <FeaturedServicesSection/> */}
       
       {/* Below the fold - lazy loaded for better performance */}
       {/* <PortfolioSection/> */}
       <TechStackSection/>
+      <AmbitionSection/>
       {/* <FeaturedServicesSection/> */}
       {/* <PricingSection/> */}
       {/* <TechnologySection/> */}
