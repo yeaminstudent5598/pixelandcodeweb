@@ -14,10 +14,9 @@ type TechItem = {
   svg: React.ReactNode;
 };
 
-// ব্র‍্যান্ড কালারগুলো ঠিক রেখে ব্যাকগ্রাউন্ড ডাইনামিক করা হয়েছে
 const TECH_STACK: TechItem[] = [
   {
-    name: 'Next.js', color: '#000000', // Dark in light mode, will be adjusted in CSS
+    name: 'Next.js', color: '#000000',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
         <path d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 01-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.875 11.875 0 00-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 00-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 01-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 01-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 01.174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 004.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 002.466-2.163 11.944 11.944 0 002.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.859-8.292-8.208-9.695a12.597 12.597 0 00-2.499-.523A33.119 33.119 0 0011.573 0zm4.069 7.217c.347 0 .408.005.486.047a.473.473 0 01.237.277c.018.06.023 1.365.018 4.304l-.006 4.218-.744-1.14-.746-1.14v-3.066c0-1.982.01-3.097.023-3.15a.478.478 0 01.233-.296c.096-.05.13-.054.5-.054z"/>
@@ -41,7 +40,7 @@ const TECH_STACK: TechItem[] = [
     ),
   },
   {
-    name: 'Tailwind', color: '#0ea5e9', // Deepened for better contrast on white
+    name: 'Tailwind', color: '#0ea5e9',
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
         <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/>
@@ -117,38 +116,39 @@ const TECH_STACK: TechItem[] = [
 ];
 
 /* ─────────────────────────────────────────────
-   Single Tech Card (Clean Corporate Look)
+   Single Tech Pill (glass)
 ───────────────────────────────────────────── */
-function TechCard({ item, mx = 8 }: { item: TechItem; mx?: number }) {
-  // Check if Next.js for dark/light mode logo
+function TechCard({ item }: { item: TechItem }) {
   const isNextJs = item.name === 'Next.js';
-  
+
   return (
     <div
-      className="group relative flex items-center gap-3 flex-shrink-0 px-5 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg hover:-translate-y-1"
-      style={{ margin: `0 ${mx}px`, minWidth: 160 }}
+      className="
+        group flex flex-shrink-0 items-center gap-2.5 rounded-full py-2 pl-2 pr-5
+        border border-[rgba(148,163,184,0.30)] bg-[rgba(255,255,255,0.85)]
+        shadow-[0_6px_18px_rgba(15,23,42,0.05),inset_0_1px_0_rgba(255,255,255,0.9)]
+        backdrop-blur-md transition-all duration-300
+        hover:-translate-y-0.5 hover:border-[rgba(56,189,248,0.6)]
+        hover:shadow-[0_10px_26px_rgba(59,130,246,0.18)]
+        dark:border-[rgba(255,255,255,0.12)] dark:bg-[rgba(255,255,255,0.06)]
+      "
+      style={{ margin: '0 7px' }}
     >
-      {/* Dynamic left accent bar */}
-      <div 
-        className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: item.color }}
-      />
-      
-      {/* Icon container */}
+      {/* Icon */}
       <div
-        className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
+        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
         style={{
-          background: `${item.color}15`, // 15% opacity hex
+          background: isNextJs ? 'rgba(100,116,139,0.14)' : `${item.color}1f`,
           color: isNextJs ? undefined : item.color,
         }}
       >
-        <div className={isNextJs ? "text-slate-900 dark:text-white" : ""}>
+        <div className={isNextJs ? 'text-slate-900 dark:text-white' : ''}>
           {item.svg}
         </div>
       </div>
 
       {/* Name */}
-      <span className="text-[13px] font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">
+      <span className="whitespace-nowrap text-[13px] font-semibold text-slate-700 dark:text-slate-200">
         {item.name}
       </span>
     </div>
@@ -168,17 +168,21 @@ function ScrollRow({
   speed?: number;
 }) {
   const triple = [...items, ...items, ...items];
-  const from = direction === 'left' ? '0%' : '-33.33%';
-  const to   = direction === 'left' ? '-33.33%' : '0%';
+  const from = direction === 'left' ? '0%' : '-33.333%';
+  const to = direction === 'left' ? '-33.333%' : '0%';
 
   return (
-    <div className="overflow-hidden w-full relative">
-      {/* Edge Fade Masks for clean scroll effect */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none" />
-      
+    <div
+      className="relative w-full overflow-hidden"
+      style={{
+        WebkitMaskImage:
+          'linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%)',
+        maskImage:
+          'linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%)',
+      }}
+    >
       <motion.div
-        className="flex w-max"
+        className="flex w-max py-1"
         animate={{ x: [from, to] }}
         transition={{ repeat: Infinity, duration: speed, ease: 'linear' }}
       >
@@ -195,8 +199,8 @@ function ScrollRow({
 ───────────────────────────────────────────── */
 const STATS_EN = [
   { num: '12+', label: 'Core Technologies', sub: 'in our stack' },
-  { num: '50+', label: 'Projects Delivered', sub: 'with zero flaws' },
-  { num: '4yrs', label: 'Solid Experience', sub: 'building products' },
+  { num: '10+', label: 'Projects Delivered', sub: 'with zero flaws' },
+  { num: '2.5yrs', label: 'Solid Experience', sub: 'building products' },
   { num: '100%', label: 'Open Source', sub: 'friendly architecture' },
 ];
 const STATS_BN = [
@@ -221,39 +225,71 @@ export function TechStackSection() {
   return (
     <section
       ref={ref}
-      className="relative w-full overflow-hidden py-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/60"
+      className="relative w-full overflow-hidden bg-white py-16 dark:bg-[#050b16] md:py-24"
     >
-      {/* ── Subtle Background Patterns ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[10%] left-[5%] w-[30%] h-[30%] rounded-full bg-blue-200/40 dark:bg-blue-900/10 blur-[100px]" />
-        <div className="absolute bottom-[5%] right-[5%] w-[25%] h-[25%] rounded-full bg-indigo-200/40 dark:bg-indigo-900/10 blur-[100px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] mix-blend-overlay"></div>
+      {/* ── Background glows ── */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute left-[8%] top-[5%] h-[420px] w-[420px] rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(56,189,248,0.14) 0%, rgba(56,189,248,0) 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-[0%] right-[8%] h-[460px] w-[460px] rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0) 70%)',
+          }}
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-        
+      {/* Container — navbar / hero er sathe same width & padding */}
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
         {/* ── Header ── */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <motion.div
+        <div className="mx-auto mb-12 flex max-w-2xl flex-col items-center text-center md:mb-14">
+          <motion.span
             initial={{ opacity: 0, y: -12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-6 shadow-sm"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] backdrop-blur-md"
+            style={{
+              border: '1px solid rgba(56,189,248,0.45)',
+              background: 'rgba(255,255,255,0.75)',
+              color: '#0369a1',
+            }}
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="h-3.5 w-3.5" />
             {language ? 'টেকনোলজি স্ট্যাক' : 'Our Technology Stack'}
-          </motion.div>
+          </motion.span>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight"
+            className="mt-5 text-3xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white md:text-4xl"
           >
             {language ? (
-              <>আধুনিক ও স্কেলেবল <br className="hidden md:block"/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">সফটওয়্যার আর্কিটেকচার</span></>
+              <>
+                আধুনিক ও স্কেলেবল{' '}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: 'linear-gradient(90deg, #0ea5e9, #3b82f6)' }}
+                >
+                  সফটওয়্যার আর্কিটেকচার
+                </span>
+              </>
             ) : (
-              <>Modern & Scalable <br className="hidden md:block"/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Software Architecture</span></>
+              <>
+                Modern & Scalable{' '}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: 'linear-gradient(90deg, #0ea5e9, #3b82f6)' }}
+                >
+                  Software Architecture
+                </span>
+              </>
             )}
           </motion.h2>
 
@@ -261,7 +297,7 @@ export function TechStackSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl font-medium"
+            className="mt-4 max-w-xl text-[15px] leading-7 text-slate-600 dark:text-slate-400 md:text-base"
           >
             {language
               ? 'আমরা বিশ্বের সবচেয়ে নির্ভরযোগ্য, ফাস্ট এবং সিকিউর ফ্রেমওয়ার্ক ব্যবহার করে সলিউশন তৈরি করি, যা আপনার ব্যবসার সাথে তাল মিলিয়ে বাড়তে পারে।'
@@ -269,46 +305,85 @@ export function TechStackSection() {
           </motion.p>
         </div>
 
-        {/* ── Scrolling Rows ── */}
-        <div className="flex flex-col gap-6 mb-20 relative">
-          <ScrollRow items={row1} direction="left"  speed={45} />
+        {/* ── Scrolling rows ── */}
+        <div className="relative mb-12 flex flex-col gap-4 md:mb-14">
+          <ScrollRow items={row1} direction="left" speed={45} />
           <ScrollRow items={row2} direction="right" speed={50} />
         </div>
 
-        {/* ── Stats Bento Row ── */}
+        {/* ── Stats strip (glass) ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+          className="relative overflow-hidden rounded-3xl"
+          style={{
+            border: '1px solid rgba(148,163,184,0.25)',
+            boxShadow: '0 18px 50px rgba(15,23,42,0.07)',
+          }}
         >
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 text-center shadow-sm hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-2">{s.num}</div>
-              <div className="text-sm font-bold text-blue-600 dark:text-blue-400 mb-1">{s.label}</div>
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-500">{s.sub}</div>
-            </div>
-          ))}
+          {/* bg light */}
+          <div
+            className="absolute inset-0 dark:hidden"
+            style={{
+              background: 'linear-gradient(160deg, #e8edff 0%, #e6f4ff 55%, #e4fbff 100%)',
+            }}
+          />
+          {/* bg dark */}
+          <div
+            className="absolute inset-0 hidden dark:block"
+            style={{
+              background: 'linear-gradient(160deg, #0d1730 0%, #0a1c33 55%, #082231 100%)',
+            }}
+          />
+
+          <div className="relative grid grid-cols-2 md:grid-cols-4">
+            {stats.map((s, i) => (
+              <div
+                key={i}
+                className={`px-5 py-6 text-center sm:px-6 sm:py-7 ${
+                  i % 2 !== 0 ? 'border-l border-slate-300/50 dark:border-white/10' : ''
+                } ${i > 1 ? 'border-t border-slate-300/50 dark:border-white/10 md:border-t-0' : ''} ${
+                  i > 0 ? 'md:border-l md:border-slate-300/50 md:dark:border-white/10' : ''
+                }`}
+              >
+                <div className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                  {s.num}
+                </div>
+                <div className="mt-1.5 text-sm font-semibold text-blue-600 dark:text-sky-300">
+                  {s.label}
+                </div>
+                <div className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                  {s.sub}
+                </div>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
-        {/* ── Bottom Security Badge ── */}
+        {/* ── Bottom badge ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex justify-center mt-12"
+          className="mt-8 flex justify-center"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-            <ShieldCheck className="w-5 h-5 text-green-500" />
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
-              {language ? 'সম্পূর্ণ নিরাপদ ও অপটিমাইজড কোডবেস' : 'Secure & Optimized Codebase Guaranteed'}
+          <div
+            className="
+              inline-flex items-center gap-2.5 rounded-full px-5 py-2.5 backdrop-blur-md
+              border border-[rgba(148,163,184,0.30)] bg-[rgba(255,255,255,0.85)]
+              shadow-[0_6px_18px_rgba(15,23,42,0.05)]
+              dark:border-[rgba(255,255,255,0.12)] dark:bg-[rgba(255,255,255,0.06)]
+            "
+          >
+            <ShieldCheck className="h-4 w-4 text-emerald-500" />
+            <span className="text-[13px] font-semibold text-slate-700 dark:text-slate-300">
+              {language
+                ? 'সম্পূর্ণ নিরাপদ ও অপটিমাইজড কোডবেস'
+                : 'Secure & Optimized Codebase Guaranteed'}
             </span>
           </div>
         </motion.div>
-
       </div>
     </section>
   );
