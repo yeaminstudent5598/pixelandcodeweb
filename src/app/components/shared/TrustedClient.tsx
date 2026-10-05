@@ -1,337 +1,257 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import {
-  Globe,
-  Zap,
-  Rocket,
-  Palette,
-  Cloud,
-  Server,
-  BarChart3,
-  ShieldCheck,
-  Gem,
-  Atom,
-  Sparkles as SparklesIcon,
-  type LucideIcon,
-} from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import React, { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
-/* ─── Accent color per client icon ───
-   Each key maps to fully-static Tailwind class strings
-   (kept static, not template-built, so Tailwind's JIT never purges them). */
-type AccentColor =
-  | 'orange'
-  | 'rose'
-  | 'teal'
-  | 'sky'
-  | 'indigo'
-  | 'purple'
-  | 'blue'
-  | 'cyan'
-  | 'violet';
+// --------------------------------------------------
+// Client logos (public/ourclients)
+// --------------------------------------------------
+const CLIENT_LOGOS = [
+  { src: "/ourclients/comapany1.webp", alt: "Client logo 1" },
+  { src: "/ourclients/company2.png", alt: "Client logo 2" },
+  { src: "/ourclients/company3.webp", alt: "Client logo 3" },
+  { src: "/ourclients/company4.png", alt: "Client logo 4" },
+  { src: "/ourclients/company5.webp", alt: "Client logo 5" },
+  { src: "/ourclients/company6.avif", alt: "Client logo 6" },
+  { src: "/ourclients/company7.svg", alt: "Client logo 7" },
+  { src: "/ourclients/company8.jpg", alt: "Client logo 8" },
+];
 
-const ACCENTS: Record<
-  AccentColor,
-  { iconBg: string; iconBorder: string; iconText: string; hoverBorder: string; hoverShadow: string; hoverText: string; tagHover: string }
-> = {
-  orange: {
-    iconBg: 'bg-orange-50',
-    iconBorder: 'border-orange-100',
-    iconText: 'text-orange-500',
-    hoverBorder: 'group-hover:border-orange-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(249,115,22,0.25)]',
-    hoverText: 'group-hover:text-orange-600',
-    tagHover: 'group-hover:bg-orange-50 group-hover:border-orange-200 group-hover:text-orange-600',
-  },
-  rose: {
-    iconBg: 'bg-rose-50',
-    iconBorder: 'border-rose-100',
-    iconText: 'text-rose-500',
-    hoverBorder: 'group-hover:border-rose-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(244,63,94,0.25)]',
-    hoverText: 'group-hover:text-rose-600',
-    tagHover: 'group-hover:bg-rose-50 group-hover:border-rose-200 group-hover:text-rose-600',
-  },
-  teal: {
-    iconBg: 'bg-teal-50',
-    iconBorder: 'border-teal-100',
-    iconText: 'text-teal-500',
-    hoverBorder: 'group-hover:border-teal-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(20,184,166,0.25)]',
-    hoverText: 'group-hover:text-teal-600',
-    tagHover: 'group-hover:bg-teal-50 group-hover:border-teal-200 group-hover:text-teal-600',
-  },
-  sky: {
-    iconBg: 'bg-sky-50',
-    iconBorder: 'border-sky-100',
-    iconText: 'text-sky-500',
-    hoverBorder: 'group-hover:border-sky-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(14,165,233,0.25)]',
-    hoverText: 'group-hover:text-sky-600',
-    tagHover: 'group-hover:bg-sky-50 group-hover:border-sky-200 group-hover:text-sky-600',
-  },
-  indigo: {
-    iconBg: 'bg-indigo-50',
-    iconBorder: 'border-indigo-100',
-    iconText: 'text-indigo-500',
-    hoverBorder: 'group-hover:border-indigo-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(99,102,241,0.25)]',
-    hoverText: 'group-hover:text-indigo-600',
-    tagHover: 'group-hover:bg-indigo-50 group-hover:border-indigo-200 group-hover:text-indigo-600',
-  },
-  purple: {
-    iconBg: 'bg-purple-50',
-    iconBorder: 'border-purple-100',
-    iconText: 'text-purple-500',
-    hoverBorder: 'group-hover:border-purple-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(168,85,247,0.25)]',
-    hoverText: 'group-hover:text-purple-600',
-    tagHover: 'group-hover:bg-purple-50 group-hover:border-purple-200 group-hover:text-purple-600',
-  },
-  blue: {
-    iconBg: 'bg-blue-50',
-    iconBorder: 'border-blue-100',
-    iconText: 'text-blue-500',
-    hoverBorder: 'group-hover:border-blue-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]',
-    hoverText: 'group-hover:text-blue-600',
-    tagHover: 'group-hover:bg-blue-50 group-hover:border-blue-200 group-hover:text-blue-600',
-  },
-  cyan: {
-    iconBg: 'bg-cyan-50',
-    iconBorder: 'border-cyan-100',
-    iconText: 'text-cyan-500',
-    hoverBorder: 'group-hover:border-cyan-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(6,182,212,0.25)]',
-    hoverText: 'group-hover:text-cyan-600',
-    tagHover: 'group-hover:bg-cyan-50 group-hover:border-cyan-200 group-hover:text-cyan-600',
-  },
-  violet: {
-    iconBg: 'bg-violet-50',
-    iconBorder: 'border-violet-100',
-    iconText: 'text-violet-500',
-    hoverBorder: 'group-hover:border-violet-300',
-    hoverShadow: 'group-hover:shadow-[0_0_15px_rgba(139,92,246,0.25)]',
-    hoverText: 'group-hover:text-violet-600',
-    tagHover: 'group-hover:bg-violet-50 group-hover:border-violet-200 group-hover:text-violet-600',
-  },
-};
+type ReadyLogo = { url: string; alt: string };
 
-type MarqueeItem = { name: string; category: string; icon: LucideIcon; tag: string; accent: AccentColor };
+// --------------------------------------------------
+// Auto-trim: logo er charpashe faka jayga (transparent / white) kete dey,
+// jate sob logo same size e dekhay. Load na hole reject kore.
+// --------------------------------------------------
+const MAX_SIDE = 1000;
 
-/* ─── Marquee Data ─── */
-const MARQUEE_DATA: {
-  bn: { badge: string; title: string; subtitle: string; row1: MarqueeItem[]; row2: MarqueeItem[] };
-  en: { badge: string; title: string; subtitle: string; row1: MarqueeItem[]; row2: MarqueeItem[] };
-} = {
-  bn: {
-    badge: 'আমাদের গ্লোবাল নেটওয়ার্ক',
-    title: 'বিশ্বস্ত ব্র্যান্ড ও পার্টনারসমূহ',
-    subtitle:
-      'আন্তর্জাতিক মানসম্পন্ন বিভিন্ন এন্টারপ্রাইজ ও টেকনোলজি স্টার্টআপের সাথে আমাদের সফল অংশীদারিত্ব',
-    row1: [
-      { name: 'TechCorp', category: 'এন্টারপ্রাইজ সলিউশন', icon: Zap, tag: 'ইউএসএ', accent: 'orange' },
-      { name: 'InnovateX', category: 'এআই রিসার্চ ল্যাব', icon: Rocket, tag: 'গ্লোবাল', accent: 'rose' },
-      { name: 'DevStudio', category: 'প্রোডাক্ট ইঞ্জিনিয়ারিং', icon: Palette, tag: 'ইউকে', accent: 'teal' },
-      { name: 'NextGen', category: 'ক্লাউড সাস প্ল্যাটফর্ম', icon: Globe, tag: 'জার্মানি', accent: 'sky' },
-      { name: 'CloudScale', category: 'ডেভঅপ্স ইনফ্রাস্ট্রাকচার', icon: Cloud, tag: 'কানাডা', accent: 'indigo' },
-    ],
-    row2: [
-      { name: 'DataPulse', category: 'বিগ ডাটা অ্যানালিটিক্স', icon: BarChart3, tag: 'সিঙ্গাপুর', accent: 'purple' },
-      { name: 'CyberShield', category: 'সাইবার সিকিউরিটি', icon: ShieldCheck, tag: 'জাপান', accent: 'blue' },
-      { name: 'Apex Digital', category: 'ফিনটেক ইঞ্জিন', icon: Gem, tag: 'ইউএই', accent: 'cyan' },
-      { name: 'QuantumLabs', category: 'কোয়ান্টাম কম্পিউটিং', icon: Atom, tag: 'সুইজারল্যান্ড', accent: 'violet' },
-      { name: 'FlowMotion', category: 'ইউআই/ইউএক্স প্রোটোটাইপিং', icon: SparklesIcon, tag: 'অস্ট্রেলিয়া', accent: 'orange' },
-    ],
-  },
-  en: {
-    badge: 'OUR GLOBAL NETWORK',
-    title: 'Trusted by Industry Leaders',
-    subtitle:
-      'Empowering next-generation enterprises, startups, and innovative tech teams worldwide',
-    row1: [
-      { name: 'TechCorp', category: 'Enterprise Solutions', icon: Zap, tag: 'USA', accent: 'orange' },
-      { name: 'InnovateX', category: 'AI Research Lab', icon: Rocket, tag: 'Global', accent: 'rose' },
-      { name: 'DevStudio', category: 'Product Engineering', icon: Palette, tag: 'UK', accent: 'teal' },
-      { name: 'NextGen', category: 'Cloud SaaS Platform', icon: Globe, tag: 'Germany', accent: 'sky' },
-      { name: 'CloudScale', category: 'DevOps Infra', icon: Cloud, tag: 'Canada', accent: 'indigo' },
-    ],
-    row2: [
-      { name: 'DataPulse', category: 'Big Data Analytics', icon: BarChart3, tag: 'Singapore', accent: 'purple' },
-      { name: 'CyberShield', category: 'Cyber Security', icon: ShieldCheck, tag: 'Japan', accent: 'blue' },
-      { name: 'Apex Digital', category: 'Fintech Engine', icon: Gem, tag: 'UAE', accent: 'cyan' },
-      { name: 'QuantumLabs', category: 'Quantum Computing', icon: Atom, tag: 'Switzerland', accent: 'violet' },
-      { name: 'FlowMotion', category: 'UI/UX Prototyping', icon: SparklesIcon, tag: 'Australia', accent: 'orange' },
-    ],
-  },
-};
+function loadAndTrim(src: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const img = new window.Image();
 
-export default function TrustedClient() {
-  // LanguageContext exposes a boolean: false = English (default), true = Bangla
-  const { language } = useLanguage();
-  const isEn = !language;
-  const currentLang = isEn ? 'en' : 'bn';
-  const content = MARQUEE_DATA[currentLang];
+    img.onerror = () => reject(new Error(`Failed to load ${src}`));
 
+    img.onload = () => {
+      // SVG scalable — as it is (load hoyeche mane thik ache)
+      if (src.toLowerCase().endsWith(".svg")) return resolve(src);
+
+      try {
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
+        if (!w || !h) return resolve(src);
+
+        const ratio = Math.min(1, MAX_SIDE / Math.max(w, h));
+        const cw = Math.round(w * ratio);
+        const ch = Math.round(h * ratio);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = cw;
+        canvas.height = ch;
+
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        if (!ctx) return resolve(src);
+
+        ctx.drawImage(img, 0, 0, cw, ch);
+        const { data } = ctx.getImageData(0, 0, cw, ch);
+
+        let minX = cw;
+        let minY = ch;
+        let maxX = -1;
+        let maxY = -1;
+
+        for (let y = 0; y < ch; y++) {
+          for (let x = 0; x < cw; x++) {
+            const i = (y * cw + x) * 4;
+
+            // transparent pixel
+            if (data[i + 3] < 20) continue;
+            // near-white pixel (white background)
+            if (data[i] > 242 && data[i + 1] > 242 && data[i + 2] > 242) continue;
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+
+        if (maxX < 0 || maxY < 0) return resolve(src);
+
+        const pad = 2;
+        const sx = Math.max(0, minX - pad);
+        const sy = Math.max(0, minY - pad);
+        const sw = Math.min(cw - sx, maxX - minX + 1 + pad * 2);
+        const sh = Math.min(ch - sy, maxY - minY + 1 + pad * 2);
+
+        if (sw < 8 || sh < 8) return resolve(src);
+
+        const out = document.createElement("canvas");
+        out.width = sw;
+        out.height = sh;
+        const outCtx = out.getContext("2d");
+        if (!outCtx) return resolve(src);
+
+        outCtx.drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+        resolve(out.toDataURL("image/png"));
+      } catch {
+        resolve(src);
+      }
+    };
+
+    img.src = src;
+  });
+}
+
+// --------------------------------------------------
+// Single logo (no box, same height)
+// --------------------------------------------------
+function Logo({ url, alt }: ReadyLogo) {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-white">
-      {/* ─── Animations ─── */}
-      <style>{`
-        @keyframes marqueeLeft {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-33.3333%); }
-        }
-        @keyframes marqueeRight {
-          0% { transform: translateX(-33.3333%); }
-          100% { transform: translateX(0%); }
-        }
-        @keyframes floatOrb {
-          0%, 100% { transform: translate(0px, 0px) scale(1); }
-          50% { transform: translate(24px, -18px) scale(1.06); }
-        }
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-
-        .animate-marquee-left {
-          display: flex;
-          width: max-content;
-          animation: marqueeLeft 38s linear infinite;
-        }
-        .animate-marquee-right {
-          display: flex;
-          width: max-content;
-          animation: marqueeRight 44s linear infinite;
-        }
-        .animate-marquee-left:hover,
-        .animate-marquee-right:hover {
-          animation-play-state: paused;
-        }
-        .bg-orb-1 { animation: floatOrb 12s ease-in-out infinite; }
-        .bg-orb-2 { animation: floatOrb 14s ease-in-out infinite reverse; }
-
-        .shine-badge {
-          background: linear-gradient(90deg, transparent, rgba(99,102,241,0.22), transparent);
-          background-size: 200% 100%;
-          animation: shimmer 3.5s linear infinite;
-        }
-      `}</style>
-
-      {/* ─── Background: soft light-blue glow, matching the reference CTA style ─── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* base soft radial wash */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(99,102,241,0.08),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_85%_100%,rgba(59,130,246,0.06),transparent)]" />
-        {/* faint decorative dots, like the reference card */}
-        <div className="absolute top-10 left-[12%] w-1.5 h-1.5 rounded-full bg-indigo-300/40" />
-        <div className="absolute top-24 right-[18%] w-1.5 h-1.5 rounded-full bg-blue-300/40" />
-        <div className="absolute bottom-16 left-[22%] w-1.5 h-1.5 rounded-full bg-indigo-300/30" />
-        <div className="absolute bottom-10 right-[10%] w-2 h-2 rounded-full bg-blue-300/30" />
-        {/* very subtle floating glow blobs */}
-        <div className="bg-orb-1 absolute -top-16 left-1/4 w-[380px] h-[380px] bg-blue-300/15 rounded-full blur-[130px]" />
-        <div className="bg-orb-2 absolute bottom-0 right-1/4 w-[420px] h-[420px] bg-indigo-300/15 rounded-full blur-[140px]" />
-        {/* thin top hairline like the reference card border */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 bg-gradient-to-r from-transparent via-indigo-300/50 to-transparent" />
-      </div>
-
-      {/* ─── Header ─── */}
-      <div className="max-w-3xl mx-auto px-6 text-center mb-14 relative z-10">
-        <motion.span
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold tracking-widest text-indigo-600 bg-white border border-indigo-100 rounded-full uppercase mb-4 shadow-[0_2px_12px_rgba(99,102,241,0.15)] overflow-hidden"
-        >
-          <span className="shine-badge absolute inset-0" />
-          {/* <Sparkles className="w-3.5 h-3.5 relative z-10 text-indigo-500" /> */}
-          {/* <span className="relative z-10">{content.badge}</span> */}
-        </motion.span>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-3xl md:text-5xl font-black tracking-tight text-slate-900"
-        >
-          {isEn ? (
-            <>
-              Trusted by{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Industry Leaders
-              </span>
-            </>
-          ) : (
-            <>
-              বিশ্বস্ত{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                ব্র্যান্ড ও পার্টনারসমূহ
-              </span>
-            </>
-          )}
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-slate-500 text-sm md:text-base mt-4 max-w-2xl mx-auto leading-relaxed"
-        >
-          {content.subtitle}
-        </motion.p>
-      </div>
-
-      {/* ─── Double Row Marquee Track ─── */}
-      <div className="relative w-full space-y-5 overflow-hidden [mask-image:linear-gradient(to_r,transparent,black_10%,black_90%,transparent)] z-10">
-        <div className="animate-marquee-left gap-6 py-2">
-          {[...content.row1, ...content.row1, ...content.row1].map((client, idx) => (
-            <MarqueeCard key={`r1-${idx}`} client={client} />
-          ))}
-        </div>
-
-        <div className="animate-marquee-right gap-6 py-2">
-          {[...content.row2, ...content.row2, ...content.row2].map((client, idx) => (
-            <MarqueeCard key={`r2-${idx}`} client={client} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <li className="flex h-8 shrink-0 items-center sm:h-9 lg:h-10">
+      <img
+        src={url}
+        alt={alt}
+        draggable={false}
+        className="h-full w-auto max-w-[110px] select-none object-contain transition-transform duration-300 hover:scale-110 sm:max-w-[125px] lg:max-w-[140px]"
+      />
+    </li>
   );
 }
 
-/* ─── Marquee Card (light theme, per-client accent color) ─── */
-function MarqueeCard({ client }: { client: MarqueeItem }) {
-  const c = ACCENTS[client.accent];
-  const Icon = client.icon;
+// --------------------------------------------------
+// Trusted Client Marquee
+// --------------------------------------------------
+export default function ClientMarquee() {
+  const { language } = useLanguage();
+  const [logos, setLogos] = useState<ReadyLogo[]>([]);
+
+  // sob logo ekshathe load kore, je gulo load hoy na oigulo bad dey
+  useEffect(() => {
+    let alive = true;
+
+    Promise.allSettled(CLIENT_LOGOS.map((l) => loadAndTrim(l.src))).then(
+      (results) => {
+        if (!alive) return;
+
+        const ready: ReadyLogo[] = [];
+        results.forEach((r, i) => {
+          if (r.status === "fulfilled") {
+            ready.push({ url: r.value, alt: CLIENT_LOGOS[i].alt });
+          }
+        });
+
+        setLogos(ready);
+      }
+    );
+
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // seamless loop er jonno list ta 2 bar repeat
+  const group = [...logos, ...logos];
 
   return (
-    <div
-      className={`group relative flex items-center justify-between gap-5 px-6 py-4 rounded-2xl bg-white border border-slate-200 backdrop-blur-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer min-w-[280px] md:min-w-[310px] ${c.hoverBorder} ${c.hoverShadow}`}
-    >
-      <div className="flex items-center gap-4">
-        <div
-          className={`w-12 h-12 rounded-xl border flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 ${c.iconBg} ${c.iconBorder}`}
-        >
-          <Icon className={`w-5 h-5 ${c.iconText}`} strokeWidth={2} />
-        </div>
+    <section className="relative overflow-hidden bg-white py-14 sm:py-16 lg:py-20">
+      {/* marquee animation */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes clientMarqueeMove {
+              from { transform: translateX(0); }
+              to   { transform: translateX(-50%); }
+            }
+            .client-marquee-track {
+              animation: clientMarqueeMove 40s linear infinite;
+            }
+            .client-marquee-wrap:hover .client-marquee-track {
+              animation-play-state: paused;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .client-marquee-track { animation: none; }
+            }
+          `,
+        }}
+      />
 
-        <div>
-          <h3 className={`text-base font-bold text-slate-800 transition-colors ${c.hoverText}`}>
-            {client.name}
-          </h3>
-          <p className="text-xs font-medium text-slate-500 group-hover:text-slate-600 transition-colors flex items-center gap-1.5">
-            <Globe className="w-3 h-3 text-slate-400" />
-            {client.category}
-          </p>
-        </div>
+      {/* soft blue glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute left-1/2 top-[30%] h-[300px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse, rgba(56,189,248,0.12) 0%, rgba(56,189,248,0) 70%)",
+          }}
+        />
       </div>
 
-      <span
-        className={`text-[10px] font-mono tracking-wider font-semibold uppercase px-2.5 py-1 rounded-md bg-slate-50 text-slate-500 border border-slate-200 transition-colors ${c.tagHover}`}
-      >
-        {client.tag}
-      </span>
-    </div>
+      {/* Container — navbar ar hero er sathe same width & padding */}
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        {/* Heading */}
+        <div className="mx-auto max-w-2xl text-center">
+          <span
+            className="inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] backdrop-blur-md"
+            style={{
+              border: "1px solid rgba(56,189,248,0.45)",
+              background: "rgba(255,255,255,0.75)",
+              color: "#0369a1",
+            }}
+          >
+            {language ? "আমাদের ক্লায়েন্ট" : "Our Clients"}
+          </span>
+
+          <h2
+            className="mt-4 text-2xl font-semibold leading-snug tracking-tight sm:text-3xl"
+            style={{ color: "#0f172a" }}
+          >
+            {language ? (
+              <>
+                বাংলাদেশের দ্রুত বর্ধনশীল ব্র্যান্ডগুলো
+                <br className="hidden sm:block" /> আমাদের উপর আস্থা রাখে
+              </>
+            ) : (
+              <>
+                Trusted by Fast-Growing Brands
+                <br className="hidden sm:block" /> From Startups to Enterprises
+              </>
+            )}
+          </h2>
+        </div>
+
+        {/* Marquee — same container, tai edge gulo navbar er sathe align */}
+        <div
+          className="client-marquee-wrap relative mt-10 overflow-hidden sm:mt-12"
+          style={{
+            minHeight: "2.5rem",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%)",
+            maskImage:
+              "linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%)",
+          }}
+        >
+          {logos.length > 0 && (
+            <div className="client-marquee-track flex w-max items-center">
+              {/* Group 1 */}
+              <ul className="flex shrink-0 items-center gap-12 pr-12 sm:gap-16 sm:pr-16">
+                {group.map((logo, i) => (
+                  <Logo key={`a-${i}`} url={logo.url} alt={logo.alt} />
+                ))}
+              </ul>
+
+              {/* Group 2 (seamless loop) */}
+              <ul
+                aria-hidden="true"
+                className="flex shrink-0 items-center gap-12 pr-12 sm:gap-16 sm:pr-16"
+              >
+                {group.map((logo, i) => (
+                  <Logo key={`b-${i}`} url={logo.url} alt="" />
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
