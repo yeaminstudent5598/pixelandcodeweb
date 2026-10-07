@@ -1,16 +1,23 @@
 'use client';
 
-import { useLanguage } from '@/context/LanguageContext';
 import Image from 'next/image';
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Linkedin, Twitter, Mail,
-  ChevronLeft, ChevronRight, Users, ArrowUpRight, Sparkles
+  ChevronLeft, ChevronRight, ArrowUpRight,
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
+   Brand blue (light blue gradient — no dark blue)
+───────────────────────────────────────────── */
+const BLUE_GRADIENT = 'linear-gradient(180deg, #38bdf8 0%, #3b82f6 100%)';
+const BLUE_GRADIENT_H = 'linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%)';
+
+/* ─────────────────────────────────────────────
    Team Data
+   linkedin / twitter / mail e '#' mane link nei, oi icon dekhabe na.
+   Real link boshale auto dekhabe. mail e shudhu email address likhben.
 ───────────────────────────────────────────── */
 const teamMembers = [
   {
@@ -127,7 +134,7 @@ const teamMembers = [
 ];
 
 /* ─────────────────────────────────────────────
-   Animations (TypeScript Fix Added)
+   Animations
 ───────────────────────────────────────────── */
 type Dir = 1 | -1;
 const EASE_OUT = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -135,13 +142,13 @@ const EASE_OUT = [0.22, 1, 0.36, 1] as [number, number, number, number];
 const infoV = (d: Dir): Variants => ({
   enter:  { opacity: 0, y: d * 20, filter: 'blur(4px)' },
   center: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.5, ease: EASE_OUT, delay: 0.1 } },
-  exit:   { opacity: 0, y: d * -15, filter: 'blur(2px)', transition: { duration: 0.25, ease: "easeIn" as const } },
+  exit:   { opacity: 0, y: d * -15, filter: 'blur(2px)', transition: { duration: 0.25, ease: 'easeIn' as const } },
 });
 
 const portraitV = (d: Dir): Variants => ({
   enter:  { opacity: 0, x: d * 40, scale: 0.98, filter: 'blur(8px)' },
   center: { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: EASE_OUT } },
-  exit:   { opacity: 0, x: d * -30, scale: 0.98, filter: 'blur(4px)', transition: { duration: 0.3, ease: "easeIn" as const } },
+  exit:   { opacity: 0, x: d * -30, scale: 0.98, filter: 'blur(4px)', transition: { duration: 0.3, ease: 'easeIn' as const } },
 });
 
 const wmV: Variants = {
@@ -154,7 +161,6 @@ const wmV: Variants = {
    Component
 ───────────────────────────────────────────── */
 export function TeamSection() {
-  const { language } = useLanguage();
   const [active, setActive] = useState(0);
   const [dir, setDir] = useState<Dir>(1);
   const [paused, setPaused] = useState(false);
@@ -171,143 +177,176 @@ export function TeamSection() {
 
   const m = teamMembers[active];
 
+  // shudhu real link thakle icon dekhabe
+  const socials = [
+    { href: m.linkedin, Icon: Linkedin, label: 'LinkedIn' },
+    { href: m.twitter, Icon: Twitter, label: 'Twitter' },
+    { href: m.mail && m.mail !== '#' ? `mailto:${m.mail}` : '#', Icon: Mail, label: 'Email' },
+  ].filter((s) => s.href && s.href !== '#');
+
+  const hasLinkedin = m.linkedin && m.linkedin !== '#';
+
   return (
     <section
-      className="relative w-full mx-auto overflow-hidden bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/60 font-sans"
+      className="relative w-full overflow-hidden bg-white dark:bg-[#050b16]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* 🎨 Ambient Background (Clean) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] rounded-full bg-blue-100/60 dark:bg-blue-900/10 blur-[100px]" />
-        <div className="absolute bottom-[5%] right-[5%] w-[300px] h-[300px] rounded-full bg-indigo-100/60 dark:bg-indigo-900/10 blur-[100px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-      </div>
+      {/* Container — navbar / hero er sathe same width & padding */}
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        <div className="grid items-center gap-10 py-16 md:py-24 lg:grid-cols-2 lg:gap-16">
 
-      {/* ═══ SPLIT GRID ═══ */}
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center max-w-6xl mx-auto min-h-[min(88vh,760px)] py-20 lg:py-0">
-
-          {/* ── LEFT PANEL (Text & Controls) ── */}
-          <div className="flex flex-col justify-center relative lg:pr-12">
-            
-            {/* Ghost Number */}
-            <div className="absolute top-0 right-0 lg:right-10 text-[100px] lg:text-[140px] font-black text-slate-100 dark:text-slate-800/50 leading-none select-none pointer-events-none -z-10 tracking-tighter">
+          {/* ── LEFT: Text & Controls ── */}
+          <div className="relative flex flex-col justify-center">
+            {/* Ghost number */}
+            <div className="pointer-events-none absolute right-0 top-0 select-none text-[90px] font-black leading-none tracking-tighter text-slate-100 dark:text-white/[0.04] lg:text-[130px]">
               {String(active + 1).padStart(2, '0')}
             </div>
 
-            {/* Badge */}
-            <div className="mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 text-sm font-semibold shadow-sm">
-                <Sparkles className="w-4 h-4" />
-                {language ? 'আমাদের এক্সপার্ট টিম' : 'Meet Our Experts'}
+            <div className="relative">
+              {/* Badge */}
+              <span
+                className="inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] backdrop-blur-md border border-[rgba(56,189,248,0.45)] bg-[rgba(255,255,255,0.75)] text-sky-700 dark:border-[rgba(56,189,248,0.35)] dark:bg-[rgba(56,189,248,0.12)] dark:text-sky-200"
+              >
+                Meet Our Experts
               </span>
-            </div>
 
-            {/* Animated Info */}
-            <div className="min-h-[300px]">
-              <AnimatePresence mode="wait" custom={dir}>
-                <motion.div
-                  key={`info-${active}`}
-                  custom={dir}
-                  variants={infoV(dir)}
-                  initial="enter" animate="center" exit="exit"
-                  className="flex flex-col"
-                >
-                  <div className="inline-block self-start mb-4 px-3 py-1 rounded-md bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 text-blue-600 dark:text-blue-400 text-[11px] font-bold tracking-widest uppercase">
-                    {m.tag}
-                  </div>
-
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.05] mb-3">
-                    {m.name.split(' ').map((word, i) => (
-                      <span key={i} className="block">
-                        {i === 0 ? word : <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 pb-1">{word}</span>}
-                      </span>
-                    ))}
-                  </h2>
-
-                  <p className="text-sm font-bold tracking-widest uppercase text-slate-500 dark:text-slate-400 mb-5">
-                    {m.role}
-                  </p>
-
-                  <div className="w-12 h-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 mb-6" />
-
-                  <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium max-w-[480px] mb-8">
-                    {m.desc}
-                  </p>
-
-                  <div className="flex items-center gap-3 flex-wrap">
-                    {[
-                      { href: m.linkedin, Icon: Linkedin, label: 'LinkedIn' },
-                      { href: m.twitter,  Icon: Twitter,  label: 'Twitter' },
-                      { href: m.mail,     Icon: Mail,     label: 'Email' },
-                    ].map(({ href, Icon, label }) => (
-                      <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 shadow-sm"
-                        title={label}
-                      >
-                        <Icon className="w-4 h-4" />
-                      </a>
-                    ))}
-                    
-                    <a href={m.linkedin} target="_blank" rel="noopener noreferrer"
-                      className="ml-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md shadow-blue-600/20"
-                    >
-                      {language ? 'কানেক্ট করুন' : 'Connect'}
-                      <ArrowUpRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="flex items-center gap-4 mt-8 pt-8 border-t border-slate-200 dark:border-slate-800/80">
-              <div className="flex gap-2">
-                {[
-                  { fn: prev, icon: <ChevronLeft className="w-5 h-5" /> },
-                  { fn: next, icon: <ChevronRight className="w-5 h-5" /> },
-                ].map(({ fn, icon }, i) => (
-                  <button key={i} onClick={fn} 
-                    className="w-11 h-11 rounded-full flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-sm"
+              {/* Animated info */}
+              <div className="mt-6 min-h-[300px]">
+                <AnimatePresence mode="wait" custom={dir}>
+                  <motion.div
+                    key={`info-${active}`}
+                    custom={dir}
+                    variants={infoV(dir)}
+                    initial="enter" animate="center" exit="exit"
+                    className="flex flex-col"
                   >
-                    {icon}
-                  </button>
-                ))}
+                    {/* tag */}
+                    <span className="mb-4 inline-block self-start rounded-md border border-sky-200 bg-sky-50 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-sky-700 dark:border-sky-400/30 dark:bg-sky-400/10 dark:text-sky-300">
+                      {m.tag}
+                    </span>
+
+                    {/* name */}
+                    <h2 className="mb-3 text-3xl font-semibold leading-[1.1] tracking-tight text-slate-900 dark:text-white md:text-4xl lg:text-[44px]">
+                      {m.name.split(' ').map((word, i) => (
+                        <span key={i} className="block">
+                          {i === 0 ? (
+                            word
+                          ) : (
+                            <span
+                              className="bg-clip-text pb-1 text-transparent"
+                              style={{ backgroundImage: BLUE_GRADIENT_H }}
+                            >
+                              {word}
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </h2>
+
+                    {/* role */}
+                    <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 sm:text-[13px]">
+                      {m.role}
+                    </p>
+
+                    <div className="mb-5 h-1 w-12 rounded-full" style={{ backgroundImage: BLUE_GRADIENT_H }} />
+
+                    {/* desc */}
+                    <p className="mb-7 max-w-[480px] text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+                      {m.desc}
+                    </p>
+
+                    {/* socials + connect */}
+                    {(socials.length > 0 || hasLinkedin) && (
+                      <div className="flex flex-wrap items-center gap-3">
+                        {socials.map(({ href, Icon, label }) => (
+                          <a
+                            key={label}
+                            href={href}
+                            target={href.startsWith('mailto:') ? undefined : '_blank'}
+                            rel="noopener noreferrer"
+                            aria-label={`${m.name} on ${label}`}
+                            title={label}
+                            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/80 text-slate-500 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-600 dark:border-white/15 dark:bg-white/5 dark:text-slate-300 dark:hover:border-sky-400/60 dark:hover:text-sky-300"
+                          >
+                            <Icon className="h-4 w-4" />
+                          </a>
+                        ))}
+
+                        {hasLinkedin && (
+                          <a
+                            href={m.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-1 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                            style={{
+                              background: BLUE_GRADIENT_H,
+                              color: '#ffffff',
+                              border: '1px solid rgba(255,255,255,0.6)',
+                              boxShadow:
+                                '0 10px 28px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.45)',
+                            }}
+                          >
+                            Connect
+                            <ArrowUpRight className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              <span className="text-sm font-bold text-slate-400 dark:text-slate-500 tracking-wider">
-                {String(active + 1).padStart(2, '0')}
-                <span className="mx-1.5 opacity-50">/</span>
-                {String(teamMembers.length).padStart(2, '0')}
-              </span>
+              {/* Navigation */}
+              <div className="mt-8 flex items-center gap-4 border-t border-slate-200 pt-7 dark:border-white/10">
+                <div className="flex gap-2">
+                  {[
+                    { fn: prev, icon: <ChevronLeft className="h-5 w-5" />, label: 'Previous team member' },
+                    { fn: next, icon: <ChevronRight className="h-5 w-5" />, label: 'Next team member' },
+                  ].map(({ fn, icon, label }) => (
+                    <button
+                      key={label}
+                      onClick={fn}
+                      aria-label={label}
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/80 text-slate-600 backdrop-blur-md transition-all duration-300 hover:border-sky-400 hover:text-sky-600 dark:border-white/15 dark:bg-white/5 dark:text-slate-300 dark:hover:border-sky-400/60 dark:hover:text-sky-300"
+                    >
+                      {icon}
+                    </button>
+                  ))}
+                </div>
 
-              <div className="flex-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden ml-2 max-w-[200px]">
-                <motion.div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600"
-                  animate={{ width: `${((active + 1) / teamMembers.length) * 100}%` }}
-                  transition={{ duration: 0.4, ease: "easeOut" as const }}
-                />
+                <span className="text-sm font-bold tracking-wider text-slate-400 dark:text-slate-500">
+                  {String(active + 1).padStart(2, '0')}
+                  <span className="mx-1.5 opacity-50">/</span>
+                  {String(teamMembers.length).padStart(2, '0')}
+                </span>
+
+                <div className="ml-1 h-1.5 max-w-[200px] flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ backgroundImage: BLUE_GRADIENT_H }}
+                    animate={{ width: `${((active + 1) / teamMembers.length) * 100}%` }}
+                    transition={{ duration: 0.4, ease: 'easeOut' as const }}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* ── RIGHT PANEL (Portrait) ── */}
-          <div className="relative w-full h-[500px] lg:h-full min-h-[400px] flex items-center justify-center">
-
-            {/* Watermark Name in Background */}
-            <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          {/* ── RIGHT: Portrait ── */}
+          <div className="relative flex min-h-[400px] w-full items-center justify-center lg:min-h-[520px]">
+            {/* Watermark name */}
+            <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`wm-${active}`}
                   variants={wmV}
                   initial="enter" animate="center" exit="exit"
-                  className="text-center font-black tracking-tighter leading-[0.85]"
+                  className="text-center font-black leading-[0.85] tracking-tighter"
                   style={{
-                    fontSize: 'clamp(60px, 10vw, 140px)',
+                    fontSize: 'clamp(56px, 9vw, 120px)',
                     WebkitTextFillColor: 'transparent',
-                    WebkitTextStroke: '1px rgba(100, 116, 139, 0.15)', // Slate-500 with low opacity
+                    WebkitTextStroke: '1px rgba(56, 189, 248, 0.22)',
                   }}
                 >
                   {m.name.split(' ').map((w, i) => <div key={i}>{w}</div>)}
@@ -315,22 +354,44 @@ export function TeamSection() {
               </AnimatePresence>
             </div>
 
-            {/* Portrait Frame (Clean B2B Layout) */}
+            {/* Portrait frame (glass) */}
             <AnimatePresence mode="wait" custom={dir}>
               <motion.div
                 key={`portrait-${active}`}
                 custom={dir}
                 variants={portraitV(dir)}
                 initial="enter" animate="center" exit="exit"
-                className="relative z-10 w-full max-w-[380px] aspect-[3/4] p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] shadow-2xl shadow-blue-900/10 dark:shadow-none"
+                className="relative z-10 aspect-[3/4] w-full max-w-[360px] rounded-[2.25rem] p-2 backdrop-blur-xl"
+                style={{
+                  border: '1px solid rgba(148,163,184,0.30)',
+                  background: 'rgba(255,255,255,0.55)',
+                  boxShadow:
+                    '0 24px 60px rgba(59,130,246,0.18), inset 0 1px 0 rgba(255,255,255,0.8)',
+                }}
               >
-                <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                <div className="relative h-full w-full overflow-hidden rounded-[1.75rem]">
+                  {/* photo bg — light */}
+                  <div
+                    className="absolute inset-0 dark:hidden"
+                    style={{
+                      background:
+                        'linear-gradient(160deg, #e8edff 0%, #e6f4ff 55%, #e4fbff 100%)',
+                    }}
+                  />
+                  {/* photo bg — dark */}
+                  <div
+                    className="absolute inset-0 hidden dark:block"
+                    style={{
+                      background:
+                        'linear-gradient(160deg, #0d1730 0%, #0a1c33 55%, #082231 100%)',
+                    }}
+                  />
+
                   <Image
                     src={m.imgSrc}
                     alt={m.name}
                     fill
-                    priority
-                    sizes="(max-width:768px) 100vw, 40vw"
+                    sizes="(max-width:768px) 90vw, 360px"
                     style={{
                       objectFit: 'cover',
                       objectPosition: m.imgPos,
@@ -339,48 +400,60 @@ export function TeamSection() {
                       transition: 'none',
                     }}
                   />
-                  {/* Subtle inner shadow/gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent pointer-events-none" />
+
+                  {/* glass sheen */}
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%)',
+                    }}
+                  />
                 </div>
               </motion.div>
             </AnimatePresence>
-
           </div>
         </div>
       </div>
 
-      {/* ═══ AVATAR STRIP (Bottom) ═══ */}
-      <div className="relative z-20 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md py-4">
-        <div className="container mx-auto px-4 flex justify-center">
-          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-hide px-2">
+      {/* ═══ AVATAR STRIP ═══ */}
+      <div className="relative z-20 border-t border-slate-200 bg-white/70 py-4 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.03]">
+        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div
+            className="flex w-full items-center justify-start gap-3 overflow-x-auto px-2 py-2 md:justify-center md:gap-4"
+            style={{ scrollbarWidth: 'none' }}
+          >
             {teamMembers.map((tm, i) => {
               const isActive = i === active;
               return (
-                <button 
+                <button
                   key={i}
                   onClick={() => go(i, i > active ? 1 : -1)}
                   title={tm.name}
-                  className="relative flex-shrink-0 focus:outline-none transition-all duration-300"
+                  aria-label={`Show ${tm.name}`}
+                  aria-current={isActive ? 'true' : undefined}
+                  className="relative flex-shrink-0 transition-all duration-300 focus:outline-none"
                   style={{
-                    width: isActive ? 56 : 44, 
+                    width: isActive ? 56 : 44,
                     height: isActive ? 56 : 44,
-                    opacity: isActive ? 1 : 0.4,
-                    filter: isActive ? 'none' : 'grayscale(100%)'
+                    opacity: isActive ? 1 : 0.45,
+                    filter: isActive ? 'none' : 'grayscale(100%)',
                   }}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="avatar-ring"
-                      className="absolute -inset-1.5 rounded-full border-2 border-blue-600 dark:border-blue-500 shadow-sm"
+                      className="absolute -inset-1.5 rounded-full border-2 border-sky-500"
                       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                     />
                   )}
-                  <div className="w-full h-full rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 border border-white dark:border-slate-700">
+                  <div className="h-full w-full overflow-hidden rounded-full border border-white bg-slate-200 dark:border-white/20 dark:bg-slate-800">
                     <Image
-                      src={tm.imgSrc} 
-                      alt={tm.name}
-                      width={60} height={60}
-                      className="w-full h-full object-cover"
+                      src={tm.imgSrc}
+                      alt=""
+                      width={60}
+                      height={60}
+                      className="h-full w-full object-cover"
                       style={{ objectPosition: tm.imgPos }}
                     />
                   </div>
