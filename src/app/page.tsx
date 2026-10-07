@@ -14,6 +14,7 @@ import GrowthSection from './components/shared/GrowthSection';
 import PowerSection from './components/shared/PowerSection';
 import WorkShowcaseSection from './components/shared/WorkShowcaseSection';
 import AmbitionSection from './components/shared/AmbitionSection';
+import ProcessSection from './components/shared/ProcessSection';
 
 
 // ==========================================
@@ -348,6 +349,7 @@ export default function HomePage() {
       {/* Below the fold - lazy loaded for better performance */}
       {/* <PortfolioSection/> */}
       <TechStackSection/>
+      <ProcessSection/>
       <AmbitionSection/>
       {/* <FeaturedServicesSection/> */}
       {/* <PricingSection/> */}
