@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -39,52 +38,7 @@ import {
 // SERVICES DATA
 // =====================================================
 
-const serviceComponentsBN = [
-  {
-    title: "ওয়েব সার্ভিস",
-    href: "/web-service",
-    description: "আধুনিক, দ্রুত ও স্কেলেবল ওয়েবসাইট তৈরি করুন।",
-    icon: Code2,
-  },
-  {
-    title: "ডিজিটাল মার্কেটিং",
-    href: "/digital-marketing",
-    description: "সঠিক ডিজিটাল স্ট্র্যাটেজির মাধ্যমে ব্যবসা বাড়ান।",
-    icon: Megaphone,
-  },
-  {
-    title: "Meta Marketing",
-    href: "/meta-marketing",
-    description: "Facebook ও Instagram marketing দিয়ে sales বৃদ্ধি করুন।",
-    icon: Share2,
-  },
-  {
-    title: "গ্রাফিক্স ডিজাইন",
-    href: "/graphics-design",
-    description: "আপনার ব্র্যান্ডের জন্য premium visual identity।",
-    icon: Palette,
-  },
-  {
-    title: "SEO",
-    href: "/seo",
-    description: "Google search-এ আপনার business-এর visibility বাড়ান।",
-    icon: Search,
-  },
-  {
-    title: "ভিডিও এডিটিং",
-    href: "/video-editing",
-    description: "Professional এবং engaging video content তৈরি করুন।",
-    icon: Film,
-  },
-  {
-    title: "UI/UX ডিজাইন",
-    href: "/ui-ux-design",
-    description: "ব্যবহারকারীর জন্য সহজ ও modern interface design।",
-    icon: Smartphone,
-  },
-];
-
-const serviceComponentsEN = [
+const serviceComponents = [
   {
     title: "Web Service",
     href: "/web-service",
@@ -128,6 +82,20 @@ const serviceComponentsEN = [
     icon: Smartphone,
   },
 ];
+
+const t = {
+  services: "Services",
+  store: "Companies",
+  packages: "Packages",
+  portfolio: "Portfolio",
+  contact: "Contact",
+  requestDemo: "Request For Demo",
+  allServices: "View All Services",
+  bannerBadge: "Digital Ecosystem",
+  bannerTitle: "Scale Your Business to New Heights",
+  bannerDesc: "Empowering your brand with cutting-edge code & high-converting design.",
+  exploreBtn: "Let's Talk Strategy",
+};
 
 // =====================================================
 // LOGO
@@ -310,40 +278,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
-
-  const serviceComponents = language
-    ? serviceComponentsBN
-    : serviceComponentsEN;
-
-  const t = language
-    ? {
-        services: "সার্ভিসেস",
-        store: "কোম্পানিস",
-        packages: "প্যাকেজ",
-        portfolio: "পোর্টফোলিও",
-        contact: "যোগাযোগ",
-        requestDemo: "ডেমো রিকোয়েস্ট",
-        allServices: "সব সার্ভিস দেখুন",
-        bannerBadge: "ডিজিটাল সলিউশন",
-        bannerTitle: "আপনার ব্যবসাকে নিয়ে যান পরবর্তী ধাপে",
-        bannerDesc: "আধুনিক ডিজাইন এবং নিখুঁত কোডিংয়ের সাথে আপনার ব্র্যান্ডকে অনন্য করে তুলুন।",
-        exploreBtn: "প্রজেক্ট আলোচনা করুন",
-      }
-    : {
-        services: "Services",
-        store: "Companies",
-        packages: "Packages",
-        portfolio: "Portfolio",
-        contact: "Contact",
-        requestDemo: "Request For Demo",
-        allServices: "View All Services",
-        bannerBadge: "Digital Ecosystem",
-        bannerTitle: "Scale Your Business to New Heights",
-        bannerDesc: "Empowering your brand with cutting-edge code & high-converting design.",
-        exploreBtn: "Let's Talk Strategy",
-      };
 
   useEffect(() => {
     setMounted(true);
@@ -488,15 +423,11 @@ export function Navbar() {
 
                                 <div>
                                   <p className="text-sm font-extrabold text-slate-900 dark:text-white">
-                                    {language
-                                      ? "আমাদের ডিজিটাল সার্ভিস"
-                                      : "Our Digital Services"}
+                                    Our Digital Services
                                   </p>
 
                                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                                    {language
-                                      ? "আপনার ব্যবসার জন্য সম্পূর্ণ ডিজিটাল সলিউশন"
-                                      : "Complete digital solutions for your business"}
+                                    Complete digital solutions for your business
                                   </p>
                                 </div>
                               </div>
@@ -524,9 +455,7 @@ export function Navbar() {
                                 <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
 
                                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                                  {language
-                                    ? "আপনার প্রজেক্ট নিয়ে কথা বলতে প্রস্তুত"
-                                    : "Ready to discuss your project?"}
+                                  Ready to discuss your project?
                                 </span>
                               </div>
 
@@ -592,16 +521,6 @@ export function Navbar() {
                         )}
                       </motion.div>
                     </AnimatePresence>
-                  </motion.button>
-
-                  <div className="w-px h-4 bg-slate-300/70 dark:bg-white/15 mx-1" />
-
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setLanguage(!language)}
-                    className="px-3 py-1.5 rounded-full text-xs font-extrabold tracking-wider text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-white/10 transition-all"
-                  >
-                    {language ? "BN" : "EN"}
                   </motion.button>
                 </div>
               )}
