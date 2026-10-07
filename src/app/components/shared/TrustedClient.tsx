@@ -103,16 +103,18 @@ function loadAndTrim(src: string): Promise<string> {
 }
 
 // --------------------------------------------------
-// Single logo (no box, same height)
+// Single logo
+// Light mode: plain logo (no box)
+// Dark mode: soft white pill, jate dark logo gulo-o dekha jay
 // --------------------------------------------------
 function Logo({ url, alt }: ReadyLogo) {
   return (
-    <li className="flex h-8 shrink-0 items-center sm:h-9 lg:h-10">
+    <li className="flex shrink-0 items-center dark:rounded-xl dark:bg-white/95 dark:px-4 dark:py-2">
       <img
         src={url}
         alt={alt}
         draggable={false}
-        className="h-full w-auto max-w-[110px] select-none object-contain transition-transform duration-300 hover:scale-110 sm:max-w-[125px] lg:max-w-[140px]"
+        className="h-8 w-auto max-w-[110px] select-none object-contain transition-transform duration-300 hover:scale-110 sm:h-9 sm:max-w-[125px] lg:h-10 lg:max-w-[140px]"
       />
     </li>
   );
@@ -153,7 +155,7 @@ export default function ClientMarquee() {
   const group = [...logos, ...logos];
 
   return (
-    <section className="relative overflow-hidden bg-white py-14 sm:py-16 lg:py-20">
+    <section className="relative overflow-hidden bg-white py-14 dark:bg-[#050b16] sm:py-16 lg:py-20">
       {/* marquee animation */}
       <style
         dangerouslySetInnerHTML={{
@@ -191,20 +193,16 @@ export default function ClientMarquee() {
         {/* Heading */}
         <div className="mx-auto max-w-2xl text-center">
           <span
-            className="inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] backdrop-blur-md"
-            style={{
-              border: "1px solid rgba(56,189,248,0.45)",
-              background: "rgba(255,255,255,0.75)",
-              color: "#0369a1",
-            }}
+            className="
+              inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] backdrop-blur-md
+              border border-[rgba(56,189,248,0.45)] bg-[rgba(255,255,255,0.75)] text-sky-700
+              dark:border-[rgba(56,189,248,0.35)] dark:bg-[rgba(56,189,248,0.12)] dark:text-sky-200
+            "
           >
             {language ? "আমাদের ক্লায়েন্ট" : "Our Clients"}
           </span>
 
-          <h2
-            className="mt-4 text-2xl font-semibold leading-snug tracking-tight sm:text-3xl"
-            style={{ color: "#0f172a" }}
-          >
+          <h2 className="mt-4 text-2xl font-semibold leading-snug tracking-tight text-slate-900 dark:text-white sm:text-3xl">
             {language ? (
               <>
                 বাংলাদেশের দ্রুত বর্ধনশীল ব্র্যান্ডগুলো
