@@ -1,25 +1,14 @@
-// File Path: D:\yeamin student\PixelandCode Web\pixelandcode\src\app\components\shared\WorkShowcaseSection.tsx
-
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
 import styles from "./WorkShowcaseSection.module.css";
 
-type Inset = {
-  left?: string;
-  right?: string;
-  top?: string;
-  bottom?: string;
-  radius: string;
-};
-
 type Tile =
   | {
       kind: "project";
       tag: string;
-      image: string; // screenshot shown inside the mockup
-      bg: string; // card background gradient
-      inset: Inset;
+      image: string; // full mockup image, fills the whole card
+      bg: string; // fallback background while the image loads
       size: "short" | "tall";
     }
   | { kind: "portrait"; label: string; image: string }
@@ -31,18 +20,16 @@ const COLUMNS: Tile[][] = [
     {
       kind: "project",
       tag: "Web design",
-      image: "/Demo_Work_01.jpg",
+      image: "/portfolio/web-design.png",
       bg: "linear-gradient(160deg,#5a5a5a 0%,#2c2c2c 100%)",
-      inset: { left: "6%", right: "5%", top: "39%", bottom: "7%", radius: "8px" },
       size: "short",
     },
     { kind: "portrait", label: "Graphic design", image: "/graphic%20team.jpg" },
     {
       kind: "project",
       tag: "Portfolio",
-      image: "/web%20design.jpg",
+      image: "/portfolio/portfolio.png",
       bg: "linear-gradient(160deg,#3b6aa5 0%,#0f2a4d 100%)",
-      inset: { left: "15%", right: "-4%", top: "24%", bottom: "8%", radius: "8px" },
       size: "tall",
     },
   ],
@@ -58,9 +45,8 @@ const COLUMNS: Tile[][] = [
     {
       kind: "project",
       tag: "E-commerce",
-      image: "/images/ecommerce.jpg",
+      image: "/portfolio/ecommerce-app.png",
       bg: "linear-gradient(160deg,#bfd3b8 0%,#6b7d5c 100%)",
-      inset: { left: "7%", right: "6%", top: "20%", bottom: "0", radius: "14px 14px 0 0" },
       size: "tall",
     },
     {
@@ -76,18 +62,16 @@ const COLUMNS: Tile[][] = [
     {
       kind: "project",
       tag: "Business",
-      image: "/web02.jpeg",
+      image: "/portfolio/business.png",
       bg: "linear-gradient(180deg,#a9c9e8 0%,#2f5d3a 100%)",
-      inset: { left: "5%", right: "11%", top: "38%", bottom: "6%", radius: "8px" },
       size: "short",
     },
     { kind: "portrait", label: "Video editing", image: "/video_editor_team.webp" },
     {
       kind: "project",
       tag: "E-commerce",
-      image: "/images/porer-bazar.jpg",
+      image: "/portfolio/ecommerce-web.png",
       bg: "linear-gradient(160deg,#6d7d8c 0%,#2a3440 100%)",
-      inset: { left: "8%", right: "-6%", top: "36%", bottom: "0", radius: "8px 0 0 0" },
       size: "short",
     },
   ],
@@ -104,28 +88,76 @@ const COLUMNS: Tile[][] = [
     {
       kind: "project",
       tag: "Web app",
-      image: "/images/amader-shodai.jpg",
+      image: "/portfolio/web-app.png",
       bg: "linear-gradient(160deg,#2f6b72 0%,#0f2a30 100%)",
-      inset: { left: "7%", right: "7%", top: "20%", bottom: "6%", radius: "14px" },
       size: "tall",
     },
   ],
 ];
 
+// --------------------------------------------------
+// Dark mode overrides (light mode ekdom agerই moto)
+// --------------------------------------------------
+const DARK_MODE_CSS = `
+  .dark [data-wc="section"] {
+    background: #050b16 !important;
+  }
+  .dark [data-wc="title"] {
+    color: #ffffff !important;
+  }
+  .dark [data-wc="sub"] {
+    color: #94a3b8 !important;
+  }
+  .dark [data-wc="btn"] {
+    background: linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 10px 28px rgba(59, 130, 246, 0.35) !important;
+  }
+  .dark [data-wc="quote"] {
+    background: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.10) !important;
+  }
+  .dark [data-wc="quote-text"] {
+    color: #e2e8f0 !important;
+  }
+  .dark [data-wc="name"] {
+    color: #ffffff !important;
+  }
+  .dark [data-wc="role"] {
+    color: #94a3b8 !important;
+  }
+  .dark [data-wc="avatar"] {
+    background: rgba(56, 189, 248, 0.18) !important;
+    color: #7dd3fc !important;
+  }
+  .dark [data-wc="card"] {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+`;
+
 function TileView({ tile }: { tile: Tile }) {
   if (tile.kind === "quote") {
     return (
-      <figure className={`${styles.card} ${styles.quoteH} ${styles.quote}`} style={{ margin: 0 }}>
-        <blockquote className={styles.quoteText} style={{ margin: 0 }}>
+      <figure
+        data-wc="quote"
+        className={`${styles.card} ${styles.quoteH} ${styles.quote}`}
+        style={{ margin: 0 }}
+      >
+        <blockquote
+          data-wc="quote-text"
+          className={styles.quoteText}
+          style={{ margin: 0 }}
+        >
           &ldquo;{tile.quote}&rdquo;
         </blockquote>
         <figcaption className={styles.author}>
-          <span className={styles.avatar} aria-hidden="true">
+          <span data-wc="avatar" className={styles.avatar} aria-hidden="true">
             {tile.initials}
           </span>
           <span>
-            <p className={styles.name}>{tile.name}</p>
-            <p className={styles.role}>{tile.role}</p>
+            <p data-wc="name" className={styles.name}>{tile.name}</p>
+            <p data-wc="role" className={styles.role}>{tile.role}</p>
           </span>
         </figcaption>
       </figure>
@@ -135,6 +167,7 @@ function TileView({ tile }: { tile: Tile }) {
   if (tile.kind === "portrait") {
     return (
       <div
+        data-wc="card"
         className={`${styles.card} ${styles.tall} ${styles.portrait}`}
         style={{ background: "linear-gradient(180deg,#5a2ee0 0%,#2a0f7a 55%,#0d0620 100%)" }}
       >
@@ -153,60 +186,60 @@ function TileView({ tile }: { tile: Tile }) {
     );
   }
 
-  const { inset } = tile;
+  // project tile — image puro card jure, tag upore
   return (
     <div
+      data-wc="card"
       className={`${styles.card} ${tile.size === "tall" ? styles.tall : styles.short}`}
       style={{ background: tile.bg }}
     >
+      <Image
+        src={tile.image}
+        alt={`${tile.tag} project preview`}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
+        className={styles.img}
+      />
       <span className={styles.tag}>{tile.tag}</span>
-      <div
-        className={styles.inset}
-        style={{
-          left: inset.left,
-          right: inset.right,
-          top: inset.top,
-          bottom: inset.bottom,
-          borderRadius: inset.radius,
-        }}
-      >
-        <Image
-          src={tile.image}
-          alt={`${tile.tag} project preview`}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
-          className={styles.imgTop}
-        />
-      </div>
     </div>
   );
 }
 
 export function WorkShowcaseSection() {
   return (
-    <section className={styles.section} aria-labelledby="showcase-heading">
-      <div className={styles.container}>
-        <div className={styles.head}>
-          <h2 id="showcase-heading" className={styles.title}>
-            See what we&apos;ve built for our clients
-          </h2>
-          <p className={styles.sub}>Their ideas went live. Yours could be next.</p>
-          <Link href="/portfolio" className={styles.btn}>
-            View portfolio
-          </Link>
-        </div>
+    <>
+      <style dangerouslySetInnerHTML={{ __html: DARK_MODE_CSS }} />
 
-        <div className={styles.grid}>
-          {COLUMNS.map((column, i) => (
-            <div key={i} className={styles.col}>
-              {column.map((tile, j) => (
-                <TileView key={j} tile={tile} />
-              ))}
-            </div>
-          ))}
+      <section
+        data-wc="section"
+        className={styles.section}
+        aria-labelledby="showcase-heading"
+      >
+        <div className={styles.container}>
+          <div className={styles.head}>
+            <h2 data-wc="title" id="showcase-heading" className={styles.title}>
+              See what we&apos;ve built for our clients
+            </h2>
+            <p data-wc="sub" className={styles.sub}>
+              Their ideas went live. Yours could be next.
+            </p>
+            <Link data-wc="btn" href="/portfolio" className={styles.btn}>
+              View portfolio
+            </Link>
+          </div>
+
+          <div className={styles.grid}>
+            {COLUMNS.map((column, i) => (
+              <div key={i} className={styles.col}>
+                {column.map((tile, j) => (
+                  <TileView key={j} tile={tile} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
