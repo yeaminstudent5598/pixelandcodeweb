@@ -4,14 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Users, Boxes, Briefcase, CheckCircle2 } from "lucide-react";
-import { useLanguage } from "@/context/LanguageContext";
 
 // --------------------------------------------------
 // Images
 // --------------------------------------------------
-const IMG_TOP = "/part-01.jpg";
-const IMG_LEFT = "/part-02.jpg";
-const IMG_BOTTOM = "/part-03.jpg";
+const IMG_TOP = "/hero/SaaS.png";
+const IMG_LEFT = "/hero/Shopping.png";
+const IMG_BOTTOM = "/hero/Mockup_Workspace.png";
 
 // --------------------------------------------------
 // Brand blue (light blue gradient — no dark blue)
@@ -142,21 +141,12 @@ function PhotoTile({
 // HERO
 // --------------------------------------------------
 export function HeroSection() {
-  const { language } = useLanguage();
-
-  const stats = language
-    ? [
-        { num: "৫০+", label: "সফল প্রজেক্ট", Icon: Boxes },
-        { num: "৩০+", label: "ক্লায়েন্ট", Icon: Users },
-        { num: "১০০%", label: "সন্তুষ্টি", Icon: CheckCircle2 },
-        { num: "৩+", label: "বছরের অভিজ্ঞতা", Icon: Briefcase },
-      ]
-    : [
-        { num: "50+", label: "Projects", Icon: Boxes },
-        { num: "10+", label: "Clients", Icon: Users },
-        { num: "100%", label: "Satisfaction", Icon: CheckCircle2 },
-        { num: "2.5+", label: "Experience", Icon: Briefcase },
-      ];
+  const stats = [
+    { num: "50+", label: "Projects", Icon: Boxes },
+    { num: "10+", label: "Clients", Icon: Users },
+    { num: "100%", label: "Satisfaction", Icon: CheckCircle2 },
+    { num: "2.5+", label: "Experience", Icon: Briefcase },
+  ];
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-white pt-28 pb-16 dark:bg-[#050b16] lg:pt-32 lg:pb-20">
@@ -225,7 +215,7 @@ export function HeroSection() {
                 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]
               "
             >
-              {language ? "ডিজিটাল এক্সপেরিয়েন্স" : "Digitize Your Imagination"}
+              Digitize Your Imagination
             </span>
           </motion.div>
 
@@ -234,11 +224,7 @@ export function HeroSection() {
             variants={item}
             className="mt-6 text-[40px] font-semibold leading-[1.12] tracking-[-0.02em] text-slate-900 dark:text-white sm:text-5xl lg:text-[52px] xl:text-[58px]"
           >
-            {language ? (
-              <>আপনার ব্যবসাকে ডিজিটালভাবে এগিয়ে নিয়ে যান।</>
-            ) : (
-              <>Innovative Software Development Company in Bangladesh</>
-            )}
+            Innovative Software Development Company in Bangladesh
           </motion.h1>
 
           {/* Description */}
@@ -246,9 +232,9 @@ export function HeroSection() {
             variants={item}
             className="mt-6 max-w-[560px] text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-[17px] sm:leading-8"
           >
-            {language
-              ? "আমরা আধুনিক ও ফলাফলভিত্তিক ওয়েব ডেভেলপমেন্ট, ব্র্যান্ডিং এবং ডিজিটাল মার্কেটিং সলিউশনের মাধ্যমে ব্যবসাকে একটি শক্তিশালী ডিজিটাল উপস্থিতি তৈরি করতে সাহায্য করি।"
-              : "We build modern, purposeful digital experiences through web development, branding, and digital marketing — helping businesses build a stronger presence online."}
+            We build modern, purposeful digital experiences through web
+            development, branding, and digital marketing — helping businesses
+            build a stronger presence online.
           </motion.p>
 
           {/* Buttons */}
@@ -265,7 +251,7 @@ export function HeroSection() {
                   "0 10px 28px rgba(59,130,246,0.38), inset 0 1px 0 rgba(255,255,255,0.45)",
               }}
             >
-              {language ? "প্রজেক্ট নিয়ে কথা বলুন" : "Start a Project"}
+              Start a Project
             </Link>
 
             {/* Secondary — blue outline glass */}
@@ -279,7 +265,7 @@ export function HeroSection() {
                 dark:border-[rgba(125,211,252,0.55)] dark:bg-[rgba(56,189,248,0.10)] dark:text-sky-300 dark:hover:bg-[rgba(56,189,248,0.20)]
               "
             >
-              {language ? "ফ্রি কনসালটেশন" : "Free Consultation"}
+              Free Consultation
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.div>
