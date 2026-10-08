@@ -14,7 +14,7 @@ export function FloatingWhatsApp() {
     return () => clearTimeout(timer);
   }, []);
 
-  const phoneNumber = '8801641801705'; // আন্তর্জাতিক ফরম্যাট
+  const phoneNumber = '8801989415813'; // আন্তর্জাতিক ফরম্যাট
   const message = 'Hello Pixel & Code, I need some information.'; // ডিফল্ট মেসেজ
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
