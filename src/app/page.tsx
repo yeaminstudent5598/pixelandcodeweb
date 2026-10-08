@@ -15,6 +15,7 @@ import PowerSection from './components/shared/PowerSection';
 import WorkShowcaseSection from './components/shared/WorkShowcaseSection';
 import AmbitionSection from './components/shared/AmbitionSection';
 import ProcessSection from './components/shared/ProcessSection';
+import DashboardShowcaseSection from './components/shared/DashboardShowcaseSection';
 
 
 // ==========================================
@@ -351,6 +352,7 @@ export default function HomePage() {
       <TechStackSection/>
       <ProcessSection/>
       <AmbitionSection/>
+      <DashboardShowcaseSection/>
       {/* <FeaturedServicesSection/> */}
       {/* <PricingSection/> */}
       {/* <TechnologySection/> */}
