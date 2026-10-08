@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { RequestDemoModal } from "./RequestDemoModal";
 
 import {
   Menu,
@@ -277,8 +278,11 @@ export function Navbar() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   const { theme, setTheme } = useTheme();
+
+  const closeDemo = React.useCallback(() => setDemoOpen(false), []);
 
   useEffect(() => {
     setMounted(true);
@@ -525,9 +529,12 @@ export function Navbar() {
                 </div>
               )}
 
+              {/* Request For Demo — modal khole */}
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Link
-                  href="/request-demo"
+                <button
+                  type="button"
+                  onClick={() => setDemoOpen(true)}
+                  aria-haspopup="dialog"
                   className="group relative flex items-center gap-2 px-5 py-2.5 rounded-full overflow-hidden backdrop-blur-xl border border-sky-300/60 dark:border-sky-400/30 bg-gradient-to-r from-white/70 to-sky-100/60 dark:from-white/[0.06] dark:to-sky-400/10 text-slate-800 dark:text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_8px_24px_rgba(14,165,233,0.15)] hover:border-sky-400 hover:shadow-[0_10px_30px_rgba(14,165,233,0.25)] transition-all duration-300"
                 >
                   <span className="absolute top-0 right-0 w-12 h-full bg-white/60 dark:bg-white/10 skew-x-[-25deg] -translate-x-[300%] group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out" />
@@ -536,7 +543,7 @@ export function Navbar() {
                     {t.requestDemo}
                   </span>
                   <ArrowRight className="w-4 h-4 text-sky-500 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
+                </button>
               </motion.div>
             </div>
 
@@ -628,16 +635,20 @@ export function Navbar() {
                   </div>
 
                   <div className="p-4 border-t border-slate-100 dark:border-slate-800">
-                    <SheetClose asChild>
-                      <Link
-                        href="/request-demo"
-                        className="flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-xl bg-cyan-500 text-white font-bold shadow-lg shadow-cyan-500/20 hover:bg-cyan-600 transition-colors"
-                      >
-                        <Sparkles className="w-4 h-4" />
-                        {t.requestDemo}
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </SheetClose>
+                    {/* menu age bondho, tarpor modal khole */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setTimeout(() => setDemoOpen(true), 250);
+                      }}
+                      aria-haspopup="dialog"
+                      className="flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-xl bg-cyan-500 text-white font-bold shadow-lg shadow-cyan-500/20 hover:bg-cyan-600 transition-colors"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      {t.requestDemo}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               </SheetContent>
@@ -645,6 +656,9 @@ export function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Request For Demo modal (document.body e portal) */}
+      <RequestDemoModal open={demoOpen} onClose={closeDemo} />
     </>
   );
 }
