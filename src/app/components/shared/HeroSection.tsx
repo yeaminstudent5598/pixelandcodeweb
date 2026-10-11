@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Users, Boxes, Briefcase, CheckCircle2 } from "lucide-react";
@@ -37,6 +37,232 @@ const tile = {
   hidden: { opacity: 0, scale: 0.92 },
   show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
+
+// --------------------------------------------------
+// PIXEL AURORA background
+//
+// Tune korar jonno:
+//   CELL   -> pixel gulor majhe doori (beshi = boro grid)
+//   SIZE   -> ekta pixel er size (CELL er theke choto hobe)
+//   PEAK   -> pixel kototuku spasto (light / dark)
+//   RADIUS -> mouse er kache koto dur porjonto jwole
+// --------------------------------------------------
+const CELL = 16;
+const SIZE = 11;
+const PEAK_LIGHT = 0.42;
+const PEAK_DARK = 0.6;
+const RADIUS = 150;
+const LEVELS = 20;
+
+function smoothstep(a: number, b: number, x: number) {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+}
+
+function PixelAurora() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const parent = canvas?.parentElement;
+    if (!canvas || !parent) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let cols = 0;
+    let rows = 0;
+    let w = 0;
+    let h = 0;
+    let rnd = new Float32Array(0);
+    let weight = new Float32Array(0);
+    let raf = 0;
+    let visible = true;
+    let lastFrame = 0;
+    let lastT = 4000;
+
+    const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = parent.clientWidth;
+      h = parent.clientHeight;
+
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.ceil(w / CELL);
+      rows = Math.ceil(h / CELL);
+      rnd = new Float32Array(cols * rows);
+      weight = new Float32Array(cols * rows);
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x;
+
+          // stable random per pixel
+          const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+          rnd[i] = s - Math.floor(s);
+
+          // kothay beshi ghono hobe: upor-dane ar niche-bame
+          // (bame text er pichone kom, jate pora jay)
+          const nx = x / cols;
+          const ny = y / rows;
+          const d1 = Math.hypot((nx - 0.88) / 0.65, (ny - 0.28) / 0.95);
+          const w1 = 1 - smoothstep(0, 1, d1);
+          const d2 = Math.hypot((nx - 0.03) / 0.4, (ny - 1) / 0.5);
+          const w2 = (1 - smoothstep(0, 1, d2)) * 0.75;
+          weight[i] = Math.max(w1, w2);
+        }
+      }
+    };
+
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, w, h);
+
+      const dark = document.documentElement.classList.contains("dark");
+      const rgb = dark ? "56,189,248" : "14,165,233";
+      const peak = dark ? PEAK_DARK : PEAK_LIGHT;
+
+      // alpha level gulo age theke toiri (performance er jonno)
+      const styles: string[] = [];
+      for (let k = 0; k <= LEVELS; k++) {
+        styles.push(`rgba(${rgb},${((k / LEVELS) * peak).toFixed(3)})`);
+      }
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x;
+          const wgt = weight[i];
+          let a = 0;
+
+          if (wgt > 0.02) {
+            const nx = x / cols;
+            const ny = y / rows;
+
+            // dhire boye jawa wave field
+            const v =
+              (Math.sin(nx * 7 + t * 0.00035) +
+                Math.sin(ny * 6 - t * 0.00028) +
+                Math.sin((nx + ny) * 8 + t * 0.00045) +
+                Math.sin(Math.hypot(nx - 0.8, ny - 0.35) * 10 - t * 0.0006) +
+                4) /
+              8;
+
+            a = smoothstep(0.5, 0.85, v) * wgt;
+
+            // prottek pixel nijer moto halka jhilmil kore
+            a *= 0.55 + 0.45 * Math.sin(t * 0.0012 * (0.4 + rnd[i]) + rnd[i] * 40);
+          }
+
+          // mouse er kache pixel jwole othe
+          if (!reduce) {
+            const dx = x * CELL + SIZE / 2 - mouse.x;
+            const dy = y * CELL + SIZE / 2 - mouse.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < RADIUS * RADIUS) {
+              const f = 1 - Math.sqrt(d2) / RADIUS;
+              a = Math.max(a, f * f * 0.9 * (0.4 + 0.6 * rnd[i]));
+            }
+          }
+
+          const q = Math.min(LEVELS, Math.round(a * LEVELS));
+          if (q === 0) continue;
+
+          ctx.fillStyle = styles[q];
+          ctx.fillRect(x * CELL, y * CELL, SIZE, SIZE);
+        }
+      }
+    };
+
+    const loop = (t: number) => {
+      raf = requestAnimationFrame(loop);
+      if (!visible) return;
+      if (t - lastFrame < 33) return; // ~30fps
+      lastFrame = t;
+      lastT = t;
+
+      mouse.x += (mouse.tx - mouse.x) * 0.18;
+      mouse.y += (mouse.ty - mouse.y) * 0.18;
+
+      draw(t);
+    };
+
+    const onMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+
+      if (x < 0 || y < 0 || x > r.width || y > r.height) {
+        mouse.x = mouse.tx = -9999;
+        mouse.y = mouse.ty = -9999;
+        return;
+      }
+
+      mouse.tx = x;
+      mouse.ty = y;
+      if (mouse.x < -1000) {
+        mouse.x = x;
+        mouse.y = y;
+      }
+    };
+
+    resize();
+    draw(lastT);
+
+    const ro = new ResizeObserver(() => {
+      resize();
+      draw(lastT);
+    });
+    ro.observe(parent);
+
+    // theme toggle korle color sathe sathe bodlabe
+    const mo = new MutationObserver(() => draw(lastT));
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    if (!reduce) {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          visible = entry.isIntersecting;
+        },
+        { threshold: 0 }
+      );
+      io.observe(parent);
+
+      window.addEventListener("pointermove", onMove, { passive: true });
+      raf = requestAnimationFrame(loop);
+
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("pointermove", onMove);
+        io.disconnect();
+        ro.disconnect();
+        mo.disconnect();
+      };
+    }
+
+    return () => {
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="absolute inset-0 h-full w-full"
+    />
+  );
+}
 
 // --------------------------------------------------
 // Glass Stat Card
@@ -175,24 +401,8 @@ export function HeroSection() {
           }}
         />
 
-        {/* grid — light */}
-        <div
-          className="absolute inset-0 dark:hidden"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(14,116,144,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(14,116,144,0.05) 1px, transparent 1px)",
-            backgroundSize: "36px 36px",
-          }}
-        />
-        {/* grid — dark */}
-        <div
-          className="absolute inset-0 hidden dark:block"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(148,197,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,197,255,0.06) 1px, transparent 1px)",
-            backgroundSize: "36px 36px",
-          }}
-        />
+        {/* Pixel Aurora (grid er bodole) */}
+        <PixelAurora />
       </div>
 
       <div className="relative z-10 mx-auto grid w-full max-w-[1400px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:px-12">
