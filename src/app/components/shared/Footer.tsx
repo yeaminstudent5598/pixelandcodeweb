@@ -67,8 +67,8 @@ const contactItems = [
   {
     icon: Phone,
     label: 'Phone',
-    text: '+880 1641-801705',
-    href: 'tel:+8801641801705',
+    text: '+880 1989-415813',
+    href: 'tel:+8801989415813',
   },
   {
     icon: Mail,
