@@ -147,11 +147,11 @@ export function PaymentClient() {
                     <div className="mb-6 flex justify-center gap-8">
                       <div className="flex flex-col items-center">
                         <Image src="/bkashLogo.svg" alt="Bkash" width={60} height={60} className="rounded-md shadow-sm" />
-                        <p className="mt-2 font-bold dark:text-white">+8801641801705</p>
+                        <p className="mt-2 font-bold dark:text-white">+8801989415813</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src="/NagadLogo.svg" alt="Nagad" width={60} height={60} className="rounded-md shadow-sm" />
-                        <p className="mt-2 font-bold dark:text-white">+8801641801705</p>
+                        <p className="mt-2 font-bold dark:text-white">+8801989415813</p>
                       </div>
                     </div>
                   </div>
@@ -169,9 +169,9 @@ export function PaymentClient() {
                         ? "ব্যাংকের মাধ্যমে বা দেশের বাইরের কার্ড থেকে পেমেন্ট করার জন্য অনুগ্রহ করে আমাদের সাথে হোয়াটসঅ্যাপে যোগাযোগ করুন।" 
                         : "For payments via Bank Transfer or International Cards, please contact us on WhatsApp."}
                     </p>
-                    <a href="https://wa.me/8801641801705" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/8801989415813" target="_blank" rel="noopener noreferrer">
                       <Button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-8 py-6 text-md font-bold shadow-lg">
-                        WhatsApp: +8801641801705
+                        WhatsApp: +8801989415813
                       </Button>
                     </a>
                   </div>
