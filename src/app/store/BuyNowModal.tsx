@@ -32,7 +32,7 @@ export function BuyNowModal({ productName, price }: BuyNowModalProps) {
   const [open, setOpen] = useState(false);
 
   const waMsg  = `Hello, I want to buy "${productName}" (Price: $${price}). Please guide me.`;
-  const waLink = `https://wa.me/8801641801705?text=${encodeURIComponent(waMsg)}`;
+  const waLink = `https://wa.me/8801989415813?text=${encodeURIComponent(waMsg)}`;
 
   return (
     <>
