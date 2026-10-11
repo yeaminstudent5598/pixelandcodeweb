@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Mail, MessageCircle, Facebook, MapPin, Send } from "lucide-react";
 
-const WHATSAPP = "8801641801705";
+const WHATSAPP = "8801989415813";
 
 const contactCards = [
   {
@@ -17,7 +17,7 @@ const contactCards = [
   },
   {
     title: "WhatsApp Us",
-    text: "+8801641801705",
+    text: "+8801989415813",
     href: `https://wa.me/${WHATSAPP}`,
     icon: <MessageCircle className="h-6 w-6" />,
     from: "#22d3ee",
