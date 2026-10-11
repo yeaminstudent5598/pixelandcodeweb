@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Check, Mail, MessageCircle, Sparkles } from "lucide-react";
 
 // Contact page er sathe same
-const WHATSAPP = "8801641801705";
+const WHATSAPP = "8801989415813";
 const EMAIL = "pixelandcode07@gmail.com";
 
 const services = [
