@@ -18,7 +18,7 @@ export function StructuredData() {
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+880-01641801705",
+      "telephone": "+880-01989415813",
       "contactType": "Customer Service",
       "availableLanguage": ["Bengali", "English"]
     },
