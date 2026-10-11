@@ -71,7 +71,7 @@ export function DiamondClient() {
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
-                <a href="https://wa.me/8801641801705" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-slate-500 hover:text-purple-600 transition-colors">
+                <a href="https://wa.me/8801989415813" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-slate-500 hover:text-purple-600 transition-colors">
                   {language ? 'WhatsApp-এ কথা বলুন' : 'Talk on WhatsApp'}
                 </a>
               </div>
