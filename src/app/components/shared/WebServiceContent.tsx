@@ -1,1191 +1,1487 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import Link from 'next/link';
-import { useLanguage } from '@/context/LanguageContext';
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
-  ArrowRight, CheckCircle2, Code2, ShoppingCart, FileText,
-  Layers, BookOpen, Building2, Zap, Shield, Globe,
-  Database, Server, GitBranch, Package, ChevronRight,
-  Star, Clock, Headphones, Monitor, Smartphone,
-} from 'lucide-react';
+  AnimatePresence,
+  MotionConfig,
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+  type Variants,
+} from "framer-motion";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Building2,
+  Check,
+  ChevronDown,
+  Code2,
+  CreditCard,
+  FileText,
+  Globe,
+  Headphones,
+  Layers,
+  Lock,
+  MessageCircle,
+  Monitor,
+  Palette,
+  Pencil,
+  Phone,
+  Rocket,
+  Search,
+  ServerCog,
+  ShoppingCart,
+  Smartphone,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+import {
+  FAQS,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  PROCESS_STEPS,
+  TECH_GROUPS,
+  WEBSITE_TYPES,
+  WHATSAPP,
+} from "@/lib/webServiceData";
 
-/* ══════════════════════════════════════════════════════════
-   STYLES
-══════════════════════════════════════════════════════════ */
-const S = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+/* ─────────────────────────────────────────────
+   Brand blue (light blue gradient — no dark blue)
+───────────────────────────────────────────── */
+const BLUE_GRADIENT = "linear-gradient(180deg, #38bdf8 0%, #3b82f6 100%)";
+const BLUE_GRADIENT_H = "linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%)";
 
-  .ws-root    { font-family:'DM Sans',sans-serif; }
-  .ws-display { font-family:'Syne',sans-serif !important; }
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-  @keyframes ws-gradX {
-    0%,100%{background-position:0% 50%} 50%{background-position:100% 50%}
-  }
-  .ws-grad {
-    background:linear-gradient(135deg,#f97316 0%,#ef4444 50%,#f59e0b 100%);
-    background-size:200% 200%;
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    background-clip:text; animation:ws-gradX 5s ease infinite;
-  }
+const TYPE_ICON: Record<string, LucideIcon> = {
+  ecommerce: ShoppingCart,
+  corporate: Building2,
+  portfolio: Layers,
+  lms: BookOpen,
+  blog: FileText,
+  landing: Monitor,
+};
 
-  /* dot grid */
-  .ws-dotgrid {
-    background-image:radial-gradient(circle,rgba(249,115,22,.10) 1px,transparent 1px);
-    background-size:34px 34px;
-  }
-  /* line grid */
-  .ws-linegrid {
-    background-image:
-      linear-gradient(rgba(249,115,22,.05) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(249,115,22,.05) 1px,transparent 1px);
-    background-size:60px 60px;
-  }
+const PROCESS_ICON: LucideIcon[] = [Headphones, Palette, Code2, Rocket];
 
-  /* infinite ticker */
-  @keyframes ws-tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-  .ws-ticker { animation:ws-tick 22s linear infinite; }
-  .ws-ticker-wrap:hover .ws-ticker { animation-play-state:paused; }
+const WHY: { Icon: LucideIcon; title: string; text: string }[] = [
+  {
+    Icon: Zap,
+    title: "Fast by default",
+    text: "Built with Next.js and React so pages load quickly and feel smooth.",
+  },
+  {
+    Icon: Smartphone,
+    title: "Mobile-first design",
+    text: "Every layout is designed for phones first, then scaled up to tablets and desktops.",
+  },
+  {
+    Icon: Search,
+    title: "SEO-ready foundations",
+    text: "Clean markup, meta tags, sitemap and structured data are set up from day one.",
+  },
+  {
+    Icon: Pencil,
+    title: "Easy to update",
+    text: "A simple admin panel or headless CMS lets you edit your content yourself.",
+  },
+  {
+    Icon: CreditCard,
+    title: "Local payments",
+    text: "Payment gateway integration, including bKash and card payments, for online stores.",
+  },
+  {
+    Icon: ServerCog,
+    title: "Launch & support",
+    text: "We handle domain, hosting, SSL and deployment, then stay on for maintenance.",
+  },
+];
 
-  /* hero browser mockup */
-  @keyframes ws-blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  @keyframes ws-barIn { from{width:0} to{width:var(--w)} }
-  @keyframes ws-floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  @keyframes ws-pulse  { 0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,.4)} 50%{box-shadow:0 0 0 8px rgba(249,115,22,0)} }
+const RELATED = [
+  {
+    href: "/ui-ux-design",
+    title: "UI/UX Design",
+    text: "Clean, user-focused interfaces.",
+  },
+  {
+    href: "/seo",
+    title: "SEO",
+    text: "Rank higher and get found on Google.",
+  },
+  {
+    href: "/digital-marketing",
+    title: "Digital Marketing",
+    text: "Grow your business with smart campaigns.",
+  },
+  {
+    href: "/graphics-design",
+    title: "Graphics Design",
+    text: "Brand identity and social media designs.",
+  },
+];
 
-  /* orbital rings */
-  @keyframes ws-cw  { from{transform:translate(-50%,-50%) rotateX(68deg) rotate(0deg)}   to{transform:translate(-50%,-50%) rotateX(68deg) rotate(360deg)} }
-  @keyframes ws-ccw { from{transform:translate(-50%,-50%) rotateX(62deg) rotateY(38deg) rotate(0deg)} to{transform:translate(-50%,-50%) rotateX(62deg) rotateY(38deg) rotate(-360deg)} }
-  @keyframes ws-glw { 0%,100%{box-shadow:0 0 20px rgba(249,115,22,.35)} 50%{box-shadow:0 0 50px rgba(249,115,22,.70)} }
+const bdt = (n: number) => `৳${n.toLocaleString("en-US")}`;
 
-  /* shimmer */
-  @keyframes ws-shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-  .ws-shimmer::after {
-    content:''; position:absolute; inset:0; border-radius:inherit;
-    background:linear-gradient(105deg,transparent 40%,rgba(249,115,22,.07) 50%,transparent 60%);
-    background-size:200% 100%; animation:ws-shimmer 3.5s linear infinite; pointer-events:none;
-  }
+/* ─────────────────────────────────────────────
+   Section animation
+───────────────────────────────────────────── */
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+const fade: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+const inView = { once: true, margin: "-60px" } as const;
 
-  /* step connector */
-  .ws-step-line { background:linear-gradient(to right,#f97316,rgba(249,115,22,.15)); }
-
-  /* card tilt transition reset */
-  .ws-tilt { transition:transform .5s cubic-bezier(.175,.885,.32,1.275),box-shadow .4s ease,border-color .3s; }
-  .ws-tilt:hover { border-color:rgba(249,115,22,.35) !important; }
-
-  /* price card */
-  .ws-price-card { transition:transform .4s cubic-bezier(.175,.885,.32,1.275),box-shadow .4s; }
-  .ws-price-card:hover { transform:translateY(-10px) scale(1.02); }
-
-  /* FAQ */
-  .ws-faq-item { transition:border-color .25s; }
-  .ws-faq-item:hover { border-color:rgba(249,115,22,.25) !important; }
-
-  /* tech badge */
-  .ws-tech { transition:all .3s cubic-bezier(.175,.885,.32,1.275); }
-  .ws-tech:hover {
-    transform:translateY(-6px) scale(1.06);
-    border-color:rgba(249,115,22,.45) !important;
-    box-shadow:0 12px 32px rgba(249,115,22,.18) !important;
-  }
-  .ws-tech:hover .ws-tech-icon { color:#f97316 !important; }
-`;
-
-/* ══════════════════════════════════════════════════════════
-   HELPER — 3D tilt card hook
-══════════════════════════════════════════════════════════ */
-function useTilt() {
-  const ref = useRef<HTMLDivElement>(null);
-  const onMove = (e: React.MouseEvent) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transform = `perspective(700px) rotateY(${x*16}deg) rotateX(${-y*16}deg) scale(1.04)`;
-  };
-  const onLeave = () => { if (ref.current) ref.current.style.transform = ''; };
-  return { ref, onMove, onLeave };
+/* ─────────────────────────────────────────────
+   Small shared parts
+───────────────────────────────────────────── */
+function SectionHead({
+  id,
+  eyebrow,
+  title,
+  text,
+}: {
+  id: string;
+  eyebrow: string;
+  title: React.ReactNode;
+  text?: string;
+}) {
+  return (
+    <motion.div
+      variants={fade}
+      initial="hidden"
+      whileInView="show"
+      viewport={inView}
+      className="mx-auto mb-12 max-w-2xl text-center md:mb-14"
+    >
+      <span className="inline-flex items-center rounded-full border border-[rgba(56,189,248,0.45)] bg-[rgba(255,255,255,0.75)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-sky-700 backdrop-blur-md dark:border-[rgba(56,189,248,0.35)] dark:bg-[rgba(56,189,248,0.12)] dark:text-sky-200">
+        {eyebrow}
+      </span>
+      <h2
+        id={id}
+        className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white md:text-4xl"
+        style={{ textWrap: "balance" }}
+      >
+        {title}
+      </h2>
+      {text && (
+        <p className="mx-auto mt-3 max-w-xl text-[15px] leading-7 text-slate-600 dark:text-slate-400">
+          {text}
+        </p>
+      )}
+    </motion.div>
+  );
 }
 
-/* ══════════════════════════════════════════════════════════
-   DATA
-══════════════════════════════════════════════════════════ */
-const WEBSITE_TYPES = [
-  {
-    icon: <ShoppingCart />, color:'#f97316',
-    en:{ title:'E-Commerce',      desc:'Full-featured online store with payment gateway, inventory, and order management.',
-         features:['Product management','bKash / Card payment','Order tracking','Admin dashboard'],
-         from:'৳35,000' },
-    bn:{ title:'ই-কমার্স',        desc:'পেমেন্ট গেটওয়ে, ইনভেন্টরি ও অর্ডার ম্যানেজমেন্টসহ পূর্ণাঙ্গ অনলাইন স্টোর।',
-         features:['প্রোডাক্ট ম্যানেজমেন্ট','bKash / কার্ড পেমেন্ট','অর্ডার ট্র্যাকিং','অ্যাডমিন ড্যাশবোর্ড'],
-         from:'৳৩৫,০০০' },
-  },
-  {
-    icon: <Building2 />, color:'#3b82f6',
-    en:{ title:'Corporate Website',  desc:'Professional business presence with service showcases, team pages, and lead capture.',
-         features:['Service pages','Team section','Contact forms','SEO optimised'],
-         from:'৳18,000' },
-    bn:{ title:'কর্পোরেট ওয়েবসাইট', desc:'সার্ভিস শোকেস, টিম পেজ এবং লিড ক্যাপচারসহ পেশাদার বিজনেস ওয়েবসাইট।',
-         features:['সার্ভিস পেজ','টিম সেকশন','কন্ট্যাক্ট ফর্ম','SEO অপ্টিমাইজড'],
-         from:'৳১৮,০০০' },
-  },
-  {
-    icon: <Layers />, color:'#8b5cf6',
-    en:{ title:'Portfolio / Agency', desc:'Visually striking portfolio to showcase work, case studies, and win new clients.',
-         features:['Project showcase','Case studies','Client testimonials','Animated UI'],
-         from:'৳12,000' },
-    bn:{ title:'পোর্টফোলিও / এজেন্সি', desc:'কাজ প্রদর্শন, কেস স্টাডি এবং নতুন ক্লায়েন্ট পেতে আকর্ষণীয় পোর্টফোলিও।',
-         features:['প্রজেক্ট শোকেস','কেস স্টাডি','ক্লায়েন্ট রিভিউ','অ্যানিমেটেড UI'],
-         from:'৳১২,০০০' },
-  },
-  {
-    icon: <BookOpen />, color:'#22c55e',
-    en:{ title:'LMS / EdTech',    desc:'Learning management system with course builder, video lessons, quizzes, and certificates.',
-         features:['Course builder','Video lessons','Quiz & certificates','Student dashboard'],
-         from:'৳55,000' },
-    bn:{ title:'LMS / এডটেক',    desc:'কোর্স বিল্ডার, ভিডিও লেসন, কুইজ ও সার্টিফিকেটসহ লার্নিং ম্যানেজমেন্ট সিস্টেম।',
-         features:['কোর্স বিল্ডার','ভিডিও লেসন','কুইজ ও সার্টিফিকেট','স্টুডেন্ট ড্যাশবোর্ড'],
-         from:'৳৫৫,০০০' },
-  },
-  {
-    icon: <FileText />, color:'#f59e0b',
-    en:{ title:'Blog / News',     desc:'Content-rich blog or news portal with categories, search, and newsletter integration.',
-         features:['Rich text editor','Category & tags','Newsletter','SEO-ready'],
-         from:'৳10,000' },
-    bn:{ title:'ব্লগ / নিউজ',    desc:'ক্যাটাগরি, সার্চ ও নিউজলেটারসহ কন্টেন্ট-রিচ ব্লগ বা নিউজ পোর্টাল।',
-         features:['রিচ টেক্সট এডিটর','ক্যাটাগরি ও ট্যাগ','নিউজলেটার','SEO-রেডি'],
-         from:'৳১০,০০০' },
-  },
-  {
-    icon: <Monitor />, color:'#ec4899',
-    en:{ title:'Landing Page',    desc:'High-converting single-page website designed to turn visitors into paying customers.',
-         features:['Conversion-focused','A/B test ready','Fast load (<1s)','Mobile-first'],
-         from:'৳6,000' },
-    bn:{ title:'ল্যান্ডিং পেজ',  desc:'ভিজিটরকে কাস্টমারে রূপান্তর করতে ডিজাইন করা হাই-কনভার্টিং সিঙ্গেল পেজ।',
-         features:['কনভার্সন-ফোকাসড','A/B টেস্ট রেডি','দ্রুত লোড (<১s)','মোবাইল-ফার্স্ট'],
-         from:'৳৬,০০০' },
-  },
+const GradientText = ({ children }: { children: React.ReactNode }) => (
+  <span
+    className="bg-clip-text text-transparent"
+    style={{ backgroundImage: BLUE_GRADIENT_H }}
+  >
+    {children}
+  </span>
+);
+
+const primaryBtn: React.CSSProperties = {
+  background: BLUE_GRADIENT_H,
+  color: "#ffffff",
+  border: "1px solid rgba(255,255,255,0.6)",
+  boxShadow:
+    "0 10px 28px rgba(59,130,246,0.38), inset 0 1px 0 rgba(255,255,255,0.45)",
+};
+
+const ghostBtn =
+  "border border-slate-300 bg-white/70 text-slate-800 hover:border-sky-400 hover:text-sky-600 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-sky-400/60 dark:hover:text-sky-300";
+
+/* ═════════════════════════════════════════════
+   HERO — "Website building itself"
+═════════════════════════════════════════════ */
+
+/* Prottek phase koto millisecond cholbe: Plan, Design, Develop, Launch */
+const DURATIONS = [1900, 2700, 3300, 3800];
+const STEP_LABELS = ["Plan", "Design", "Develop", "Launch"];
+
+/* Code card er text (real JSX, akkhor kore type hoy) */
+type Seg = { t: string; k: "kw" | "fn" | "str" | "tag" | "plain" };
+const CODE: Seg[][] = [
+  [
+    { t: "export default function ", k: "kw" },
+    { t: "Page", k: "fn" },
+    { t: "() {", k: "plain" },
+  ],
+  [
+    { t: "  return ", k: "kw" },
+    { t: "<Hero", k: "tag" },
+  ],
+  [
+    { t: "    title=", k: "plain" },
+    { t: '"Your business"', k: "str" },
+  ],
+  [
+    { t: "    cta=", k: "plain" },
+    { t: '"Get a quote"', k: "str" },
+    { t: " />", k: "tag" },
+  ],
+  [{ t: "}", k: "plain" }],
 ];
+const CODE_TOTAL = CODE.flat().reduce((n, s) => n + s.t.length, 0);
 
-const PROCESS_STEPS = [
-  { num:'01', icon:<Headphones/>, color:'#f97316',
-    en:{ title:'Discovery',     desc:'We understand your business goals, target audience, and project scope through in-depth consultation.' },
-    bn:{ title:'ডিসকভারি',     desc:'গভীর আলোচনার মাধ্যমে আপনার ব্যবসার লক্ষ্য, টার্গেট অডিয়েন্স এবং প্রজেক্টের পরিধি বুঝি।' } },
-  { num:'02', icon:<Layers/>,    color:'#3b82f6',
-    en:{ title:'Design',        desc:'We craft pixel-perfect UI/UX wireframes and prototypes that align with your brand identity.' },
-    bn:{ title:'ডিজাইন',       desc:'আপনার ব্র্যান্ড আইডেন্টিটির সাথে মিল রেখে পিক্সেল-পারফেক্ট UI/UX ওয়্যারফ্রেম তৈরি করি।' } },
-  { num:'03', icon:<Code2/>,     color:'#8b5cf6',
-    en:{ title:'Development',   desc:'Our engineers build your site with clean, scalable code using Next.js, React, and modern stacks.' },
-    bn:{ title:'ডেভেলপমেন্ট', desc:'Next.js, React এবং আধুনিক স্ট্যাক ব্যবহার করে পরিষ্কার, স্কেলেবল কোডে সাইট তৈরি করি।' } },
-  { num:'04', icon:<Zap/>,       color:'#22c55e',
-    en:{ title:'Launch & Support', desc:'We deploy your site, run thorough QA testing, and provide ongoing maintenance and support.' },
-    bn:{ title:'লঞ্চ ও সাপোর্ট', desc:'সাইট ডেপ্লয় করি, পুঙ্খানুপুঙ্খ QA টেস্টিং করি এবং চলমান রক্ষণাবেক্ষণ ও সাপোর্ট দিই।' } },
-];
+const TOKEN: Record<Seg["k"], string> = {
+  kw: "text-sky-600 dark:text-sky-300",
+  fn: "text-blue-600 dark:text-blue-300",
+  str: "text-emerald-600 dark:text-emerald-300",
+  tag: "text-cyan-700 dark:text-cyan-300",
+  plain: "text-slate-700 dark:text-slate-200",
+};
 
-const TECH_STACK = [
-  { cat:'Frontend',   items:[{n:'Next.js',icon:<Code2/>},{n:'React',icon:<Code2/>},{n:'TypeScript',icon:<Code2/>},{n:'Tailwind CSS',icon:<Layers/>},{n:'Framer Motion',icon:<Zap/>}] },
-  { cat:'Backend',    items:[{n:'Node.js',icon:<Server/>},{n:'FastAPI',icon:<Server/>},{n:'Express',icon:<Server/>},{n:'REST API',icon:<Globe/>}] },
-  { cat:'Database',   items:[{n:'PostgreSQL',icon:<Database/>},{n:'MongoDB',icon:<Database/>},{n:'Prisma ORM',icon:<Database/>},{n:'Redis',icon:<Zap/>}] },
-  { cat:'Deployment', items:[{n:'Vercel',icon:<GitBranch/>},{n:'Render',icon:<Package/>},{n:'Cloudflare',icon:<Shield/>},{n:'GitHub CI/CD',icon:<GitBranch/>}] },
-];
+/* phase 0..3 loop. active=false hole (off-screen / tab hidden) pause */
+function useBuildLoop(active: boolean, reduce: boolean) {
+  const [phase, setPhase] = useState(reduce ? 3 : 0);
 
-const PACKAGES = [
-  {
-    name:'Starter', nameBN:'স্টার্টার',
-    price:'৳8,000', priceSuffix:'থেকে',
-    badge:null,
-    color:'#6b7280',
-    en:{ desc:'Perfect for individuals, freelancers, and small businesses starting online.',
-         features:[
-           {t:'Up to 5 pages',ok:true},{t:'Mobile responsive',ok:true},
-           {t:'Basic SEO setup',ok:true},{t:'Contact form',ok:true},
-           {t:'1 month support',ok:true},{t:'Custom CMS',ok:false},
-           {t:'E-commerce',ok:false},{t:'Custom animations',ok:false},
-         ] },
-    bn:{ desc:'ব্যক্তি, ফ্রিল্যান্সার এবং অনলাইনে শুরু করা ছোট ব্যবসার জন্য পারফেক্ট।',
-         features:[
-           {t:'সর্বোচ্চ ৫ পেজ',ok:true},{t:'মোবাইল রেসপন্সিভ',ok:true},
-           {t:'বেসিক SEO',ok:true},{t:'কন্ট্যাক্ট ফর্ম',ok:true},
-           {t:'১ মাস সাপোর্ট',ok:true},{t:'কাস্টম CMS',ok:false},
-           {t:'ই-কমার্স',ok:false},{t:'কাস্টম অ্যানিমেশন',ok:false},
-         ] },
-  },
-  {
-    name:'Growth', nameBN:'গ্রোথ',
-    price:'৳25,000', priceSuffix:'থেকে',
-    badge:'Most Popular', badgeBN:'সবচেয়ে জনপ্রিয়',
-    color:'#f97316',
-    en:{ desc:'Ideal for growing businesses needing a powerful, feature-rich web presence.',
-         features:[
-           {t:'Up to 15 pages',ok:true},{t:'Mobile responsive',ok:true},
-           {t:'Advanced SEO',ok:true},{t:'Custom CMS / Dashboard',ok:true},
-           {t:'3 months support',ok:true},{t:'Payment integration',ok:true},
-           {t:'Custom animations',ok:true},{t:'E-commerce (up to 200 products)',ok:false},
-         ] },
-    bn:{ desc:'শক্তিশালী, ফিচার-রিচ ওয়েব প্রেজেন্স প্রয়োজন এমন বিকাশমান ব্যবসার জন্য আদর্শ।',
-         features:[
-           {t:'সর্বোচ্চ ১৫ পেজ',ok:true},{t:'মোবাইল রেসপন্সিভ',ok:true},
-           {t:'অ্যাডভান্সড SEO',ok:true},{t:'কাস্টম CMS / ড্যাশবোর্ড',ok:true},
-           {t:'৩ মাস সাপোর্ট',ok:true},{t:'পেমেন্ট ইন্টিগ্রেশন',ok:true},
-           {t:'কাস্টম অ্যানিমেশন',ok:true},{t:'ই-কমার্স (২০০ পণ্য পর্যন্ত)',ok:false},
-         ] },
-  },
-  {
-    name:'Enterprise', nameBN:'এন্টারপ্রাইজ',
-    price:'৳55,000', priceSuffix:'থেকে',
-    badge:null,
-    color:'#8b5cf6',
-    en:{ desc:'Full-scale custom solutions for large businesses, startups, and SaaS platforms.',
-         features:[
-           {t:'Unlimited pages',ok:true},{t:'Mobile responsive',ok:true},
-           {t:'Full SEO strategy',ok:true},{t:'Custom CMS + API',ok:true},
-           {t:'6 months support',ok:true},{t:'Full E-commerce',ok:true},
-           {t:'Custom animations',ok:true},{t:'Multi-vendor / SaaS',ok:true},
-         ] },
-    bn:{ desc:'বড় ব্যবসা, স্টার্টআপ এবং SaaS প্ল্যাটফর্মের জন্য পূর্ণ-স্কেল কাস্টম সমাধান।',
-         features:[
-           {t:'আনলিমিটেড পেজ',ok:true},{t:'মোবাইল রেসপন্সিভ',ok:true},
-           {t:'ফুল SEO স্ট্র্যাটেজি',ok:true},{t:'কাস্টম CMS + API',ok:true},
-           {t:'৬ মাস সাপোর্ট',ok:true},{t:'ফুল ই-কমার্স',ok:true},
-           {t:'কাস্টম অ্যানিমেশন',ok:true},{t:'মাল্টি-ভেন্ডর / SaaS',ok:true},
-         ] },
-  },
-];
+  useEffect(() => {
+    if (reduce) {
+      setPhase(3);
+      return;
+    }
+    if (!active) return;
+    const t = setTimeout(() => setPhase((p) => (p + 1) % 4), DURATIONS[phase]);
+    return () => clearTimeout(t);
+  }, [phase, active, reduce]);
 
-const FAQS = [
-  { en:{ q:'How long does it take to build a website?', a:'Typically 2–6 weeks depending on the project complexity. A landing page takes 3–5 days, a full e-commerce site takes 4–6 weeks.' },
-    bn:{ q:'একটি ওয়েবসাইট তৈরি করতে কতদিন লাগে?', a:'প্রজেক্টের জটিলতার উপর নির্ভর করে সাধারণত ২–৬ সপ্তাহ। ল্যান্ডিং পেজে ৩–৫ দিন, পূর্ণ ই-কমার্সে ৪–৬ সপ্তাহ।' } },
-  { en:{ q:'Do you provide hosting and domain setup?', a:'Yes! We help you set up domain, hosting (Vercel, Render, or shared), SSL certificate, and DNS configuration.' },
-    bn:{ q:'আপনারা কি হোস্টিং ও ডোমেইন সেটআপ দেন?', a:'হ্যাঁ! ডোমেইন, হোস্টিং (Vercel, Render বা শেয়ারড), SSL সার্টিফিকেট এবং DNS কনফিগারেশন সেটআপ করে দিই।' } },
-  { en:{ q:'Can I update the website content myself?', a:'Absolutely. We build a custom CMS or integrate with headless CMS (Sanity, Contentful) so you can edit content without any coding knowledge.' },
-    bn:{ q:'আমি কি নিজে ওয়েবসাইটের কনটেন্ট আপডেট করতে পারব?', a:'অবশ্যই। আমরা কাস্টম CMS বা হেডলেস CMS (Sanity, Contentful) ইন্টিগ্রেট করি যাতে কোনো কোডিং জ্ঞান ছাড়াই কনটেন্ট এডিট করা যায়।' } },
-  { en:{ q:'What payment methods do you accept?', a:'We accept bKash, Nagad, bank transfer, and international payments via Wise or PayPal. 50% advance, 50% on delivery.' },
-    bn:{ q:'আপনারা কোন পেমেন্ট মেথড গ্রহণ করেন?', a:'bKash, Nagad, ব্যাংক ট্রান্সফার এবং Wise বা PayPal এর মাধ্যমে আন্তর্জাতিক পেমেন্ট গ্রহণ করি। ৫০% অগ্রিম, ৫০% ডেলিভারিতে।' } },
-];
+  return phase;
+}
 
-const TICKER_ITEMS = ['Next.js','React','TypeScript','Tailwind CSS','Node.js','PostgreSQL',
-  'Framer Motion','Prisma','Redis','FastAPI','MongoDB','Vercel','Docker','GraphQL'];
+function useTyping(phase: number, reduce: boolean) {
+  const [n, setN] = useState(0);
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: HERO
-══════════════════════════════════════════════════════════ */
-function Hero({ lang }: { lang: boolean }) {
-  const BrowserMockup = () => {
-    const bars = [
-      {w:'75%',c:'#60a5fa'},{w:'50%',c:'#f97316'},{w:'85%',c:'#9ca3af'},
-      {w:'40%',c:'#34d399'},{w:'65%',c:'#9ca3af'},{w:'55%',c:'#f59e0b'},
-      {w:'80%',c:'#60a5fa'},{w:'35%',c:'#9ca3af'},
-    ];
-    return (
-      <div style={{
-        position:'relative', width:'100%', maxWidth:480,
-        background:'#0d0d0d', border:'1px solid rgba(255,255,255,.08)',
-        borderRadius:20, overflow:'hidden',
-        boxShadow:'0 32px 80px rgba(0,0,0,.6)',
-        animation:'ws-floatY 7s ease-in-out infinite',
-      }}>
-        {/* Browser bar */}
-        <div style={{
-          display:'flex', alignItems:'center', gap:8,
-          padding:'12px 16px', background:'rgba(255,255,255,.03)',
-          borderBottom:'1px solid rgba(255,255,255,.06)',
-        }}>
-          {['#ef4444','#f59e0b','#22c55e'].map((c,i)=>(
-            <div key={i} style={{width:10,height:10,borderRadius:'50%',background:c}} />
-          ))}
-          <div style={{
-            flex:1, height:22, borderRadius:6,
-            background:'rgba(255,255,255,.05)',
-            display:'flex', alignItems:'center', paddingLeft:10,
-            fontSize:10, color:'#4b5563', fontFamily:'monospace',
-          }}>
-            pixelandcode.agency
-          </div>
-        </div>
-        {/* Code lines */}
-        <div style={{padding:'20px 20px 16px'}}>
-          {bars.map((b,i)=>(
-            <div key={i} style={{
-              height:5, borderRadius:3, background:b.c,
-              width:b.w, opacity:.55+(i%3)*.12,
-              marginBottom:10,
-              animation:`ws-barIn .7s ease ${i*.07}s both`,
-              '--w':b.w,
-            } as React.CSSProperties} />
-          ))}
-          <div style={{
-            display:'flex', alignItems:'center', gap:4, marginTop:6,
-          }}>
-            <div style={{
-              width:5, height:14, background:'#f97316', borderRadius:1,
-              animation:'ws-blink 1.2s ease-in-out infinite',
-            }} />
-          </div>
-        </div>
-        {/* Bottom status */}
-        <div style={{
-          padding:'10px 16px', background:'rgba(255,255,255,.02)',
-          borderTop:'1px solid rgba(255,255,255,.05)',
-          display:'flex', alignItems:'center', justifyContent:'space-between',
-        }}>
-          <div style={{display:'flex',alignItems:'center',gap:6}}>
-            <div style={{
-              width:6,height:6,borderRadius:'50%',background:'#22c55e',
-              animation:'ws-pulse 2s ease-in-out infinite',
-            }} />
-            <span style={{fontSize:10,color:'#6b7280'}}>Building in progress…</span>
-          </div>
-          <span style={{fontSize:10,color:'#22c55e',fontWeight:600}}>Live</span>
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    if (reduce || phase === 3) {
+      setN(CODE_TOTAL);
+      return;
+    }
+    if (phase < 2) {
+      setN(0);
+      return;
+    }
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setN(i);
+      if (i >= CODE_TOTAL) clearInterval(id);
+    }, 22);
+    return () => clearInterval(id);
+  }, [phase, reduce]);
 
-  /* mini orbital */
-  const Orbital = () => (
-    <div style={{position:'relative',width:90,height:90,flexShrink:0}}>
-      <div style={{
-        position:'absolute',top:'50%',left:'50%',
-        transform:'translate(-50%,-50%)',
-        width:26,height:26,borderRadius:'50%',
-        background:'linear-gradient(135deg,#f97316,#b91c1c)',
-        boxShadow:'0 0 20px rgba(249,115,22,.8)',
-        animation:'ws-glw 3s ease-in-out infinite',
-      }} />
-      <div style={{
-        position:'absolute',top:'50%',left:'50%',
-        width:60,height:60,borderRadius:'50%',
-        border:'1.5px solid rgba(249,115,22,.28)',
-        animation:'ws-cw 10s linear infinite',
-      }}>
-        <div style={{position:'absolute',top:-3.5,left:'50%',transform:'translateX(-50%)',
-          width:7,height:7,borderRadius:'50%',background:'#f97316',
-          boxShadow:'0 0 8px rgba(249,115,22,.9)'}} />
-      </div>
-      <div style={{
-        position:'absolute',top:'50%',left:'50%',
-        width:86,height:86,borderRadius:'50%',
-        border:'1px solid rgba(239,68,68,.18)',
-        animation:'ws-ccw 16s linear infinite',
-      }}>
-        <div style={{position:'absolute',bottom:-3,left:'50%',transform:'translateX(-50%)',
-          width:5,height:5,borderRadius:'50%',background:'#ef4444',
-          boxShadow:'0 0 8px rgba(239,68,68,.9)'}} />
-      </div>
-    </div>
-  );
+  return n;
+}
+
+function CodeView({ count }: { count: number }) {
+  let left = count;
+  let caretDone = false;
 
   return (
-    <section className="ws-linegrid" style={{
-      position:'relative',background:'#050505',overflow:'hidden',
-      minHeight:'100vh',display:'flex',alignItems:'center',paddingTop:72,
-    }}>
-      {/* Orbs */}
-      <div style={{position:'absolute',top:'15%',left:'5%',width:500,height:500,borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(249,115,22,.12) 0%,transparent 65%)',
-        filter:'blur(70px)',pointerEvents:'none'}} />
-      <div style={{position:'absolute',bottom:'10%',right:'5%',width:380,height:380,borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 65%)',
-        filter:'blur(60px)',pointerEvents:'none'}} />
-
-      {/* Top line */}
-      <div style={{position:'absolute',top:0,left:0,right:0,height:1,
-        background:'linear-gradient(to right,transparent,rgba(249,115,22,.5),transparent)'}} />
-
-      {/* FIXED className merge */}
-      <div className="container mx-auto grid-cols-1 lg:grid-cols-2" style={{
-        position:'relative',zIndex:5,
-        display:'grid',
-        gap:60,alignItems:'center',padding:'80px 24px',
-      }}>
-
-        {/* LEFT */}
-        <div>
-          <div style={{marginBottom:24}}>
-            <span style={{
-              display:'inline-flex',alignItems:'center',gap:8,
-              padding:'6px 18px',borderRadius:9999,
-              border:'1px solid rgba(249,115,22,.30)',
-              background:'rgba(249,115,22,.07)',
-              color:'#fb923c',fontSize:11,fontWeight:700,
-              letterSpacing:'.14em',textTransform:'uppercase',
-              backdropFilter:'blur(8px)',
-            }}>
-              <Globe style={{width:12,height:12}} />
-              {lang ? 'ওয়েব সার্ভিস' : 'Web Service'}
+    <pre className="m-0 font-mono text-[10.5px] leading-[1.7] sm:text-xs">
+      {CODE.map((line, li) => {
+        const parts = line.map((seg, si) => {
+          if (left <= 0) return null;
+          const take = Math.min(seg.t.length, left);
+          left -= take;
+          return (
+            <span key={si} className={TOKEN[seg.k]}>
+              {seg.t.slice(0, take)}
             </span>
-          </div>
+          );
+        });
 
-          <h1 className="ws-display" style={{
-            fontSize:'clamp(38px,5.5vw,76px)',fontWeight:900,
-            lineHeight:.95,letterSpacing:'-0.03em',color:'#fff',marginBottom:24,
-          }}>
-            {lang ? (
-              <><span style={{display:'block'}}>আমরা তৈরি করি</span>
-                <span className="ws-grad" style={{display:'block'}}>অসাধারণ</span>
-                <span style={{display:'block'}}>ওয়েবসাইট</span></>
-            ) : (
-              <><span style={{display:'block'}}>We Build</span>
-                <span className="ws-grad" style={{display:'block'}}>Exceptional</span>
-                <span style={{display:'block'}}>Web Experiences</span></>
+        const showCaret = left <= 0 && !caretDone && count < CODE_TOTAL;
+        if (showCaret) caretDone = true;
+
+        return (
+          <div key={li} className="whitespace-pre">
+            {parts.some(Boolean) ? parts : "\u00A0"}
+            {showCaret && (
+              <span className="ml-px inline-block h-3 w-[6px] translate-y-[2px] animate-pulse bg-sky-500" />
             )}
-          </h1>
-
-          <p style={{color:'#6b7280',fontSize:17,lineHeight:1.8,fontWeight:300,
-            maxWidth:440,marginBottom:36}}>
-            {lang
-              ? 'Next.js, React এবং আধুনিক প্রযুক্তি ব্যবহার করে আমরা তৈরি করি এমন ওয়েবসাইট যা দ্রুত লোড হয়, সুন্দর দেখায় এবং ব্যবসায় রিয়েল রেজাল্ট দেয়।'
-              : 'Using Next.js, React, and modern technology, we create websites that load fast, look stunning, and deliver real business results.'}
-          </p>
-
-          <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:48}}>
-            <Link href="/contact" style={{textDecoration:'none'}}>
-              <button className="ws-display" style={{
-                display:'inline-flex',alignItems:'center',gap:8,
-                padding:'15px 30px',borderRadius:9999,
-                background:'#ea580c',color:'#fff',
-                fontWeight:800,fontSize:15,border:'none',cursor:'pointer',
-                transition:'background .2s,box-shadow .3s,transform .15s',
-              }}
-                onMouseEnter={e=>{e.currentTarget.style.background='#f97316';e.currentTarget.style.boxShadow='0 0 40px rgba(249,115,22,.45)';e.currentTarget.style.transform='translateY(-2px)';}}
-                onMouseLeave={e=>{e.currentTarget.style.background='#ea580c';e.currentTarget.style.boxShadow='none';e.currentTarget.style.transform='translateY(0)';}}
-              >
-                {lang ? 'প্রজেক্ট শুরু করুন' : 'Start a Project'}
-                <ArrowRight style={{width:17,height:17}} />
-              </button>
-            </Link>
-            <a href="#pricing" style={{textDecoration:'none'}}>
-              <button style={{
-                display:'inline-flex',alignItems:'center',gap:8,
-                padding:'15px 30px',borderRadius:9999,
-                border:'1px solid rgba(255,255,255,.12)',
-                background:'rgba(255,255,255,.04)',
-                color:'#d1d5db',fontWeight:600,fontSize:15,
-                cursor:'pointer',backdropFilter:'blur(8px)',
-                transition:'border-color .2s,color .2s,transform .15s',
-              }}
-                onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(249,115,22,.4)';e.currentTarget.style.color='#fff';e.currentTarget.style.transform='translateY(-2px)';}}
-                onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,.12)';e.currentTarget.style.color='#d1d5db';e.currentTarget.style.transform='translateY(0)';}}
-              >
-                {lang ? 'প্যাকেজ দেখুন' : 'View Pricing'}
-              </button>
-            </a>
           </div>
-
-          {/* Stats */}
-          <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
-            {[
-              {n:'50+',l:lang?'প্রজেক্ট':'Projects'},
-              {n:'3+', l:lang?'বছরের অভিজ্ঞতা':'Years Exp.'},
-              {n:'100%',l:lang?'সন্তুষ্টি':'Satisfaction'},
-            ].map((s,i)=>(
-              <div key={i} style={{
-                padding:'14px 20px',borderRadius:14,
-                background:'rgba(255,255,255,.03)',
-                border:'1px solid rgba(255,255,255,.07)',
-                textAlign:'center',backdropFilter:'blur(8px)',
-                transition:'border-color .3s,transform .3s',
-              }}
-                onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(249,115,22,.3)';e.currentTarget.style.transform='translateY(-4px)';}}
-                onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,.07)';e.currentTarget.style.transform='translateY(0)';}}
-              >
-                <div className="ws-display ws-grad" style={{fontSize:28,fontWeight:900,lineHeight:1}}>{s.n}</div>
-                <div style={{fontSize:11,color:'#6b7280',marginTop:4}}>{s.l}</div>
-              </div>
-            ))}
-            <Orbital />
-          </div>
-        </div>
-
-        {/* RIGHT — browser mockup */}
-        <div style={{display:'flex',justifyContent:'center',alignItems:'center',
-          position:'relative'}} className="hidden lg:flex">
-
-          {/* Glow under */}
-          <div style={{
-            position:'absolute',bottom:-20,left:'50%',transform:'translateX(-50%)',
-            width:'60%',height:60,
-            background:'radial-gradient(ellipse,rgba(249,115,22,.3) 0%,transparent 70%)',
-            filter:'blur(14px)',pointerEvents:'none',
-          }} />
-
-          <BrowserMockup />
-
-          {/* Floating badges */}
-          {[
-            {icon:<Smartphone/>,t:'Mobile First',s:'100% Responsive',top:'8%',right:'-5%',
-              col:'rgba(249,115,22,.12)',bc:'rgba(249,115,22,.25)',anim:'ws-floatY 5s ease-in-out infinite'},
-            {icon:<Zap/>,t:'Fast Load',s:'< 1s LCP',bottom:'22%',left:'-8%',
-              col:'rgba(34,197,94,.12)',bc:'rgba(34,197,94,.25)',anim:'ws-floatY 6s ease-in-out infinite 1.5s'},
-            {icon:<Shield/>,t:'SEO Ready',s:'100/100 Score',bottom:'5%',right:'5%',
-              col:'rgba(96,165,250,.12)',bc:'rgba(96,165,250,.25)',anim:'ws-floatY 7s ease-in-out infinite .8s'},
-          ].map((b,i)=>(
-            <div key={i} style={{
-              position:'absolute', ...(b.top?{top:b.top}:{}), ...(b.bottom?{bottom:b.bottom}:{}),
-              ...(b.left?{left:b.left}:{}), ...(b.right?{right:b.right}:{}),
-              display:'flex',alignItems:'center',gap:10,
-              padding:'10px 14px',borderRadius:14,
-              background:'rgba(10,10,10,.9)',backdropFilter:'blur(16px)',
-              border:`1px solid ${b.bc}`,
-              animation:b.anim,
-            }}>
-              <div style={{
-                width:32,height:32,borderRadius:8,background:b.col,
-                display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,
-              }}>
-                {/* FIXED: Removed direct style injection on cloneElement */}
-                <div style={{ color:'#fff', width: 15, height: 15 }}>
-                  {b.icon}
-                </div>
-              </div>
-              <div>
-                <p style={{fontSize:12,fontWeight:700,color:'#fff',lineHeight:1.2}}>{b.t}</p>
-                <p style={{fontSize:10,color:'#6b7280',marginTop:1}}>{b.s}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+        );
+      })}
+    </pre>
   );
 }
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: TECH TICKER
-══════════════════════════════════════════════════════════ */
-function TechTicker() {
-  const doubled = [...TICKER_ITEMS,...TICKER_ITEMS];
+/* Wireframe -> design: dui layer er opacity cross-fade hoy */
+const wireBox =
+  "border border-dashed border-sky-300/80 bg-sky-50/60 dark:border-sky-400/40 dark:bg-white/[0.03]";
+
+function Part({
+  designed,
+  wire = wireBox,
+  done,
+  className = "",
+  delay = 0,
+  children,
+}: {
+  designed: boolean;
+  wire?: string;
+  done: string;
+  className?: string;
+  delay?: number;
+  children?: React.ReactNode;
+}) {
   return (
-    <div style={{background:'rgba(249,115,22,1)',padding:'12px 0',overflow:'hidden'}}>
-      <div className="ws-ticker-wrap">
-        <div className="ws-ticker" style={{display:'flex',gap:'2.5rem',width:'max-content'}}>
-          {doubled.map((item,i)=>(
-            <span key={i} className="ws-display" style={{
-              color:'#fff',fontSize:12,fontWeight:700,
-              letterSpacing:'.12em',textTransform:'uppercase',
-              display:'flex',alignItems:'center',gap:'2rem',whiteSpace:'nowrap',
-            }}>
-              {item}<span style={{color:'rgba(255,255,255,.4)',fontSize:8}}>✦</span>
-            </span>
-          ))}
-        </div>
+    <div className={`absolute ${className}`}>
+      <div
+        className={`absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${wire}`}
+        style={{ opacity: designed ? 0 : 1 }}
+      />
+      <div
+        className={`absolute inset-0 rounded-[inherit] transition-opacity duration-700 ${done}`}
+        style={{
+          opacity: designed ? 1 : 0,
+          transitionDelay: designed ? `${delay}ms` : "0ms",
+        }}
+      >
+        {children}
       </div>
     </div>
   );
 }
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: WEBSITE TYPES
-══════════════════════════════════════════════════════════ */
-function WebsiteTypes({ lang }: { lang: boolean }) {
+function Chip({
+  show,
+  Icon,
+  text,
+  className,
+  dur,
+}: {
+  show: boolean;
+  Icon: LucideIcon;
+  text: string;
+  className: string;
+  dur: number;
+}) {
   return (
-    <section className="ws-dotgrid" style={{
-      padding:'120px 0',background:'#090909',position:'relative',overflow:'hidden',
-    }}>
-      <div style={{position:'absolute',top:'30%',right:'5%',width:400,height:400,borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 65%)',
-        filter:'blur(60px)',pointerEvents:'none'}} />
-
-      <div className="container mx-auto" style={{padding:'0 24px',position:'relative',zIndex:5}}>
-        {/* Header */}
-        <div style={{textAlign:'center',marginBottom:64}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:16}}>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-            <span className="ws-display" style={{color:'#f97316',fontSize:11,fontWeight:700,
-              letterSpacing:'.12em',textTransform:'uppercase'}}>
-              {lang ? 'আমরা কী বানাই' : 'What We Build'}
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          key={text}
+          initial={{ opacity: 0, scale: 0.7, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ type: "spring", stiffness: 300, damping: 22 }}
+          className={`absolute z-20 ${className}`}
+        >
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ repeat: Infinity, duration: dur, ease: "easeInOut" }}
+            className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-white/90 px-4 py-2.5 shadow-[0_14px_36px_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-white/15 dark:bg-[#0b1626]/90"
+          >
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-full"
+              style={{ background: BLUE_GRADIENT }}
+            >
+              <Icon className="h-3.5 w-3.5" color="#ffffff" />
             </span>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-          </div>
-          <h2 className="ws-display" style={{
-            fontSize:'clamp(28px,5vw,60px)',fontWeight:900,color:'#fff',
-            letterSpacing:'-0.02em',marginBottom:16,
-          }}>
-            {lang ? <>যেকোনো ধরনের <span className="ws-grad">ওয়েবসাইট</span></> : <>Any Type of <span className="ws-grad">Website</span></>}
-          </h2>
-          <p style={{color:'#6b7280',fontSize:16,fontWeight:300,maxWidth:480,margin:'0 auto'}}>
-            {lang ? 'ল্যান্ডিং পেজ থেকে শুরু করে পূর্ণাঙ্গ SaaS প্ল্যাটফর্ম — আমরা সব ধরনের ওয়েব প্রজেক্ট হ্যান্ডেল করি।'
-                  : 'From landing pages to full SaaS platforms — we handle every kind of web project.'}
-          </p>
-        </div>
-
-        {/* 3×2 grid */}
-        <div style={{
-          display:'grid',
-          gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',
-          gap:20,maxWidth:1100,margin:'0 auto',
-        }}>
-          {WEBSITE_TYPES.map((type,i)=>{
-            const { ref, onMove, onLeave } = useTilt();
-            const d = lang ? type.bn : type.en;
-            return (
-              <div key={i} ref={ref} className="ws-tilt ws-shimmer" onMouseMove={onMove} onMouseLeave={onLeave}
-                style={{
-                  position:'relative',padding:'32px 28px',borderRadius:22,
-                  background:'#0d0d0d',border:'1px solid rgba(255,255,255,.06)',
-                  overflow:'hidden',cursor:'default',
-                }}>
-                {/* Index */}
-                <div className="ws-display" style={{
-                  position:'absolute',top:20,right:20,
-                  fontSize:52,fontWeight:900,lineHeight:1,
-                  color:'rgba(255,255,255,.025)',userSelect:'none',
-                }}>0{i+1}</div>
-
-                {/* Icon */}
-                <div style={{
-                  width:52,height:52,borderRadius:14,
-                  background:`${type.color}14`,border:`1px solid ${type.color}28`,
-                  display:'flex',alignItems:'center',justifyContent:'center',
-                  marginBottom:20,transition:'all .3s',
-                }}>
-                  {/* FIXED: Removed direct style injection on cloneElement */}
-                  <div style={{ color: type.color, width: 24, height: 24 }}>
-                    {type.icon}
-                  </div>
-                </div>
-
-                {/* From badge */}
-                <div style={{
-                  position:'absolute',top:22,right:52,
-                  padding:'3px 10px',borderRadius:6,
-                  background:`${type.color}14`,border:`1px solid ${type.color}25`,
-                  fontSize:10,fontWeight:700,color:type.color,letterSpacing:'.06em',
-                }}>
-                  {d.from}+
-                </div>
-
-                <h3 className="ws-display" style={{
-                  fontSize:20,fontWeight:800,color:'#fff',marginBottom:10,
-                  letterSpacing:'-0.01em',
-                }}>{d.title}</h3>
-
-                <p style={{color:'#6b7280',fontSize:13,lineHeight:1.75,
-                  fontWeight:300,marginBottom:18}}>{d.desc}</p>
-
-                {/* Features */}
-                <ul style={{listStyle:'none',padding:0,margin:0,display:'flex',
-                  flexDirection:'column',gap:6}}>
-                  {d.features.map((f,fi)=>(
-                    <li key={fi} style={{
-                      display:'flex',alignItems:'center',gap:8,
-                      fontSize:12,color:'#9ca3af',
-                    }}>
-                      <CheckCircle2 style={{width:13,height:13,color:type.color,flexShrink:0}} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Bottom accent */}
-                <div style={{
-                  position:'absolute',bottom:0,left:0,right:0,height:2,
-                  background:`linear-gradient(to right,${type.color},transparent)`,
-                  borderRadius:'0 0 22px 22px',
-                }} />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+            <span className="text-xs font-semibold text-slate-800 dark:text-white">
+              {text}
+            </span>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: PROCESS
-══════════════════════════════════════════════════════════ */
-function Process({ lang }: { lang: boolean }) {
+function BuildVisual({ parallaxY }: { parallaxY: MotionValue<number> }) {
+  const reduce = !!useReducedMotion();
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const seen = useInView(wrapRef, { margin: "-8% 0px" });
+  const [tabVisible, setTabVisible] = useState(true);
+
+  useEffect(() => {
+    const onVis = () => setTabVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  const phase = useBuildLoop(seen && tabVisible, reduce);
+  const typed = useTyping(phase, reduce);
+  const designed = phase >= 1;
+
+  /* 3D tilt (shudhu mouse) */
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 120, damping: 20 });
+  const sry = useSpring(ry, { stiffness: 120, damping: 20 });
+
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || reduce) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    ry.set(px * 10);
+    rx.set(-py * 8);
+  };
+  const onLeave = () => {
+    rx.set(0);
+    ry.set(0);
+  };
+
   return (
-    <section style={{padding:'120px 0',background:'#060606',position:'relative',overflow:'hidden'}}>
-      <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',
-        width:500,height:500,borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(249,115,22,.06) 0%,transparent 65%)',
-        filter:'blur(60px)',pointerEvents:'none'}} />
+    <motion.div style={{ y: parallaxY }} className="relative">
+      <div
+        ref={wrapRef}
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+        className="relative mx-auto w-full max-w-[640px] lg:mx-0 lg:ml-auto"
+        style={{ perspective: 1200 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
+          style={{ rotateX: srx, rotateY: sry, transformStyle: "preserve-3d" }}
+          className="relative"
+        >
+          <div
+            role="img"
+            aria-label="Animation of a website being planned, designed, developed and launched"
+            className="relative"
+          >
+            {/* ───── browser frame ───── */}
+            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_28px_70px_rgba(59,130,246,0.18)] dark:border-white/10 dark:bg-[#0a1222] dark:shadow-none">
+              {/* url bar */}
+              <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/[0.04]">
+                <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
 
-      <div className="container mx-auto" style={{padding:'0 24px',position:'relative',zIndex:5}}>
-        {/* Header */}
-        <div style={{textAlign:'center',marginBottom:80}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:16}}>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-            <span className="ws-display" style={{color:'#f97316',fontSize:11,fontWeight:700,
-              letterSpacing:'.12em',textTransform:'uppercase'}}>
-              {lang ? 'আমাদের প্রক্রিয়া' : 'Our Process'}
-            </span>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-          </div>
-          <h2 className="ws-display" style={{
-            fontSize:'clamp(28px,5vw,60px)',fontWeight:900,color:'#fff',
-            letterSpacing:'-0.02em',
-          }}>
-            {lang ? <>আমরা কীভাবে <span className="ws-grad">কাজ করি</span></>
-                  : <>How We <span className="ws-grad">Work</span></>}
-          </h2>
-        </div>
+                <div className="ml-3 flex min-w-0 flex-1 items-center gap-2 rounded-md bg-white px-3 py-1 text-[11px] text-slate-400 dark:bg-white/5 dark:text-slate-500">
+                  <Lock
+                    className={`h-3 w-3 shrink-0 transition-colors duration-500 ${
+                      phase === 3 ? "text-emerald-500" : "text-slate-300"
+                    }`}
+                  />
+                  <span className="truncate">
+                    {phase === 3 ? "https://" : ""}yourbusiness.com
+                  </span>
 
-        {/* Steps grid */}
-        <div style={{
-          display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',
-          gap:0,maxWidth:1000,margin:'0 auto',position:'relative',
-        }}>
-          {PROCESS_STEPS.map((step,i)=>{
-            const d = lang ? step.bn : step.en;
-            const isLast = i === PROCESS_STEPS.length-1;
-            return (
-              <div key={i} style={{position:'relative',textAlign:'center',padding:'0 24px'}}>
-                {/* Connector line (not on last) */}
-                {/* FIXED JSX logic */}
-                {!isLast ? (
-                  <div className="ws-step-line hidden md:block" style={{
-                    position:'absolute',top:36,left:'calc(50% + 36px)',
-                    right:'calc(-50% + 36px)',height:1,zIndex:0,
-                  }} />
-                ) : null}
-
-                {/* Number badge */}
-                <div style={{
-                  position:'relative',zIndex:1,
-                  width:72,height:72,borderRadius:'50%',
-                  background:`${step.color}14`,
-                  border:`1.5px solid ${step.color}35`,
-                  display:'flex',alignItems:'center',justifyContent:'center',
-                  margin:'0 auto 24px',
-                  boxShadow:`0 0 20px ${step.color}20`,
-                  transition:'all .3s',
-                }}
-                  onMouseEnter={e=>{e.currentTarget.style.boxShadow=`0 0 40px ${step.color}45`;e.currentTarget.style.transform='scale(1.1)';}}
-                  onMouseLeave={e=>{e.currentTarget.style.boxShadow=`0 0 20px ${step.color}20`;e.currentTarget.style.transform='scale(1)';}}
-                >
-                  {/* FIXED: Removed direct style injection on cloneElement */}
-                  <div style={{ color: step.color, width: 28, height: 28 }}>
-                    {step.icon}
-                  </div>
-                </div>
-
-                {/* Number label */}
-                <div className="ws-display" style={{
-                  fontSize:11,fontWeight:700,color:step.color,
-                  letterSpacing:'.14em',textTransform:'uppercase',marginBottom:10,
-                }}>
-                  Step {step.num}
-                </div>
-
-                <h3 className="ws-display" style={{
-                  fontSize:22,fontWeight:800,color:'#fff',
-                  marginBottom:12,letterSpacing:'-0.01em',
-                }}>{d.title}</h3>
-
-                <p style={{
-                  color:'#6b7280',fontSize:14,lineHeight:1.75,fontWeight:300,
-                }}>{d.desc}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════
-   SECTION: TECH STACK
-══════════════════════════════════════════════════════════ */
-function TechStack({ lang }: { lang: boolean }) {
-  return (
-    <section className="ws-linegrid" style={{
-      padding:'120px 0',background:'#090909',position:'relative',overflow:'hidden',
-    }}>
-      <div className="container mx-auto" style={{padding:'0 24px',position:'relative',zIndex:5}}>
-        <div style={{textAlign:'center',marginBottom:64}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:16}}>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-            <span className="ws-display" style={{color:'#f97316',fontSize:11,fontWeight:700,
-              letterSpacing:'.12em',textTransform:'uppercase'}}>
-              {lang ? 'আমাদের টেক স্ট্যাক' : 'Tech Stack'}
-            </span>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-          </div>
-          <h2 className="ws-display" style={{
-            fontSize:'clamp(28px,5vw,60px)',fontWeight:900,color:'#fff',
-            letterSpacing:'-0.02em',marginBottom:16,
-          }}>
-            {lang ? <>আধুনিক <span className="ws-grad">প্রযুক্তি</span> ব্যবহার করি</>
-                  : <>Built With <span className="ws-grad">Modern Tech</span></>}
-          </h2>
-          <p style={{color:'#6b7280',fontSize:16,fontWeight:300,maxWidth:440,margin:'0 auto'}}>
-            {lang ? 'আমরা সর্বাধুনিক প্রযুক্তি ব্যবহার করি যা দ্রুত, নিরাপদ এবং স্কেলেবল।'
-                  : 'We use cutting-edge technologies that are fast, secure, and scalable.'}
-          </p>
-        </div>
-
-        {/* 3D perspective tech grid */}
-        <div style={{
-          perspective:'1200px',perspectiveOrigin:'50% -20%',
-          maxWidth:900,margin:'0 auto',
-        }}>
-          <div style={{
-            transform:'rotateX(8deg)',transformOrigin:'top center',
-          }}>
-            {TECH_STACK.map((cat,ci)=>(
-              <div key={ci} style={{marginBottom:32}}>
-                <p style={{
-                  fontSize:10,fontWeight:700,color:'rgba(255,255,255,.2)',
-                  letterSpacing:'.14em',textTransform:'uppercase',
-                  marginBottom:14,textAlign:'center',
-                }}>
-                  {cat.cat}
-                </p>
-                <div style={{
-                  display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center',
-                }}>
-                  {cat.items.map((tech,ti)=>(
-                    <div key={ti} className="ws-tech" style={{
-                      display:'flex',alignItems:'center',gap:8,
-                      padding:'10px 18px',borderRadius:12,
-                      background:'rgba(255,255,255,.03)',
-                      border:'1px solid rgba(255,255,255,.07)',
-                      backdropFilter:'blur(12px)',cursor:'default',
-                    }}>
-                      <span className="ws-tech-icon" style={{
-                        color:'#6b7280',transition:'color .3s',
-                      }}>
-                        {/* FIXED: Removed direct style injection on cloneElement */}
-                        <div style={{ width: 14, height: 14 }}>
-                          {tech.icon}
-                        </div>
-                      </span>
-                      <span style={{fontSize:13,fontWeight:600,color:'#d1d5db',whiteSpace:'nowrap'}}>
-                        {tech.n}
-                      </span>
-                    </div>
-                  ))}
+                  <AnimatePresence>
+                    {phase === 3 && (
+                      <motion.span
+                        key="live"
+                        initial={{ opacity: 0, scale: 0.4 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.6 }}
+                        transition={{ type: "spring", stiffness: 380, damping: 18 }}
+                        className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300"
+                      >
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        </span>
+                        Live
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: PRICING
-══════════════════════════════════════════════════════════ */
-function Pricing({ lang }: { lang: boolean }) {
-  return (
-    <section id="pricing" style={{
-      padding:'120px 0',background:'#060606',position:'relative',overflow:'hidden',
-    }}>
-      <div style={{position:'absolute',top:'40%',left:'50%',transform:'translate(-50%,-50%)',
-        width:600,height:600,borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 65%)',
-        filter:'blur(80px)',pointerEvents:'none'}} />
+              {/* stage: shob size % e, tai kono size e ekdom thik thake */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-b from-white to-sky-50/60 dark:from-[#0a1222] dark:to-[#0b1a2e]">
+                {/* nav */}
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[5%] aspect-square h-[8%] rounded-md"
+                  done="rounded-[inherit] bg-gradient-to-br from-sky-400 to-blue-500"
+                />
+                {[0, 1, 2].map((i) => (
+                  <Part
+                    key={i}
+                    designed={designed}
+                    className="top-[7.6%] h-[2.8%] w-[8%] rounded-full"
+                    done="rounded-[inherit] bg-slate-300 dark:bg-white/25"
+                    delay={90 + i * 80}
+                    // left position via style-less utility classes below
+                  />
+                ))}
+                {/* nav pills position fix (absolute left offsets) */}
+                <style>{`
+                  .ws-nav-pill-0 { left: 15%; }
+                  .ws-nav-pill-1 { left: 24%; }
+                  .ws-nav-pill-2 { left: 33%; }
+                `}</style>
 
-      <div className="container mx-auto" style={{padding:'0 24px',position:'relative',zIndex:5}}>
-        <div style={{textAlign:'center',marginBottom:64}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:16}}>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-            <span className="ws-display" style={{color:'#f97316',fontSize:11,fontWeight:700,
-              letterSpacing:'.12em',textTransform:'uppercase'}}>
-              {lang ? 'মূল্য তালিকা' : 'Pricing'}
-            </span>
-            <div style={{height:1,width:44,background:'#f97316'}} />
-          </div>
-          <h2 className="ws-display" style={{
-            fontSize:'clamp(28px,5vw,60px)',fontWeight:900,color:'#fff',
-            letterSpacing:'-0.02em',marginBottom:16,
-          }}>
-            {lang ? <>স্বচ্ছ <span className="ws-grad">মূল্য নির্ধারণ</span></>
-                  : <>Transparent <span className="ws-grad">Pricing</span></>}
-          </h2>
-          <p style={{color:'#6b7280',fontSize:16,fontWeight:300,maxWidth:440,margin:'0 auto'}}>
-            {lang ? 'কোনো লুকানো চার্জ নেই। প্রজেক্ট অনুযায়ী কাস্টম কোটেশনও পাওয়া যায়।'
-                  : 'No hidden fees. Custom quotes also available based on project needs.'}
-          </p>
-        </div>
+                <Part
+                  designed={designed}
+                  className="right-[5%] top-[5%] h-[8%] w-[17%] rounded-full"
+                  done="rounded-[inherit] bg-gradient-to-r from-sky-500 to-blue-500"
+                  delay={260}
+                />
 
-        <div style={{
-          display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',
-          gap:20,maxWidth:1000,margin:'0 auto',
-        }}>
-          {PACKAGES.map((pkg,i)=>{
-            const d = lang ? pkg.bn : pkg.en;
-            const isFeatured = i===1;
-            return (
-              <div key={i} className="ws-price-card ws-shimmer" style={{
-                position:'relative',padding: isFeatured ? '36px 28px 32px' : '28px',
-                borderRadius:24,overflow:'hidden',cursor:'default',
-                background: isFeatured ? '#0f0f0f' : '#0a0a0a',
-                border: isFeatured ? `1.5px solid rgba(249,115,22,.45)` : '1px solid rgba(255,255,255,.07)',
-                boxShadow: isFeatured ? '0 0 40px rgba(249,115,22,.12),0 24px 60px rgba(0,0,0,.5)' : '0 8px 32px rgba(0,0,0,.3)',
-                transform: isFeatured ? 'scale(1.04)' : 'scale(1)',
-              }}>
-                {/* Popular badge */}
-                {isFeatured && (
-                  <div style={{
-                    position:'absolute',top:-1,left:'50%',transform:'translateX(-50%)',
-                    padding:'5px 16px',borderRadius:'0 0 10px 10px',
-                    background:'linear-gradient(135deg,#f97316,#ef4444)',
-                    fontSize:10,fontWeight:800,color:'#fff',
-                    letterSpacing:'.08em',textTransform:'uppercase',
-                    whiteSpace:'nowrap',
-                  }}>
-                    {lang ? pkg.badgeBN : pkg.badge}
+                {/* headline */}
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[21%] h-[8.5%] w-[46%] rounded-md"
+                  done="rounded-[inherit] bg-slate-800 dark:bg-white"
+                  delay={120}
+                />
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[32%] h-[8.5%] w-[34%] rounded-md"
+                  done="rounded-[inherit] bg-slate-800 dark:bg-white"
+                  delay={200}
+                />
+
+                {/* paragraph */}
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[45%] h-[3.2%] w-[44%] rounded-full"
+                  done="rounded-[inherit] bg-slate-300 dark:bg-white/30"
+                  delay={300}
+                />
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[50.5%] h-[3.2%] w-[36%] rounded-full"
+                  done="rounded-[inherit] bg-slate-300 dark:bg-white/30"
+                  delay={360}
+                />
+
+                {/* cta */}
+                <Part
+                  designed={designed}
+                  className="left-[5%] top-[59%] h-[9%] w-[22%] rounded-full"
+                  done="rounded-[inherit] bg-gradient-to-r from-sky-500 to-blue-500 shadow-[0_6px_16px_rgba(59,130,246,0.35)]"
+                  delay={440}
+                />
+
+                {/* image */}
+                <div className="absolute left-[55%] top-[21%] h-[47%] w-[40%] overflow-hidden rounded-xl">
+                  <div
+                    className={`absolute inset-0 rounded-[inherit] transition-opacity duration-500 ${wireBox}`}
+                    style={{ opacity: designed ? 0 : 1 }}
+                  >
+                    <svg
+                      className="h-full w-full text-sky-200 dark:text-sky-400/30"
+                      preserveAspectRatio="none"
+                      viewBox="0 0 100 100"
+                    >
+                      <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+                      <line x1="100" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+                    </svg>
                   </div>
-                )}
-
-                {/* Package name */}
-                <div style={{marginBottom:6}}>
-                  <span style={{
-                    padding:'3px 10px',borderRadius:6,
-                    background:`${pkg.color}14`,border:`1px solid ${pkg.color}25`,
-                    fontSize:10,fontWeight:700,color:pkg.color,letterSpacing:'.08em',textTransform:'uppercase',
-                  }}>{lang ? pkg.nameBN : pkg.name}</span>
-                </div>
-
-                {/* Price */}
-                <div style={{marginBottom:8,marginTop:12}}>
-                  <span className="ws-display" style={{
-                    fontSize:'clamp(28px,4vw,42px)',fontWeight:900,color:'#fff',
-                    letterSpacing:'-0.02em',
-                  }}>{pkg.price}</span>
-                  <span style={{fontSize:12,color:'#6b7280',marginLeft:6}}>{pkg.priceSuffix}</span>
-                </div>
-
-                <p style={{color:'#6b7280',fontSize:13,lineHeight:1.7,fontWeight:300,marginBottom:24}}>
-                  {d.desc}
-                </p>
-
-                {/* Divider */}
-                <div style={{height:1,background:'rgba(255,255,255,.06)',marginBottom:20}} />
-
-                {/* Features */}
-                <ul style={{listStyle:'none',padding:0,margin:'0 0 28px',
-                  display:'flex',flexDirection:'column',gap:10}}>
-                  {d.features.map((f,fi)=>(
-                    <li key={fi} style={{
-                      display:'flex',alignItems:'center',gap:10,
-                      fontSize:13,color: f.ok ? '#d1d5db' : '#4b5563',
-                      textDecoration: f.ok ? 'none' : 'none',
-                    }}>
-                      <CheckCircle2 style={{
-                        width:14,height:14,flexShrink:0,
-                        color: f.ok ? '#22c55e' : '#374151',
-                      }} />
-                      {f.t}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA */}
-                <Link href="/contact" style={{textDecoration:'none'}}>
-                  <button className="ws-display" style={{
-                    width:'100%',padding:'13px 0',borderRadius:12,
-                    background: isFeatured ? '#ea580c' : 'rgba(255,255,255,.05)',
-                    color: isFeatured ? '#fff' : '#d1d5db',
-                    fontWeight:800,fontSize:13,border: isFeatured ? 'none' : '1px solid rgba(255,255,255,.1)',
-                    cursor:'pointer',display:'flex',alignItems:'center',
-                    justifyContent:'center',gap:6,
-                    transition:'all .2s',
-                  }}
-                    onMouseEnter={e=>{
-                      if(isFeatured){e.currentTarget.style.background='#f97316';e.currentTarget.style.boxShadow='0 0 28px rgba(249,115,22,.4)';}
-                      else{e.currentTarget.style.borderColor='rgba(249,115,22,.35)';e.currentTarget.style.color='#fff';}
-                    }}
-                    onMouseLeave={e=>{
-                      if(isFeatured){e.currentTarget.style.background='#ea580c';e.currentTarget.style.boxShadow='none';}
-                      else{e.currentTarget.style.borderColor='rgba(255,255,255,.1)';e.currentTarget.style.color='#d1d5db';}
+                  <div
+                    className="absolute inset-0 transition-all duration-1000"
+                    style={{
+                      opacity: designed ? 1 : 0,
+                      transform: designed ? "scale(1)" : "scale(1.08)",
+                      transitionDelay: designed ? "350ms" : "0ms",
                     }}
                   >
-                    {lang ? 'এখনই শুরু করুন' : 'Get Started'}
-                    <ChevronRight style={{width:15,height:15}} />
-                  </button>
+                    <Image
+                      src="/hero/SaaS.png"
+                      alt="Web application dashboard designed and developed by Pixel & Code"
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 60vw, 260px"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* cards */}
+                {[5, 36.5, 68].map((left, i) => (
+                  <Part
+                    key={left}
+                    designed={designed}
+                    className="top-[75%] h-[19%] w-[27%] rounded-xl"
+                    done="flex flex-col justify-center gap-[9%] rounded-[inherit] border border-slate-100 bg-white p-[7%] shadow-[0_6px_16px_rgba(59,130,246,0.12)] dark:border-white/10 dark:bg-white/[0.07] dark:shadow-none"
+                    delay={520 + i * 110}
+                  >
+                    <span className="block aspect-square h-[34%] rounded-md bg-gradient-to-br from-sky-300 to-blue-500" />
+                    <span className="block h-[10%] w-[70%] rounded-full bg-slate-300 dark:bg-white/30" />
+                    <span className="block h-[10%] w-[45%] rounded-full bg-slate-200 dark:bg-white/15" />
+                  </Part>
+                ))}
+                <style>{`
+                  .ws-card-0 { left: 5%; }
+                  .ws-card-1 { left: 36.5%; }
+                  .ws-card-2 { left: 68%; }
+                `}</style>
+
+                {/* scan light (develop phase) */}
+                <AnimatePresence>
+                  {phase === 2 && (
+                    <motion.div
+                      key="scan"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="pointer-events-none absolute inset-0"
+                    >
+                      <motion.div
+                        initial={{ y: "-100%" }}
+                        animate={{ y: "560%" }}
+                        transition={{ duration: 1.7, ease: "linear", repeat: Infinity }}
+                        className="absolute left-0 right-0 top-0 h-[18%]"
+                        style={{
+                          background:
+                            "linear-gradient(to bottom, rgba(56,189,248,0), rgba(56,189,248,0.28), rgba(56,189,248,0))",
+                        }}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* ───── code card (develop) ───── */}
+            <AnimatePresence>
+              {phase === 2 && (
+                <motion.div
+                  key="code"
+                  initial={{ opacity: 0, y: 34, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 24, scale: 0.97 }}
+                  transition={{ duration: 0.5, ease: EASE }}
+                  className="absolute -bottom-7 left-3 z-20 w-[64%] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:border-white/15 dark:bg-[#0b1626]/95 sm:left-6"
+                >
+                  <div className="mb-2.5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+                    page.tsx
+                  </div>
+                  <CodeView count={typed} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ───── phone (launch) ───── */}
+            <AnimatePresence>
+              {phase === 3 && (
+                <motion.div
+                  key="phone"
+                  initial={{ opacity: 0, y: 60, rotate: 7, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 40, scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 170, damping: 20 }}
+                  className="absolute -bottom-9 right-1 z-20 w-[24%] sm:right-4"
+                >
+                  <div className="relative aspect-[9/18.5] overflow-hidden rounded-[22px] border-[3px] border-slate-800 bg-white shadow-[0_22px_50px_rgba(15,23,42,0.28)] dark:border-slate-200/80 dark:bg-[#0a1222]">
+                    <span className="absolute left-1/2 top-[2.5%] h-[2.4%] w-[30%] -translate-x-1/2 rounded-full bg-slate-800 dark:bg-slate-200/80" />
+                    <div className="absolute inset-x-[9%] top-[8%] space-y-[5%]">
+                      <span className="block h-2 w-[75%] rounded-full bg-slate-800 dark:bg-white" />
+                      <span className="block h-2 w-[50%] rounded-full bg-slate-800 dark:bg-white" />
+                      <span className="block h-1.5 w-[85%] rounded-full bg-slate-300 dark:bg-white/30" />
+                      <span className="block h-1.5 w-[65%] rounded-full bg-slate-300 dark:bg-white/30" />
+                      <span className="block h-5 w-[45%] rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />
+                      <span className="block h-[52px] w-full rounded-lg bg-gradient-to-br from-sky-200 to-blue-400 sm:h-[78px]" />
+                      <span className="block h-7 w-full rounded-lg border border-slate-100 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.07]" />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ───── phase-synced chips ───── */}
+            <Chip
+              show={phase === 2}
+              Icon={Code2}
+              text="Next.js"
+              className="-top-4 right-5 sm:right-8"
+              dur={5}
+            />
+            <Chip
+              show={phase === 3}
+              Icon={Search}
+              text="SEO ready"
+              className="-top-4 left-5 sm:left-8"
+              dur={6}
+            />
+            <Chip
+              show={phase === 3}
+              Icon={Smartphone}
+              text="Mobile first"
+              className="bottom-[26%] -left-3 hidden sm:block"
+              dur={7}
+            />
+          </div>
+        </motion.div>
+
+        {/* ───── stepper ───── */}
+        <div aria-hidden="true" className="mt-12 grid grid-cols-4 gap-3">
+          {STEP_LABELS.map((label, i) => {
+            const isActive = i === phase;
+            return (
+              <div key={label}>
+                <div className="h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: BLUE_GRADIENT_H }}
+                    initial={{ width: "0%" }}
+                    animate={{ width: i <= phase ? "100%" : "0%" }}
+                    transition={
+                      isActive
+                        ? { duration: DURATIONS[phase] / 1000, ease: "linear" }
+                        : { duration: 0.3 }
+                    }
+                  />
+                </div>
+                <span
+                  className={`mt-2 block text-xs font-semibold transition-colors duration-300 ${
+                    isActive
+                      ? "text-slate-900 dark:text-white"
+                      : "text-slate-400 dark:text-slate-500"
+                  }`}
+                >
+                  0{i + 1} {label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* Cursor-er dike halka tane */
+function Magnetic({ children }: { children: React.ReactNode }) {
+  const reduce = !!useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 220, damping: 16 });
+  const sy = useSpring(y, { stiffness: 220, damping: 16 });
+
+  return (
+    <motion.div
+      style={{ x: sx, y: sy }}
+      className="inline-block"
+      onPointerMove={(e) => {
+        if (e.pointerType !== "mouse" || reduce) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        x.set((e.clientX - (r.left + r.width / 2)) * 0.22);
+        y.set((e.clientY - (r.top + r.height / 2)) * 0.3);
+      }}
+      onPointerLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* Number scroll-e dekha gele count kore uthe. sr-only e final value thake (SEO) */
+function CountUp({
+  to,
+  decimals = 0,
+  suffix = "",
+}: {
+  to: number;
+  decimals?: number;
+  suffix?: string;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const seen = useInView(ref, { once: true });
+  const reduce = !!useReducedMotion();
+  const [v, setV] = useState(0);
+
+  useEffect(() => {
+    if (!seen) return;
+    if (reduce) {
+      setV(to);
+      return;
+    }
+    const c = animate(0, to, { duration: 1.6, ease: EASE, onUpdate: setV });
+    return () => c.stop();
+  }, [seen, to, reduce]);
+
+  return (
+    <dd ref={ref} className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+      <span className="sr-only">
+        {to}
+        {suffix}
+      </span>
+      <span aria-hidden="true">
+        {v.toFixed(decimals)}
+        {suffix}
+      </span>
+    </dd>
+  );
+}
+
+const H1_WORDS = ["Web", "design", "&", "development", "company", "in"];
+
+function Hero() {
+  const reduce = !!useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* mouse spotlight */
+  const mx = useMotionValue(-600);
+  const my = useMotionValue(-600);
+  const sx = useSpring(mx, { stiffness: 90, damping: 24 });
+  const sy = useSpring(my, { stiffness: 90, damping: 24 });
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    mx.set(el.clientWidth * 0.68 - 280);
+    my.set(120);
+  }, [mx, my]);
+
+  /* scroll parallax (visual) */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const visualY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-labelledby="ws-hero-title"
+      onPointerMove={(e) => {
+        if (e.pointerType !== "mouse" || reduce) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        mx.set(e.clientX - r.left - 280);
+        my.set(e.clientY - r.top - 280);
+      }}
+      className="relative overflow-hidden pb-24 pt-32 lg:pb-32 lg:pt-36"
+    >
+      {/* soft base glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-0 h-[460px] w-[1000px] -translate-x-1/2"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(56,189,248,0.16) 0%, rgba(56,189,248,0) 70%)",
+        }}
+      />
+
+      {/* cursor spotlight */}
+      <motion.div
+        aria-hidden="true"
+        style={{
+          x: sx,
+          y: sy,
+          background:
+            "radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(59,130,246,0.08) 40%, rgba(59,130,246,0) 70%)",
+        }}
+        className="pointer-events-none absolute left-0 top-0 hidden h-[560px] w-[560px] rounded-full md:block"
+      />
+
+      <div className="relative mx-auto grid w-full max-w-[1400px] items-center gap-16 px-5 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:px-12">
+        {/* ───── left ───── */}
+        <div className="max-w-[640px]">
+          <motion.span
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="inline-flex items-center gap-2 rounded-full border border-[rgba(56,189,248,0.45)] bg-[rgba(255,255,255,0.75)] px-4 py-2 text-[12px] font-bold uppercase tracking-[0.14em] text-sky-700 backdrop-blur-md dark:border-[rgba(56,189,248,0.35)] dark:bg-[rgba(56,189,248,0.12)] dark:text-sky-200"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500" />
+            </span>
+            <Globe className="h-3.5 w-3.5" />
+            Web Service
+          </motion.span>
+
+          {/* word-by-word mask reveal (text real, SEO safe) */}
+          <h1
+            id="ws-hero-title"
+            className="mt-6 text-[38px] font-semibold leading-[1.1] tracking-[-0.02em] text-slate-900 dark:text-white sm:text-5xl lg:text-[52px] xl:text-[56px]"
+          >
+            {H1_WORDS.map((w, i) => (
+              <span key={i}>
+                <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
+                  <motion.span
+                    className="inline-block"
+                    initial={{ y: "110%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, ease: EASE, delay: 0.12 + i * 0.07 }}
+                  >
+                    {w}
+                  </motion.span>
+                </span>{" "}
+              </span>
+            ))}
+            <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  ease: EASE,
+                  delay: 0.12 + H1_WORDS.length * 0.07,
+                }}
+              >
+                <motion.span
+                  className="inline-block bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(90deg, #0ea5e9, #3b82f6, #22d3ee, #0ea5e9)",
+                    backgroundSize: "200% 100%",
+                  }}
+                  animate={
+                    reduce ? undefined : { backgroundPosition: ["0% 50%", "200% 50%"] }
+                  }
+                  transition={{ duration: 7, ease: "linear", repeat: Infinity }}
+                >
+                  Bangladesh
+                </motion.span>
+              </motion.span>
+            </span>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.55 }}
+            className="mt-6 max-w-[560px] text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-[17px] sm:leading-8"
+          >
+            We build fast, mobile-friendly and SEO-ready websites, online stores
+            and web apps with Next.js and React, so your business looks
+            professional and brings in real customers.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.68 }}
+            className="mt-9 flex flex-wrap items-center gap-4"
+          >
+            <Magnetic>
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold uppercase tracking-wide transition-[filter] duration-300 hover:brightness-110"
+                style={primaryBtn}
+              >
+                Get a free quote
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  color="#ffffff"
+                />
+              </Link>
+            </Magnetic>
+
+            <Link
+              href="/portfolio"
+              className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-bold uppercase tracking-wide backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 ${ghostBtn}`}
+            >
+              See our work
+            </Link>
+          </motion.div>
+
+          <motion.dl
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.8 }}
+            className="mt-10 grid max-w-md grid-cols-3 divide-x divide-slate-200 rounded-2xl border border-slate-200 bg-white/70 py-4 backdrop-blur-md dark:divide-white/10 dark:border-white/10 dark:bg-white/[0.04]"
+          >
+            {[
+              { to: 50, suffix: "+", label: "Projects", decimals: 0 },
+              { to: 10, suffix: "+", label: "Clients", decimals: 0 },
+              { to: 2.5, suffix: "+", label: "Years", decimals: 1 },
+            ].map((s) => (
+              <div key={s.label} className="px-3 text-center">
+                <dt className="sr-only">{s.label}</dt>
+                <CountUp to={s.to} suffix={s.suffix} decimals={s.decimals} />
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </motion.dl>
+        </div>
+
+        {/* ───── right: website builds itself ───── */}
+        <BuildVisual parallaxY={visualY} />
+      </div>
+    </section>
+  );
+}
+
+/* ═════════════════════════════════════════════
+   Main
+═════════════════════════════════════════════ */
+export function WebServiceContent() {
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="w-full bg-white dark:bg-[#050b16]">
+        <Hero />
+
+        {/* ═════════ WHAT WE BUILD ═════════ */}
+        <section aria-labelledby="ws-types-title" className="py-16 md:py-24">
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <SectionHead
+              id="ws-types-title"
+              eyebrow="What we build"
+              title={
+                <>
+                  Any type of <GradientText>website</GradientText>
+                </>
+              }
+              text="From a simple landing page to a full online store or learning platform, we build the kind of website your business needs."
+            />
+
+            <motion.ul
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={inView}
+              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {WEBSITE_TYPES.map((t) => {
+                const Icon = TYPE_ICON[t.key] ?? Monitor;
+                return (
+                  <motion.li
+                    key={t.key}
+                    variants={fade}
+                    className="group flex flex-col rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 hover:shadow-[0_18px_44px_rgba(59,130,246,0.14)] dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-sky-400/50"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <span
+                        className="flex h-12 w-12 items-center justify-center rounded-2xl"
+                        style={{ background: BLUE_GRADIENT }}
+                      >
+                        <Icon className="h-6 w-6" color="#ffffff" />
+                      </span>
+                      <span className="rounded-full bg-sky-50 px-3 py-1 text-[11px] font-semibold text-sky-700 dark:bg-sky-400/10 dark:text-sky-300">
+                        From {bdt(t.fromBdt)}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-5 text-lg font-semibold text-slate-900 dark:text-white">
+                      {t.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                      {t.description}
+                    </p>
+
+                    <ul className="mt-5 flex-1 space-y-2">
+                      {t.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-center gap-2.5 text-sm text-slate-700 dark:text-slate-300"
+                        >
+                          <span
+                            className="flex shrink-0 items-center justify-center rounded-full"
+                            style={{
+                              background: BLUE_GRADIENT,
+                              width: 18,
+                              height: 18,
+                            }}
+                          >
+                            <Check
+                              className="h-2.5 w-2.5"
+                              color="#ffffff"
+                              strokeWidth={3.5}
+                            />
+                          </span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Link
+                      href="/contact"
+                      className="mt-6 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-sky-600 transition-colors hover:text-sky-500 dark:text-sky-300"
+                    >
+                      Get a quote
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </Link>
+                  </motion.li>
+                );
+              })}
+            </motion.ul>
+          </div>
+        </section>
+
+        {/* ═════════ WHY US ═════════ */}
+        <section
+          aria-labelledby="ws-why-title"
+          className="bg-slate-50/70 py-16 dark:bg-white/[0.02] md:py-24"
+        >
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <SectionHead
+              id="ws-why-title"
+              eyebrow="Why Pixel & Code"
+              title={
+                <>
+                  Websites built to <GradientText>perform</GradientText>
+                </>
+              }
+              text="A good website is more than good looks. Here is what you get with every project."
+            />
+
+            <motion.ul
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={inView}
+              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {WHY.map(({ Icon, title, text }) => (
+                <motion.li
+                  key={title}
+                  variants={fade}
+                  className="rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-sky-400/50"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-400/10">
+                    <Icon className="h-5 w-5 text-sky-600 dark:text-sky-300" />
+                  </span>
+                  <h3 className="mt-4 text-base font-semibold text-slate-900 dark:text-white">
+                    {title}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                    {text}
+                  </p>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </section>
+
+        {/* ═════════ PROCESS ═════════ */}
+        <section aria-labelledby="ws-process-title" className="py-16 md:py-24">
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <SectionHead
+              id="ws-process-title"
+              eyebrow="Our process"
+              title={
+                <>
+                  How we <GradientText>work</GradientText>
+                </>
+              }
+              text="A clear four-step process, so you always know what is happening with your project."
+            />
+
+            <motion.ol
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={inView}
+              className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"
+            >
+              {PROCESS_STEPS.map((s, i) => {
+                const Icon = PROCESS_ICON[i] ?? Code2;
+                return (
+                  <motion.li
+                    key={s.title}
+                    variants={fade}
+                    className="relative rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.04]"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="flex h-12 w-12 items-center justify-center rounded-2xl"
+                        style={{ background: BLUE_GRADIENT }}
+                      >
+                        <Icon className="h-6 w-6" color="#ffffff" />
+                      </span>
+                      <span className="text-4xl font-semibold tracking-tight text-slate-200 dark:text-white/10">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 text-lg font-semibold text-slate-900 dark:text-white">
+                      {s.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                      {s.desc}
+                    </p>
+                  </motion.li>
+                );
+              })}
+            </motion.ol>
+          </div>
+        </section>
+
+        {/* ═════════ TECH STACK ═════════ */}
+        <section
+          aria-labelledby="ws-tech-title"
+          className="bg-slate-50/70 py-16 dark:bg-white/[0.02] md:py-24"
+        >
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <SectionHead
+              id="ws-tech-title"
+              eyebrow="Tech stack"
+              title={
+                <>
+                  Built with <GradientText>modern technology</GradientText>
+                </>
+              }
+              text="We use proven, up-to-date tools that are fast, secure and easy to scale as your business grows."
+            />
+
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={inView}
+              className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            >
+              {TECH_GROUPS.map((g) => (
+                <motion.div
+                  key={g.group}
+                  variants={fade}
+                  className="rounded-3xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.04]"
+                >
+                  <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                    {g.group}
+                  </h3>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {g.items.map((item) => (
+                      <li
+                        key={item}
+                        className="rounded-full border border-sky-200 bg-sky-50/70 px-3 py-1.5 text-xs font-semibold text-sky-800 dark:border-sky-400/25 dark:bg-sky-400/10 dark:text-sky-200"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ═════════ PROOF + PACKAGES ═════════ */}
+        <section aria-labelledby="ws-proof-title" className="py-16 md:py-24">
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <SectionHead
+              id="ws-proof-title"
+              eyebrow="See the results"
+              title={
+                <>
+                  Real projects, <GradientText>real businesses</GradientText>
+                </>
+              }
+              text="Browse the websites we have built and the companies we have worked with."
+            />
+
+            <motion.ul
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={inView}
+              className="grid gap-5 md:grid-cols-3"
+            >
+              {[
+                {
+                  href: "/portfolio",
+                  title: "Our portfolio",
+                  text: "Websites, e-commerce platforms and designs we have delivered.",
+                },
+                {
+                  href: "/store",
+                  title: "Companies we have worked with",
+                  text: "The brands that trust Pixel & Code with their digital presence.",
+                },
+                {
+                  href: "/packages",
+                  title: "Website packages",
+                  text: "Prefer a fixed plan? Compare our packages and pricing.",
+                },
+              ].map((c) => (
+                <motion.li key={c.href} variants={fade}>
+                  <Link
+                    href={c.href}
+                    className="group flex h-full flex-col justify-between rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 hover:shadow-[0_18px_44px_rgba(59,130,246,0.14)] dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-sky-400/50"
+                  >
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                        {c.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                        {c.text}
+                      </p>
+                    </div>
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-600 dark:text-sky-300">
+                      View
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </span>
+                  </Link>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </section>
+
+        {/* ═════════ RELATED SERVICES ═════════ */}
+        <section
+          aria-labelledby="ws-related-title"
+          className="bg-slate-50/70 py-16 dark:bg-white/[0.02] md:py-20"
+        >
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12">
+            <h2
+              id="ws-related-title"
+              className="mb-8 text-center text-2xl font-semibold tracking-tight text-slate-900 dark:text-white"
+            >
+              More services to grow your business
+            </h2>
+
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {RELATED.map((r) => (
+                <li key={r.href}>
+                  <Link
+                    href={r.href}
+                    className="group flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-300 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-sky-400/50"
+                  >
+                    <span>
+                      <span className="block text-base font-semibold text-slate-900 dark:text-white">
+                        {r.title}
+                      </span>
+                      <span className="mt-0.5 block text-sm text-slate-500 dark:text-slate-400">
+                        {r.text}
+                      </span>
+                    </span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-sky-500" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ═════════ FAQ (native details, crawlable) ═════════ */}
+        <section aria-labelledby="ws-faq-title" className="py-16 md:py-24">
+          <div className="mx-auto w-full max-w-3xl px-5 sm:px-8">
+            <SectionHead
+              id="ws-faq-title"
+              eyebrow="FAQ"
+              title={
+                <>
+                  Frequently asked <GradientText>questions</GradientText>
+                </>
+              }
+            />
+
+            <div className="space-y-3">
+              {FAQS.map((f, i) => (
+                <details
+                  key={f.q}
+                  open={i === 0}
+                  className="group rounded-2xl border border-slate-200 bg-white/80 backdrop-blur-md transition-colors open:border-sky-300 dark:border-white/10 dark:bg-white/[0.04] dark:open:border-sky-400/50"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left text-base font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:text-white [&::-webkit-details-marker]:hidden">
+                    {f.q}
+                    <ChevronDown className="h-5 w-5 shrink-0 text-sky-500 transition-transform duration-300 group-open:rotate-180" />
+                  </summary>
+                  <p className="px-5 pb-5 text-[15px] leading-7 text-slate-600 dark:text-slate-400">
+                    {f.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═════════ FINAL CTA ═════════ */}
+        <section
+          aria-labelledby="ws-cta-title"
+          className="px-5 pb-20 sm:px-8 md:pb-28 lg:px-12"
+        >
+          <div
+            className="relative mx-auto w-full max-w-[1400px] overflow-hidden rounded-3xl px-6 py-12 text-center sm:px-10 md:py-16"
+            style={{
+              background: "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)",
+              border: "1px solid rgba(255,255,255,0.55)",
+              boxShadow:
+                "0 24px 60px rgba(59,130,246,0.30), inset 0 1px 0 rgba(255,255,255,0.5)",
+            }}
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0) 70%)",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-24 -right-16 h-64 w-64 rounded-full"
+              style={{ border: "40px solid rgba(255,255,255,0.14)" }}
+            />
+
+            <div className="relative mx-auto max-w-2xl">
+              <h2
+                id="ws-cta-title"
+                className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+                style={{ color: "#ffffff", textWrap: "balance" }}
+              >
+                Ready to build your website?
+              </h2>
+              <p
+                className="mx-auto mt-3 max-w-xl text-[15px] leading-7"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                Talk to us today. Your first consultation is free, and we will
+                get back with a clear plan.
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/contact"
+                  className="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    background: "#ffffff",
+                    color: "#1d6fd8",
+                    boxShadow: "0 12px 30px rgba(15,23,42,0.20)",
+                  }}
+                >
+                  Free consultation
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
 
-                {/* Accent bottom */}
-                {isFeatured && (
-                  <div style={{
-                    position:'absolute',bottom:0,left:0,right:0,height:2,
-                    background:'linear-gradient(to right,#f97316,#ef4444)',
-                  }} />
-                )}
+                <a
+                  href={`tel:${PHONE_TEL}`}
+                  className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    background: "rgba(255,255,255,0.18)",
+                    color: "#ffffff",
+                    border: "1px solid rgba(255,255,255,0.55)",
+                  }}
+                >
+                  <Phone className="h-4 w-4" color="#ffffff" />
+                  {PHONE_DISPLAY}
+                </a>
+
+                <a
+                  href={`https://wa.me/${WHATSAPP}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    background: "rgba(255,255,255,0.18)",
+                    color: "#ffffff",
+                    border: "1px solid rgba(255,255,255,0.55)",
+                  }}
+                >
+                  <MessageCircle className="h-4 w-4" color="#ffffff" />
+                  WhatsApp
+                </a>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Note */}
-        <p style={{textAlign:'center',color:'#4b5563',fontSize:13,marginTop:32,fontWeight:300}}>
-          {lang
-            ? '* দাম প্রজেক্টের জটিলতার উপর পরিবর্তন হতে পারে। বিনামূল্যে কনসালটেশনের জন্য যোগাযোগ করুন।'
-            : '* Prices may vary based on project complexity. Contact us for a free consultation.'}
-        </p>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </MotionConfig>
   );
 }
 
-/* ══════════════════════════════════════════════════════════
-   SECTION: FAQ
-══════════════════════════════════════════════════════════ */
-function FAQ({ lang }: { lang: boolean }) {
-  const [open,setOpen] = React.useState<number|null>(0);
-  return (
-    <section style={{padding:'100px 0',background:'#090909'}}>
-      <div className="container mx-auto" style={{padding:'0 24px',maxWidth:720}}>
-        <div style={{textAlign:'center',marginBottom:56}}>
-          <h2 className="ws-display" style={{
-            fontSize:'clamp(24px,4vw,52px)',fontWeight:900,color:'#fff',
-            letterSpacing:'-0.02em',marginBottom:12,
-          }}>
-            {lang ? <>সাধারণ <span className="ws-grad">প্রশ্নাবলী</span></>
-                  : <>Frequently Asked <span className="ws-grad">Questions</span></>}
-          </h2>
-        </div>
-        <div style={{display:'flex',flexDirection:'column',gap:12}}>
-          {FAQS.map((faq,i)=>{
-            const d = lang ? faq.bn : faq.en;
-            const isOpen = open===i;
-            return (
-              <div key={i} className="ws-faq-item" style={{
-                borderRadius:16,overflow:'hidden',
-                border:'1px solid rgba(255,255,255,.07)',
-                background:'rgba(255,255,255,.03)',
-                transition:'border-color .25s',
-              }}>
-                <button onClick={()=>setOpen(isOpen?null:i)} style={{
-                  width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',
-                  padding:'20px 24px',background:'none',border:'none',cursor:'pointer',
-                  color:'#fff',textAlign:'left',gap:16,
-                }}>
-                  <span className="ws-display" style={{fontSize:15,fontWeight:700,lineHeight:1.4}}>
-                    {d.q}
-                  </span>
-                  <ChevronRight style={{
-                    width:18,height:18,color:'#f97316',flexShrink:0,
-                    transform:isOpen?'rotate(90deg)':'rotate(0deg)',
-                    transition:'transform .3s',
-                  }} />
-                </button>
-                {isOpen && (
-                  <div style={{padding:'0 24px 20px'}}>
-                    <p style={{color:'#9ca3af',fontSize:14,lineHeight:1.8,fontWeight:300}}>{d.a}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════
-   SECTION: BOTTOM CTA
-══════════════════════════════════════════════════════════ */
-function BottomCTA({ lang }: { lang: boolean }) {
-  return (
-    <section style={{padding:'120px 0',background:'#060606',position:'relative',overflow:'hidden'}}>
-      <div style={{
-        position:'absolute',inset:0,
-        background:'radial-gradient(ellipse 70% 60% at 50% 60%,rgba(249,115,22,.09) 0%,transparent 70%)',
-        pointerEvents:'none',
-      }} />
-      {/* Decorative rings */}
-      {[500,750,1000].map((size,i)=>(
-        <div key={i} style={{
-          position:'absolute',top:'50%',left:'50%',
-          width:size,height:size,borderRadius:'50%',
-          border:`1px solid rgba(249,115,22,${.04-i*.01})`,
-          transform:'translate(-50%,-50%)',pointerEvents:'none',
-        }} />
-      ))}
-
-      <div className="container mx-auto" style={{padding:'0 24px',textAlign:'center',position:'relative',zIndex:5}}>
-        <div style={{
-          display:'inline-flex',alignItems:'center',gap:8,
-          padding:'7px 18px',borderRadius:9999,
-          border:'1px solid rgba(249,115,22,.25)',
-          background:'rgba(249,115,22,.07)',
-          color:'#fb923c',fontSize:11,fontWeight:700,
-          letterSpacing:'.1em',textTransform:'uppercase',marginBottom:28,
-        }}>
-          <Star style={{width:13,height:13}} />
-          {lang ? 'আজই শুরু করুন' : 'Start Today'}
-        </div>
-
-        <h2 className="ws-display" style={{
-          fontSize:'clamp(36px,7vw,88px)',fontWeight:900,color:'#fff',
-          lineHeight:.95,letterSpacing:'-0.03em',marginBottom:24,
-        }}>
-          {lang ? <><span>আপনার</span><br/><span className="ws-grad">স্বপ্নের সাইট</span><br/><span>বানাতে প্রস্তুত?</span></>
-                : <><span>Ready to Build</span><br/><span className="ws-grad">Your Dream</span><br/><span>Website?</span></>}
-        </h2>
-
-        <p style={{color:'#6b7280',fontSize:17,fontWeight:300,
-          maxWidth:440,margin:'0 auto 44px',lineHeight:1.7}}>
-          {lang ? 'আজই আমাদের সাথে কথা বলুন। প্রথম কনসালটেশন সম্পূর্ণ বিনামূল্যে।'
-                : 'Talk to us today. First consultation is completely free.'}
-        </p>
-
-        <div style={{display:'flex',gap:16,justifyContent:'center',flexWrap:'wrap'}}>
-          <Link href="/contact" style={{textDecoration:'none'}}>
-            <button className="ws-display" style={{
-              display:'inline-flex',alignItems:'center',gap:8,
-              padding:'17px 40px',borderRadius:9999,
-              background:'#ea580c',color:'#fff',
-              fontWeight:900,fontSize:16,border:'none',cursor:'pointer',
-              transition:'background .2s,box-shadow .3s,transform .15s',
-            }}
-              onMouseEnter={e=>{e.currentTarget.style.background='#f97316';e.currentTarget.style.boxShadow='0 0 60px rgba(249,115,22,.55)';e.currentTarget.style.transform='translateY(-3px)';}}
-              onMouseLeave={e=>{e.currentTarget.style.background='#ea580c';e.currentTarget.style.boxShadow='none';e.currentTarget.style.transform='translateY(0)';}}
-            >
-              {lang ? 'বিনামূল্যে কনসালটেশন' : 'Free Consultation'}
-              <ArrowRight style={{width:19,height:19}} />
-            </button>
-          </Link>
-          <a href="tel:+8801XXXXXXXXX" style={{textDecoration:'none'}}>
-            <button style={{
-              display:'inline-flex',alignItems:'center',gap:8,
-              padding:'17px 36px',borderRadius:9999,
-              border:'1px solid rgba(255,255,255,.12)',
-              background:'rgba(255,255,255,.04)',
-              color:'#d1d5db',fontWeight:600,fontSize:16,
-              cursor:'pointer',backdropFilter:'blur(8px)',
-              transition:'border-color .2s,color .2s,transform .15s',
-            }}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(249,115,22,.4)';e.currentTarget.style.color='#fff';e.currentTarget.style.transform='translateY(-3px)';}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,.12)';e.currentTarget.style.color='#d1d5db';e.currentTarget.style.transform='translateY(0)';}}
-            >
-              {lang ? 'কল করুন' : 'Call Us Now'}
-            </button>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════
-   ROOT EXPORT
-══════════════════════════════════════════════════════════ */
-export function WebServiceContent() {
-  const { language } = useLanguage();
-  return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: S }} />
-      <div className="ws-root" style={{background:'#060606'}}>
-        <Hero         lang={language} />
-        <TechTicker   />
-        <WebsiteTypes lang={language} />
-        <Process      lang={language} />
-        <TechStack    lang={language} />
-        <Pricing      lang={language} />
-        <FAQ          lang={language} />
-        <BottomCTA    lang={language} />
-      </div>
-    </>
-  );
-}
+export default WebServiceContent;
