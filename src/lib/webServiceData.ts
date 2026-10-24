@@ -4,9 +4,9 @@
 export const SITE_URL = "https://pixelandcode.agency";
 export const PAGE_URL = `${SITE_URL}/web-service`;
 
-export const PHONE_DISPLAY = "+880 1641-801705";
-export const PHONE_TEL = "+8801641801705";
-export const WHATSAPP = "8801641801705";
+export const PHONE_DISPLAY = "+880 1989-415813";
+export const PHONE_TEL = "+8801989415813";
+export const WHATSAPP = "8801989415813";
 
 export type WebsiteType = {
   key: string;
