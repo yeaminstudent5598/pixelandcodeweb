@@ -29,7 +29,7 @@ import { packageData } from "@/lib/packagesData";
 const BLUE_GRADIENT = "linear-gradient(180deg, #38bdf8 0%, #3b82f6 100%)";
 const BLUE_GRADIENT_H = "linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%)";
 
-const WHATSAPP = "8801641801705";
+const WHATSAPP = "8801989415813";
 
 /* ─────────────────────────────────────────────
    Types
